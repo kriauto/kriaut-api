@@ -1,4 +1,4 @@
-package ma.kriauto.getway.configuration;
+package ma.kriauto.api.configuration;
 
 
 import org.springframework.beans.factory.annotation.Value;
