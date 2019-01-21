@@ -1,79 +1,78 @@
 package ma.kriauto.api.controller;
 
 
-import ma.kriauto.api.exception.ResourceNotFoundException;
-import ma.kriauto.api.model.Device;
-import ma.kriauto.api.model.User;
-import ma.kriauto.api.service.DeviceService;
-import ma.kriauto.api.service.UserService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+
+import ma.kriauto.api.exception.ResourceNotFoundException;
+import ma.kriauto.api.model.Profile;
+import ma.kriauto.api.model.PushNotif;
+import ma.kriauto.api.service.ProfileService;
+import ma.kriauto.api.service.PushNotifService;
 
 
 @RestController
-public class UserController { 
+public class ProfileController { 
 	
-	private static Logger logger = LoggerFactory.getLogger(UserController.class);
+	private static Logger logger = LoggerFactory.getLogger(ProfileController.class);
 
     @Autowired
-    private UserService userService;
+    private ProfileService profileService;
     
     @Autowired
-    private DeviceService deviceService;
+    private PushNotifService pushnotifService;
+
     
-    @PostMapping("/createUser")
-    public User createUser(@RequestBody User user) {
-      logger.info("--> Start Create User");
-  	  logger.debug("--> User : "+user);
-  	  String token = userService.generateToken(user);
-  	  user.setToken(token);
-  	  logger.info("--> End Create User");
-      return userService.saveUser(user);
-    }
+//    @PostMapping("/createUser")
+//    public Profile createUser(@RequestBody Profile profile) {
+//      logger.info("--> Start Create User");
+//  	  logger.debug("--> User : "+profile);
+//  	  String token = profileService.generateToken(profile);
+//  	  user.setToken(token);
+//  	  logger.info("--> End Create User");
+//      return profileService.saveUser(profile);
+//    }
     
-    @PostMapping("/login/{identifier}")
-    public User login(@PathVariable String identifier, @RequestBody User user) {
-      logger.info("--> Start login");
-  	  logger.debug("--> User : "+user+" Identifier : "+identifier);
-  	  User current = userService.fetchUserByLogin(user.getLogin());
+    @PostMapping("/login")
+    public Profile login(@RequestBody Profile profile) {
+      logger.info("-- Start login : "+profile);
+  	  Profile current = profileService.fetchProfileByLogin(profile.getLogin());
   	  if(null == current){
 		throw new ResourceNotFoundException("User not found with id ");
-	  }else if(!current.getPassword().equals(user.getPassword())){
+	  }else if(!current.getPassword().equals(profile.getPassword())){
 		throw new ResourceNotFoundException("Missing password ");
-	  }else if(null == identifier){
-		throw new ResourceNotFoundException("Identifier Required");
+	  }else if(null == profile.getNotifToken()){
+		throw new ResourceNotFoundException("notif token Required");
 	  }else{
-		Device device = new Device();
-		if(null == deviceService.fetchDeviceByIdentifier(identifier)){
-		  device.setUserid(current.getId());
-		  device.setIdentifier(identifier);
-		  deviceService.save(device);
+		PushNotif pushnotif = new PushNotif();
+		if(null == pushnotifService.fetchDeviceByPushToken(profile.getNotifToken())){
+			pushnotif.setIdProfile(current.getId());
+			pushnotif.setPushToken(profile.getNotifToken());
+			pushnotifService.save(pushnotif);
 		}
 	  }
-  	  logger.info("--> End login");
+  	  logger.info("-- End login --");
       return current;
     }
     
-    @PostMapping("/logout/{identifier}")
-    public void logout(@PathVariable String identifier, @RequestBody User user) {
-      logger.info("--> Start logout");
-  	  logger.debug("--> User : "+user+" Identifier : "+identifier);
-  	  User current = userService.fetchUserByLogin(user.getLogin());
-  	  Device device = deviceService.fetchDeviceByIdentifier(identifier);
+    @PostMapping("/logout")
+    public void logout(@RequestHeader  @RequestBody Profile profile) {
+      logger.info("--> Start logout "+profile);
+  	  Profile current = profileService.fetchProfileByToken(profile.getAuthToken());
+  	  PushNotif pushnotif  = pushnotifService.fetchDeviceByPushToken(profile.getNotifToken());
   	  if(null == current){
 		throw new ResourceNotFoundException("User not found with id");
-	  }else if(null == device){
+	  }else if(null == pushnotif){
 		throw new ResourceNotFoundException("Device not found");
-	  }else if(!device.getUserid().equals(current.getId())){
+	  }else if(!pushnotif.getIdProfile().equals(current.getId())){
 		throw new ResourceNotFoundException("Identifier Missing");
 	  }else{
-		deviceService.delete(device);
+		  pushnotifService.delete(pushnotif);
 	  }
   	  logger.info("--> End logout");
     }

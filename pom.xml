@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>ma.kriauto</groupId>
-	<artifactId>getway</artifactId>
+	<artifactId>api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>kriauto-getway</name>
+	<name>kriauto-api</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
