@@ -2,7 +2,10 @@ package ma.kriauto.api.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
@@ -10,6 +13,8 @@ import javax.persistence.Table;
 public class PushNotif {
 	
 	@Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="generator_user")
+	@SequenceGenerator(name="generator_user",sequenceName="api_pushnotif_sequence",allocationSize=1)
 	private Long id;
 	  
 	@Column(name="pushtoken")

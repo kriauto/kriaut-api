@@ -14,7 +14,7 @@ public interface PushNotifRepository extends JpaRepository<PushNotif, Long> {
 	
 	public void delete(PushNotif pushnotif);
 	
-	@Query("SELECT p FROM PushNotif p WHERE p.pushtoken=:push")
+	@Query("SELECT p FROM PushNotif p WHERE p.pushToken=:push")
 	public PushNotif fetchDeviceByPushToken(@Param("push") String push);
 
 }

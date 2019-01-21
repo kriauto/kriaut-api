@@ -24,4 +24,10 @@ public class ProfileServiceImpl implements ProfileService {
 		return profileRepository.fetchProfileByToken(token);
 	}
 
+	@Override
+	public Profile fetchProfileByMail(String mail) {
+		// TODO Auto-generated method stub
+		return profileRepository.fetchProfileByMail(mail);
+	}
+
 }

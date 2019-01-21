@@ -1,6 +1,13 @@
 package ma.kriauto.api.controller;
 
 
+import ma.kriauto.api.exception.ResourceNotFoundException;
+import ma.kriauto.api.model.Profile;
+import ma.kriauto.api.model.PushNotif;
+import ma.kriauto.api.service.ProfileService;
+import ma.kriauto.api.service.PushNotifService;
+import ma.kriauto.api.service.SenderService;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-
-import ma.kriauto.api.exception.ResourceNotFoundException;
-import ma.kriauto.api.model.Profile;
-import ma.kriauto.api.model.PushNotif;
-import ma.kriauto.api.service.ProfileService;
-import ma.kriauto.api.service.PushNotifService;
 
 
 @RestController
@@ -26,6 +27,11 @@ public class ProfileController {
     
     @Autowired
     private PushNotifService pushnotifService;
+    
+    @Autowired
+    private SenderService senderService;
+    
+    
 
     
 //    @PostMapping("/createUser")
@@ -61,9 +67,10 @@ public class ProfileController {
     }
     
     @PostMapping("/logout")
-    public void logout(@RequestHeader  @RequestBody Profile profile) {
+    public void logout(@RequestHeader(value="Authorization") String authorization,  @RequestBody Profile profile) {
       logger.info("--> Start logout "+profile);
-  	  Profile current = profileService.fetchProfileByToken(profile.getAuthToken());
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
   	  PushNotif pushnotif  = pushnotifService.fetchDeviceByPushToken(profile.getNotifToken());
   	  if(null == current){
 		throw new ResourceNotFoundException("User not found with id");
@@ -75,6 +82,25 @@ public class ProfileController {
 		  pushnotifService.delete(pushnotif);
 	  }
   	  logger.info("--> End logout");
+    }
+    
+    @PostMapping("/initpassword")
+    public void initPassword(@RequestBody Profile profile) {
+    	logger.info("--> Start initPassword "+profile);
+    	if(null == profile.getMail()){
+    		throw new ResourceNotFoundException("MAIL_REQUIRED");
+    	}
+    	Profile current = profileService.fetchProfileByMail(profile.getMail());
+    	if(null == current){
+    		throw new ResourceNotFoundException("MAIL_NOT_FOUND");
+    	}
+    	String from = "contact@kriauto.ma";
+    	String to = current.getMail();
+    	String subject = "Identifiants de connexion";
+    	String message = "Bonjour "+current.getName()+", <br/><br/> Veuillez trouver vos identifiants de connexion : <br/><br/> - login : "+current.getLogin()+" <br/> - Mot de passe : "+current.getPassword()+" <br/><br/> l'équipe KriAuto.";
+    	senderService.sendMail(from, to, subject, message);
+    	logger.info("--> End initPassword "+profile);
+    	//return new ResponseMessage(ResponseMessage.Type.success, "PASSWORD_SEND",Constant.getLabels().get("PASSWORD_SEND").toString());
     }
 
 //    @GetMapping("/Users")

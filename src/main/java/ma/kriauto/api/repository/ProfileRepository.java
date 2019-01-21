@@ -15,5 +15,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	
 	@Query("SELECT p FROM Profile p WHERE p.authToken=:token")
 	public Profile fetchProfileByToken(@Param("token") String token);
+	
+	@Query("SELECT p FROM Profile p WHERE p.mail=:mail")
+	public Profile fetchProfileByMail(@Param("mail") String mail);
 
 }
