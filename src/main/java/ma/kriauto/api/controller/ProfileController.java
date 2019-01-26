@@ -1,23 +1,23 @@
 package ma.kriauto.api.controller;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
-
 import ma.kriauto.api.exception.CustomErrorType;
-import ma.kriauto.api.exception.ResourceNotFoundException;
 import ma.kriauto.api.model.Profile;
 import ma.kriauto.api.model.PushNotif;
 import ma.kriauto.api.service.ProfileService;
 import ma.kriauto.api.service.PushNotifService;
 import ma.kriauto.api.service.SenderService;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 
 
 
@@ -47,8 +47,8 @@ public class ProfileController {
 //  	  logger.info("--> End Create User");
 //      return profileService.saveUser(profile);
 //    }
-    
     @SuppressWarnings("unchecked")
+    @CrossOrigin
 	@PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Profile profile) {
       logger.info("-- Start login : "+profile);
@@ -71,8 +71,9 @@ public class ProfileController {
       return new ResponseEntity<Profile>(current, HttpStatus.OK);
     }
     
+    @CrossOrigin
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader String authorization, @RequestBody Profile profile) {
+    public ResponseEntity<?> logout(@RequestHeader(value="Authorization") String authorization, @RequestBody Profile profile) {
       logger.info("--> Start logout "+profile);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
@@ -90,15 +91,18 @@ public class ProfileController {
   	    return new ResponseEntity(new CustomErrorType("Logout Success"),HttpStatus.OK);
     }
     
+    
+    @CrossOrigin
     @PostMapping("/initpassword")
-    public void initPassword(@RequestBody Profile profile) {
+    public ResponseEntity<?> initPassword(@RequestBody Profile profile) {
     	logger.info("--> Start initPassword "+profile);
     	if(null == profile.getMail()){
-    		throw new ResourceNotFoundException("MAIL_REQUIRED");
+    		return new ResponseEntity(new CustomErrorType("MAIL_REQUIRED"),HttpStatus.NOT_FOUND);
     	}
     	Profile current = profileService.fetchProfileByMail(profile.getMail());
     	if(null == current){
-    		throw new ResourceNotFoundException("MAIL_NOT_FOUND");
+    		return new ResponseEntity(new CustomErrorType("MAIL_NOT_FOUND"),HttpStatus.NOT_FOUND);
+
     	}
     	String from = "contact@kriauto.ma";
     	String to = current.getMail();
@@ -106,6 +110,7 @@ public class ProfileController {
     	String message = "Bonjour "+current.getName()+", <br/><br/> Veuillez trouver vos identifiants de connexion : <br/><br/> - login : "+current.getLogin()+" <br/> - Mot de passe : "+current.getPassword()+" <br/><br/> l'équipe KriAuto.";
     	senderService.sendMail(from, to, subject, message);
     	logger.info("--> End initPassword "+profile);
+    	return new ResponseEntity(new CustomErrorType("MAIL_SEND"),HttpStatus.OK);
     	//return new ResponseMessage(ResponseMessage.Type.success, "PASSWORD_SEND",Constant.getLabels().get("PASSWORD_SEND").toString());
     }
     

@@ -2,14 +2,14 @@ package ma.kriauto.api.exception;
 
 public class CustomErrorType {
 	 
-    private String errorMessage;
+    private String Message;
  
-    public CustomErrorType(String errorMessage){
-        this.errorMessage = errorMessage;
+    public CustomErrorType(String Message){
+        this.Message = Message;
     }
  
-    public String getErrorMessage() {
-        return errorMessage;
+    public String getMessage() {
+        return Message;
     }
  
 }
