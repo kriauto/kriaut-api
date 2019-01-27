@@ -24,8 +24,14 @@ public class Car {
 	  @Column(name="htmlcolor")
 	  private String htmlColor;
 	  
-	  @Column(name="idagency")
-	  private Long idAgency;
+	  @Column(name="agencyid")
+	  private Long agencyId;
+	  
+	  @Column(name="consumption")
+	  private Float consumption;
+	  
+	  @Column(name="deviceid")
+	  private Integer deviceId;
 
 	public Long getId() {
 		return id;
@@ -67,18 +73,35 @@ public class Car {
 		this.htmlColor = htmlColor;
 	}
 
-	public Long getIdAgency() {
-		return idAgency;
+	public Long getAgencyId() {
+		return agencyId;
 	}
 
-	public void setIdAgency(Long idAgency) {
-		this.idAgency = idAgency;
+	public void setAgencyId(Long agencyId) {
+		this.agencyId = agencyId;
+	}
+
+	public Float getConsumption() {
+		return consumption;
+	}
+
+	public void setConsumption(Float consumption) {
+		this.consumption = consumption;
+	}
+
+	public Integer getDeviceId() {
+		return deviceId;
+	}
+
+	public void setDeviceId(Integer deviceId) {
+		this.deviceId = deviceId;
 	}
 
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", mark=" + mark + ", model=" + model
 				+ ", immatriculation=" + immatriculation + ", htmlColor="
-				+ htmlColor + ", idAgency=" + idAgency + "]";
+				+ htmlColor + ", agencyId=" + agencyId + ", consumption="
+				+ consumption + ", deviceId=" + deviceId + "]";
 	}
 }

@@ -18,5 +18,8 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	
 	@Query("SELECT p FROM Profile p WHERE p.mail=:mail")
 	public Profile fetchProfileByMail(@Param("mail") String mail);
+	
+	@Query("SELECT p FROM Profile p WHERE p.id=:id")
+	public Profile fetchProfileById(@Param("id") Long id);
 
 }

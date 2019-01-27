@@ -1,7 +1,12 @@
 package ma.kriauto.api.controller;
 
 
+import java.util.List;
+
+import ma.kriauto.api.dto.Location;
 import ma.kriauto.api.exception.CustomErrorType;
+import ma.kriauto.api.model.Item;
+import ma.kriauto.api.model.Position;
 import ma.kriauto.api.model.Profile;
 import ma.kriauto.api.model.PushNotif;
 import ma.kriauto.api.service.ProfileService;
@@ -35,18 +40,6 @@ public class ProfileController {
     @Autowired
     private SenderService senderService;
     
-    
-
-    
-//    @PostMapping("/createUser")
-//    public Profile createUser(@RequestBody Profile profile) {
-//      logger.info("--> Start Create User");
-//  	  logger.debug("--> User : "+profile);
-//  	  String token = profileService.generateToken(profile);
-//  	  user.setToken(token);
-//  	  logger.info("--> End Create User");
-//      return profileService.saveUser(profile);
-//    }
     @SuppressWarnings("unchecked")
     @CrossOrigin
 	@PostMapping("/login")
@@ -113,6 +106,36 @@ public class ProfileController {
     	return new ResponseEntity(new CustomErrorType("MAIL_SEND"),HttpStatus.OK);
     	//return new ResponseMessage(ResponseMessage.Type.success, "PASSWORD_SEND",Constant.getLabels().get("PASSWORD_SEND").toString());
     }
+    
+    @SuppressWarnings("unchecked")
+    @CrossOrigin
+	@PostMapping("/loadprofilelocations")
+    public ResponseEntity<?> loadprofilelocations(@RequestHeader(value="Authorization") String authorization,@RequestBody Position position) {
+      logger.info("-- Start loadprofilelocations : "+authorization+" :"+position);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType("User not found with id"),HttpStatus.NOT_FOUND);
+	  }
+  	  List<Location> locations = profileService.fetchLocationsByProfileId(current.getId(),position.getDate());
+  	  logger.info("-- End loadprofilelocations --");
+      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
+    }
+    
+//    @SuppressWarnings("unchecked")
+//    @CrossOrigin
+//	@PostMapping("/loadprofiledates")
+//    public ResponseEntity<?> loadprofiledates(@RequestHeader(value="Authorization") String authorization) {
+//      logger.info("-- Start loadprofiledates : "+authorization);
+//      String token = authorization.replaceAll("Basic", "");
+//  	  Profile current = profileService.fetchProfileByToken(token);
+//  	  if(null == current){
+//		return new ResponseEntity(new CustomErrorType("User not found with id"),HttpStatus.NOT_FOUND);
+//	  }
+//  	  List<Item> dates = profileService.fetchAllDatesByProfileId(current.getId());
+//  	  logger.info("-- End loadprofiledates --");
+//      return new ResponseEntity<List<Item>>(dates, HttpStatus.OK);
+//    }
     
 
 //    @GetMapping("/Users")

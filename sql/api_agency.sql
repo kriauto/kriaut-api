@@ -1,20 +1,28 @@
-﻿-- Table: public.api_agency
+--
+-- PostgreSQL database dump
+--
 
--- DROP TABLE public.api_agency;
+-- Dumped from database version 9.5.11
+-- Dumped by pg_dump version 9.5.11
 
-CREATE TABLE public.api_agency
-(
-  id bigint NOT NULL,
-  name character varying(250),
-  city character varying(250),
-  address character varying(250),
-  phone character varying(250),
-  fax character varying(250),
-  idprofile bigint,
-  CONSTRAINT api_agency_pkey PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE public.api_agency
-  OWNER TO postgres;
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET search_path = public, pg_catalog;
+
+--
+-- Data for Name: api_agency; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO api_agency (id, name, city, address, phone, fax, idprofile) VALUES (1, 'Auto California', 'Tanger', '79 Rue sanawbar', '00212661096361', '00212661096361', 1);
+
+
+--
+-- PostgreSQL database dump complete
+--
+
