@@ -16,14 +16,7 @@ public class UtilityServiceImpl implements UtilityService {
 	public final static String AUTH_KEY_FCM = "AAAAGCh6u8g:APA91bGM-jPzZI1BIasa0IdW6SUNCXAa78mWXI0mACvYXmawU5ptyT3iCIjcEhS1_b7V6XaEwsuL-rppJ_AgH_O1Q_XBXttUYoVIlwVamJEr6grmo4qxWGWPMELZar1bRsXCpJCaEaFq";
 	public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
 
-	@Override
-	public String getHourFromFixTime(Timestamp fixtime) {
-		// TODO Auto-generated method stub
-		SimpleDateFormat std = new SimpleDateFormat("HH:mm:ss");
-		String hour = std.format(fixtime);
-		return hour;
-	}
-	
+
 	@Override
 	public String getAddress(Double Lat, Double Lng){
 		GeoApiContext gtx = new GeoApiContext().setApiKey("AIzaSyD-w27Lhidw00LPBW7UWHp1TBPv4O3v650");
@@ -46,6 +39,14 @@ public class UtilityServiceImpl implements UtilityService {
 		SimpleDateFormat std = new SimpleDateFormat("YYYY-MM-DD");
 		String date = std.format(fixtime);
 		return date;
+	}
+	
+	@Override
+	public String getHourFromFixTime(Timestamp fixtime) {
+		// TODO Auto-generated method stub
+		SimpleDateFormat std = new SimpleDateFormat("HH:mm:ss");
+		String hour = std.format(fixtime);
+		return hour;
 	}
 
 }

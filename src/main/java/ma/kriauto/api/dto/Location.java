@@ -8,8 +8,14 @@ public class Location {
 	private String htmlColor;
 	private String address;
 	private String hour;
+	private String date;
 	private Integer markertype;
 	private Integer markerdisplay;
+	private Integer isrolling;
+	private Integer totaldistance;
+	private Long carid;
+	private Double lat;
+	private Double lon;
 	
 	public String getMark() {
 		return mark;
@@ -47,6 +53,12 @@ public class Location {
 	public void setHour(String hour) {
 		this.hour = hour;
 	}
+	public String getDate() {
+		return date;
+	}
+	public void setDate(String date) {
+		this.date = date;
+	}
 	public Integer getMarkertype() {
 		return markertype;
 	}
@@ -59,11 +71,42 @@ public class Location {
 	public void setMarkerdisplay(Integer markerdisplay) {
 		this.markerdisplay = markerdisplay;
 	}
+	public Integer getIsrolling() {
+		return isrolling;
+	}
+	public void setIsrolling(Integer isrolling) {
+		this.isrolling = isrolling;
+	}
+	public Integer getTotaldistance() {
+		return totaldistance;
+	}
+	public void setTotaldistance(Integer totaldistance) {
+		this.totaldistance = totaldistance;
+	}
+	public Long getCarid() {
+		return carid;
+	}
+	public void setCarid(Long carid) {
+		this.carid = carid;
+	}
+	public Double getLat() {
+		return lat;
+	}
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+	public Double getLon() {
+		return lon;
+	}
+	public void setLon(Double lon) {
+		this.lon = lon;
+	}
+	
 	@Override
 	public String toString() {
-		return "Location [mark=" + mark + ", model=" + model
-				+ ", immatriculation=" + immatriculation + ", htmlColor=" + htmlColor
-				+ ", address=" + address + ", hour=" + hour + ", markertype="
-				+ markertype + ", markerdisplay=" + markerdisplay + "]";
+		return "Location [mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation + ", htmlColor="
+				+ htmlColor + ", address=" + address + ", hour=" + hour + ", date=" + date + ", markertype="
+				+ markertype + ", markerdisplay=" + markerdisplay + ", isrolling=" + isrolling + ", totaldistance="
+				+ totaldistance + ", carid=" + carid + ", lat=" + lat + ", lon=" + lon + "]";
 	}
 }

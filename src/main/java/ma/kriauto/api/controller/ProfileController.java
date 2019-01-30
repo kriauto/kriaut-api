@@ -3,16 +3,6 @@ package ma.kriauto.api.controller;
 
 import java.util.List;
 
-import ma.kriauto.api.dto.Location;
-import ma.kriauto.api.exception.CustomErrorType;
-import ma.kriauto.api.model.Item;
-import ma.kriauto.api.model.Position;
-import ma.kriauto.api.model.Profile;
-import ma.kriauto.api.model.PushNotif;
-import ma.kriauto.api.service.ProfileService;
-import ma.kriauto.api.service.PushNotifService;
-import ma.kriauto.api.service.SenderService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+
+import ma.kriauto.api.common.ErrorLabel;
+import ma.kriauto.api.dto.Location;
+import ma.kriauto.api.exception.CustomErrorType;
+import ma.kriauto.api.model.Position;
+import ma.kriauto.api.model.Profile;
+import ma.kriauto.api.model.PushNotif;
+import ma.kriauto.api.service.ProfileService;
+import ma.kriauto.api.service.PushNotifService;
+import ma.kriauto.api.service.SenderService;
 
 
 
@@ -47,11 +47,11 @@ public class ProfileController {
       logger.info("-- Start login : "+profile);
   	  Profile current = profileService.fetchProfileByLogin(profile.getLogin());
   	  if(null == current){
-		return new ResponseEntity(new CustomErrorType("User not found with id"),HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }else if(!current.getPassword().equals(profile.getPassword())){
-		return new ResponseEntity(new CustomErrorType("Missing password"),HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.PASSWORD_MISSING),HttpStatus.NOT_FOUND);
 	  }else if(null == profile.getNotifToken()){
-		return new ResponseEntity(new CustomErrorType("notif token Required"),HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.NOTIF_TOKEN_REQUIRED),HttpStatus.NOT_FOUND);
 	  }else{
 		PushNotif pushnotif = new PushNotif();
 		if(null == pushnotifService.fetchDeviceByPushToken(profile.getNotifToken())){
@@ -72,16 +72,16 @@ public class ProfileController {
   	  Profile current = profileService.fetchProfileByToken(token);
   	  PushNotif pushnotif  = pushnotifService.fetchDeviceByPushToken(profile.getNotifToken());
   	  if(null == current){
-		return new ResponseEntity(new CustomErrorType("User not found with id"),HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }else if(null == pushnotif){
-		return new ResponseEntity(new CustomErrorType("Device not found"),HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.NOTIF_TOKEN_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }else if(!pushnotif.getIdProfile().equals(current.getId())){
-		return new ResponseEntity(new CustomErrorType("Identifier Missing"),HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.NOTIF_TOKEN_MISSING),HttpStatus.NOT_FOUND);
 	  }else{
 		  pushnotifService.delete(pushnotif);
 	  }
   	  logger.info("--> End logout");
-  	    return new ResponseEntity(new CustomErrorType("Logout Success"),HttpStatus.OK);
+  	    return new ResponseEntity(new CustomErrorType(ErrorLabel.LOGOUT_SUCCESS),HttpStatus.OK);
     }
     
     
@@ -90,11 +90,11 @@ public class ProfileController {
     public ResponseEntity<?> initPassword(@RequestBody Profile profile) {
     	logger.info("--> Start initPassword "+profile);
     	if(null == profile.getMail()){
-    		return new ResponseEntity(new CustomErrorType("MAIL_REQUIRED"),HttpStatus.NOT_FOUND);
+    		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_REQUIRED),HttpStatus.NOT_FOUND);
     	}
     	Profile current = profileService.fetchProfileByMail(profile.getMail());
     	if(null == current){
-    		return new ResponseEntity(new CustomErrorType("MAIL_NOT_FOUND"),HttpStatus.NOT_FOUND);
+    		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_NOT_FOUND),HttpStatus.NOT_FOUND);
 
     	}
     	String from = "contact@kriauto.ma";
@@ -103,8 +103,7 @@ public class ProfileController {
     	String message = "Bonjour "+current.getName()+", <br/><br/> Veuillez trouver vos identifiants de connexion : <br/><br/> - login : "+current.getLogin()+" <br/> - Mot de passe : "+current.getPassword()+" <br/><br/> l'équipe KriAuto.";
     	senderService.sendMail(from, to, subject, message);
     	logger.info("--> End initPassword "+profile);
-    	return new ResponseEntity(new CustomErrorType("MAIL_SEND"),HttpStatus.OK);
-    	//return new ResponseMessage(ResponseMessage.Type.success, "PASSWORD_SEND",Constant.getLabels().get("PASSWORD_SEND").toString());
+    	return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_SEND),HttpStatus.OK);
     }
     
     @SuppressWarnings("unchecked")
@@ -115,65 +114,10 @@ public class ProfileController {
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
-		return new ResponseEntity(new CustomErrorType("User not found with id"),HttpStatus.NOT_FOUND);
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
   	  List<Location> locations = profileService.fetchLocationsByProfileId(current.getId(),position.getDate());
   	  logger.info("-- End loadprofilelocations --");
       return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
     }
-    
-//    @SuppressWarnings("unchecked")
-//    @CrossOrigin
-//	@PostMapping("/loadprofiledates")
-//    public ResponseEntity<?> loadprofiledates(@RequestHeader(value="Authorization") String authorization) {
-//      logger.info("-- Start loadprofiledates : "+authorization);
-//      String token = authorization.replaceAll("Basic", "");
-//  	  Profile current = profileService.fetchProfileByToken(token);
-//  	  if(null == current){
-//		return new ResponseEntity(new CustomErrorType("User not found with id"),HttpStatus.NOT_FOUND);
-//	  }
-//  	  List<Item> dates = profileService.fetchAllDatesByProfileId(current.getId());
-//  	  logger.info("-- End loadprofiledates --");
-//      return new ResponseEntity<List<Item>>(dates, HttpStatus.OK);
-//    }
-    
-
-//    @GetMapping("/Users")
-//    public List<User> getUsers() {
-//    	logger.info("--> Start getUsers");
-//        return (List<User>) userService.findAll();
-//    }
-
-
-//    @PostMapping("/Users")
-//    public User createUser(@RequestBody User user) {
-//    	logger.info("--> Start Create User");
-//    	logger.info("--> User : "+user);
-//        return userRepository.save(user);
-//    }
-
-//    @PutMapping("/Users/{UserId}")
-//    public User updateUser(@PathVariable Long UserId, @Valid @RequestBody User UserRequest) {
-//    	logger.info("--> Start updateUser");
-//    	logger.info("--> User : "+UserRequest);
-//    	User current = userService.fetchUserById(UserId);
-//    	if(null == current){
-//    		throw new ResourceNotFoundException("User not found with id " + UserId);
-//    	}else{
-//    		//current = userService.save(current);
-//    	}
-//        return current;
-//    }
-
-
-//    @DeleteMapping("/Users/{UserId}") 
-//    public ResponseEntity<?> deleteUser(@PathVariable Long UserId) {
-//    	logger.info("--> Start deleteUser");
-//    	logger.info("--> User : "+UserId);
-//        return userRepository.findById(UserId)
-//                .map(User -> {
-//                    userRepository.delete(User);
-//                    return ResponseEntity.ok().build();
-//                }).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + UserId));
-//    }
 }

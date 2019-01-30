@@ -4,7 +4,9 @@ import ma.kriauto.api.model.Agency;
 import ma.kriauto.api.repository.AgencyRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AgencyServiceImpl implements AgencyService {
 	
 	@Autowired
