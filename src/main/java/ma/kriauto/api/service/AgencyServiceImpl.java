@@ -14,7 +14,6 @@ public class AgencyServiceImpl implements AgencyService {
 
 	@Override
 	public Agency fetchAgencyByProfileId(Long id) {
-		// TODO Auto-generated method stub
 		return agencyRepository.fetchAgencyByProfileId(id);
 	}
 

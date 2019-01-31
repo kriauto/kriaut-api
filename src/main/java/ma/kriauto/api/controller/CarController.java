@@ -20,7 +20,6 @@ import ma.kriauto.api.model.Agency;
 import ma.kriauto.api.model.Car;
 import ma.kriauto.api.model.Position;
 import ma.kriauto.api.model.Profile;
-import ma.kriauto.api.model.PushNotif;
 import ma.kriauto.api.service.AgencyService;
 import ma.kriauto.api.service.CarService;
 import ma.kriauto.api.service.ProfileService;
@@ -54,7 +53,36 @@ public class CarController {
   	  return new ResponseEntity<List<Location>>(cars, HttpStatus.OK);
     }
 	
-	@SuppressWarnings("unchecked")
+	@CrossOrigin
+    @PostMapping("/loadzonecar")
+    public ResponseEntity<?> loadzonecar(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("--> Start loadzonecar "+authorization);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }
+  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
+  	  List<Location> cars = carService.fetchCarZoneByAgencyIdAndRank(agency.getId(),car.getRank());
+  	  logger.info("--> End loadzonecar");
+  	  return new ResponseEntity<List<Location>>(cars, HttpStatus.OK);
+    }
+	
+    @CrossOrigin
+	@PostMapping("/loadcarslocations")
+    public ResponseEntity<?> loadcarslocations(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("-- Start loadcarslocations : "+authorization+" :"+car);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId()); 
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }
+  	  List<Location> locations = carService.fetchLocationsByAgencyIdAndDate(agency.getId(),car.getDate());
+  	  logger.info("-- End loadcarslocations --");
+      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
+    }
+	
     @CrossOrigin
 	@PostMapping("/loadcarlocations")
     public ResponseEntity<?> loadcarlocations(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
@@ -68,5 +96,4 @@ public class CarController {
   	  logger.info("-- End loadcarlocations --");
       return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
     }
-
 }

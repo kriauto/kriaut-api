@@ -36,6 +36,9 @@ public class Car {
 	  
 	  @Transient
 	  private String date;
+	  
+	  @Transient
+	  private Integer rank;
 
 	public Long getId() {
 		return id;
@@ -108,11 +111,19 @@ public class Car {
 	public void setDate(String date) {
 		this.date = date;
 	}
+	
+	public Integer getRank() {
+		return rank;
+	}
+
+	public void setRank(Integer rank) {
+		this.rank = rank;
+	}
 
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation
 				+ ", htmlColor=" + htmlColor + ", agencyId=" + agencyId + ", consumption=" + consumption + ", deviceId="
-				+ deviceId + ", date=" + date + "]";
+				+ deviceId + ", date=" + date + ", rank=" + rank + "]";
 	}
 }

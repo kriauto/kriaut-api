@@ -1,8 +1,6 @@
 package ma.kriauto.api.controller;
 
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import ma.kriauto.api.common.ErrorLabel;
-import ma.kriauto.api.dto.Location;
 import ma.kriauto.api.exception.CustomErrorType;
-import ma.kriauto.api.model.Position;
 import ma.kriauto.api.model.Profile;
 import ma.kriauto.api.model.PushNotif;
 import ma.kriauto.api.service.ProfileService;
@@ -40,7 +36,6 @@ public class ProfileController {
     @Autowired
     private SenderService senderService;
     
-    @SuppressWarnings("unchecked")
     @CrossOrigin
 	@PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Profile profile) {
@@ -104,20 +99,5 @@ public class ProfileController {
     	senderService.sendMail(from, to, subject, message);
     	logger.info("--> End initPassword "+profile);
     	return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_SEND),HttpStatus.OK);
-    }
-    
-    @SuppressWarnings("unchecked")
-    @CrossOrigin
-	@PostMapping("/loadprofilelocations")
-    public ResponseEntity<?> loadprofilelocations(@RequestHeader(value="Authorization") String authorization,@RequestBody Position position) {
-      logger.info("-- Start loadprofilelocations : "+authorization+" :"+position);
-      String token = authorization.replaceAll("Basic", "");
-  	  Profile current = profileService.fetchProfileByToken(token);
-  	  if(null == current){
-		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
-	  }
-  	  List<Location> locations = profileService.fetchLocationsByProfileId(current.getId(),position.getDate());
-  	  logger.info("-- End loadprofilelocations --");
-      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
     }
 }
