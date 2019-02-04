@@ -39,7 +39,7 @@ public class CarController {
     private CarService carService;
 	
 	@CrossOrigin
-    @PostMapping("/loadhistorycar")
+    @PostMapping("/menuhistory")
     public ResponseEntity<?> loadhistorycar(@RequestHeader(value="Authorization") String authorization) {
       logger.info("--> Start loadhistorycar "+authorization);
       String token = authorization.replaceAll("Basic", "");
@@ -53,23 +53,9 @@ public class CarController {
   	  return new ResponseEntity<List<Location>>(cars, HttpStatus.OK);
     }
 	
-	@CrossOrigin
-    @PostMapping("/loadzonecar")
-    public ResponseEntity<?> loadzonecar(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
-      logger.info("--> Start loadzonecar "+authorization);
-      String token = authorization.replaceAll("Basic", "");
-  	  Profile current = profileService.fetchProfileByToken(token);
-  	  if(null == current){
-		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
-	  }
-  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
-  	  List<Location> cars = carService.fetchCarZoneByAgencyIdAndRank(agency.getId(),car.getRank());
-  	  logger.info("--> End loadzonecar");
-  	  return new ResponseEntity<List<Location>>(cars, HttpStatus.OK);
-    }
 	
     @CrossOrigin
-	@PostMapping("/loadcarslocations")
+	@PostMapping("/menulastposition")
     public ResponseEntity<?> loadcarslocations(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
       logger.info("-- Start loadcarslocations : "+authorization+" :"+car);
       String token = authorization.replaceAll("Basic", "");

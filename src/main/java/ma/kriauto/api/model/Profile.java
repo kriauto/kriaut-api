@@ -83,6 +83,9 @@ public class Profile {
     @Column(name="ismyaccount")
     private Boolean isMyAccount;
     
+    @Column(name="iscontactus")
+    private Boolean isContactUs;
+    
     @Transient
     private String notifToken;
 
@@ -277,6 +280,14 @@ public class Profile {
 	public void setIsMyAccount(Boolean isMyAccount) {
 		this.isMyAccount = isMyAccount;
 	}
+	
+	public Boolean getIsContactUs() {
+		return isContactUs;
+	}
+
+	public void setIsContactUs(Boolean isContactUs) {
+		this.isContactUs = isContactUs;
+	}
 
 	public String getNotifToken() {
 		return notifToken;
@@ -300,6 +311,7 @@ public class Profile {
 				+ ", isDoor=" + isDoor + ", isDriver=" + isDriver
 				+ ", isParameters=" + isParameters + ", isStartStop="
 				+ isStartStop + ", isMyAccount=" + isMyAccount
-				+ ", notifToken=" + notifToken + "]";
+				+ ", isContactUs=" + isContactUs + ", notifToken=" + notifToken
+				+ "]";
 	}
 }
