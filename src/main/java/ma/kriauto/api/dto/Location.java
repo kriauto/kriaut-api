@@ -1,6 +1,5 @@
 package ma.kriauto.api.dto;
 
-import javax.persistence.Transient;
 
 public class Location {
 	
@@ -20,6 +19,7 @@ public class Location {
 	private Double lat;
 	private Double lon;
 	private Integer isinzone;
+	private Double speed;
 	
 	public String getMark() {
 		return mark;
@@ -117,13 +117,22 @@ public class Location {
 	public void setIsinzone(Integer isinzone) {
 		this.isinzone = isinzone;
 	}
+	public Double getSpeed() {
+		return speed;
+	}
+	public void setSpeed(Double speed) {
+		this.speed = speed;
+	}
 	
 	@Override
 	public String toString() {
-		return "Location [mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation + ", htmlColor="
-				+ htmlColor + ", address=" + address + ", hour=" + hour + ", date=" + date + ", markertype="
-				+ markertype + ", markerdisplay=" + markerdisplay + ", isrolling=" + isrolling + ", totaldistance="
-				+ totaldistance + ", carid=" + carid + ", rank=" + rank + ", lat=" + lat + ", lon=" + lon
-				+ ", isinzone=" + isinzone + "]";
+		return "Location [mark=" + mark + ", model=" + model
+				+ ", immatriculation=" + immatriculation + ", htmlColor="
+				+ htmlColor + ", address=" + address + ", hour=" + hour
+				+ ", date=" + date + ", markertype=" + markertype
+				+ ", markerdisplay=" + markerdisplay + ", isrolling="
+				+ isrolling + ", totaldistance=" + totaldistance + ", carid="
+				+ carid + ", rank=" + rank + ", lat=" + lat + ", lon=" + lon
+				+ ", isinzone=" + isinzone + ", speed=" + speed + "]";
 	}
 }
