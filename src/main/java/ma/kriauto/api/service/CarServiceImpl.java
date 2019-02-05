@@ -56,7 +56,7 @@ public class CarServiceImpl implements CarService {
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
-			location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
+			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
 			location.setHtmlColor(car.getHtmlColor());
 			location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
 			location.setCarid(car.getId());
@@ -126,7 +126,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
+			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
 			location.setHour(utilityService.getHourFromFixTime(position.getFixtime()));
 			location.setDate(utilityService.getDateFromFixTime(position.getFixtime()));
 			location.setMarkertype(0);
