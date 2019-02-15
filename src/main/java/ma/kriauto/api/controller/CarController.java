@@ -18,7 +18,6 @@ import ma.kriauto.api.dto.Location;
 import ma.kriauto.api.exception.CustomErrorType;
 import ma.kriauto.api.model.Agency;
 import ma.kriauto.api.model.Car;
-import ma.kriauto.api.model.Position;
 import ma.kriauto.api.model.Profile;
 import ma.kriauto.api.service.AgencyService;
 import ma.kriauto.api.service.CarService;
@@ -40,8 +39,8 @@ public class CarController {
 	
 	@CrossOrigin
     @PostMapping("/menuhistory")
-    public ResponseEntity<?> loadhistorycar(@RequestHeader(value="Authorization") String authorization) {
-      logger.info("--> Start loadhistorycar "+authorization);
+    public ResponseEntity<?> menuhistory(@RequestHeader(value="Authorization") String authorization) {
+      logger.info("--> Start menuhistory "+authorization);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
@@ -49,15 +48,15 @@ public class CarController {
 	  }
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
   	  List<Location> cars = carService.fetchCarHistoryByAgencyId(agency.getId());
-  	  logger.info("--> End loadhistorycar");
+  	  logger.info("--> End menuhistory");
   	  return new ResponseEntity<List<Location>>(cars, HttpStatus.OK);
     }
 	
 	
     @CrossOrigin
 	@PostMapping("/menulastposition")
-    public ResponseEntity<?> loadcarslocations(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
-      logger.info("-- Start loadcarslocations : "+authorization+" :"+car);
+    public ResponseEntity<?> menulastposition(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("-- Start menulastposition : "+authorization+" :"+car);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId()); 
@@ -65,7 +64,67 @@ public class CarController {
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
   	  List<Location> locations = carService.fetchLocationsByAgencyIdAndDate(agency.getId(),car.getDate());
-  	  logger.info("-- End loadcarslocations --");
+  	  logger.info("-- End menulastposition --");
+      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
+    }
+    
+    @CrossOrigin
+	@PostMapping("/menumaxspeed")
+    public ResponseEntity<?> menumaxspeed(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("-- Start menumaxspeed : "+authorization+" :"+car);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId()); 
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }
+  	  List<Location> locations = carService.fetchCarMaxSpeedByAgencyId(agency.getId(),car.getDate());
+  	  logger.info("-- End menumaxspeed --");
+      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
+    }
+    
+    @CrossOrigin
+	@PostMapping("/menumaxcourse")
+    public ResponseEntity<?> menumaxcourse(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("-- Start menumaxcourse : "+authorization+" :"+car);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId()); 
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }
+  	  List<Location> locations = carService.fetchCarMaxCourseByAgencyId(agency.getId(),car.getDate());
+  	  logger.info("-- End menumaxcourse --");
+      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
+    }
+    
+    @CrossOrigin
+	@PostMapping("/menuprincipalfuel")
+    public ResponseEntity<?> menuprincipalfuel(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("-- Start menuprincipalfuel : "+authorization+" :"+car);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId()); 
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }
+  	  List<Location> locations = carService.fetchCarFuelPrincipaleByAgencyId(agency.getId(),car.getDate());
+  	  logger.info("-- End menuprincipalfuel --");
+      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
+    }
+    
+    @CrossOrigin
+	@PostMapping("/menusecondaryfuel")
+    public ResponseEntity<?> menusecondaryfuel(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("-- Start menusecondaryfuel : "+authorization+" :"+car);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId()); 
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }
+  	  List<Location> locations = carService.fetchCarFuelSecondaireByAgencyId(agency.getId(),car.getDate());
+  	  logger.info("-- End menusecondaryfuel --");
       return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
     }
 	

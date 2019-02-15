@@ -19,7 +19,13 @@ public class Location {
 	private Double lat;
 	private Double lon;
 	private Integer isinzone;
+	private String  labelzone;
 	private Double speed;
+	private Double maxspeed;
+	private Double totalcourse;
+	private Double dailycourse;
+	private Double prinfuelcons;
+	private Double seconfuelcons;
 	
 	public String getMark() {
 		return mark;
@@ -117,22 +123,56 @@ public class Location {
 	public void setIsinzone(Integer isinzone) {
 		this.isinzone = isinzone;
 	}
+	public String getLabelzone() {
+		return labelzone;
+	}
+	public void setLabelzone(String labelzone) {
+		this.labelzone = labelzone;
+	}
 	public Double getSpeed() {
 		return speed;
 	}
 	public void setSpeed(Double speed) {
 		this.speed = speed;
 	}
-	
+	public Double getMaxspeed() {
+		return maxspeed;
+	}
+	public void setMaxspeed(Double maxspeed) {
+		this.maxspeed = maxspeed;
+	}
+	public Double getTotalcourse() {
+		return totalcourse;
+	}
+	public void setTotalcourse(Double totalcourse) {
+		this.totalcourse = totalcourse;
+	}
+	public Double getDailycourse() {
+		return dailycourse;
+	}
+	public void setDailycourse(Double dailycourse) {
+		this.dailycourse = dailycourse;
+	}
+	public Double getPrinfuelcons() {
+		return prinfuelcons;
+	}
+	public void setPrinfuelcons(Double prinfuelcons) {
+		this.prinfuelcons = prinfuelcons;
+	}
+	public Double getSeconfuelcons() {
+		return seconfuelcons;
+	}
+	public void setSeconfuelcons(Double secoefuelcons) {
+		this.seconfuelcons = secoefuelcons;
+	}
 	@Override
 	public String toString() {
-		return "Location [mark=" + mark + ", model=" + model
-				+ ", immatriculation=" + immatriculation + ", htmlColor="
-				+ htmlColor + ", address=" + address + ", hour=" + hour
-				+ ", date=" + date + ", markertype=" + markertype
-				+ ", markerdisplay=" + markerdisplay + ", isrolling="
-				+ isrolling + ", totaldistance=" + totaldistance + ", carid="
-				+ carid + ", rank=" + rank + ", lat=" + lat + ", lon=" + lon
-				+ ", isinzone=" + isinzone + ", speed=" + speed + "]";
+		return "Location [mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation + ", htmlColor="
+				+ htmlColor + ", address=" + address + ", hour=" + hour + ", date=" + date + ", markertype="
+				+ markertype + ", markerdisplay=" + markerdisplay + ", isrolling=" + isrolling + ", totaldistance="
+				+ totaldistance + ", carid=" + carid + ", rank=" + rank + ", lat=" + lat + ", lon=" + lon
+				+ ", isinzone=" + isinzone + ", labelzone=" + labelzone + ", speed=" + speed + ", maxspeed=" + maxspeed
+				+ ", totalcourse=" + totalcourse + ", dailycourse=" + dailycourse + ", prinfuelcons=" + prinfuelcons
+				+ ", secoefuelcons=" + seconfuelcons + "]";
 	}
 }
