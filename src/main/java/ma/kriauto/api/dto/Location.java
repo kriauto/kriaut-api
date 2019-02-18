@@ -26,6 +26,7 @@ public class Location {
 	private Double dailycourse;
 	private Double prinfuelcons;
 	private Double seconfuelcons;
+	private Double maxtemperature;
 	
 	public String getMark() {
 		return mark;
@@ -165,6 +166,13 @@ public class Location {
 	public void setSeconfuelcons(Double secoefuelcons) {
 		this.seconfuelcons = secoefuelcons;
 	}
+	public Double getMaxtemperature() {
+		return maxtemperature;
+	}
+	public void setMaxtemperature(Double maxtemperature) {
+		this.maxtemperature = maxtemperature;
+	}
+	
 	@Override
 	public String toString() {
 		return "Location [mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation + ", htmlColor="
@@ -173,6 +181,6 @@ public class Location {
 				+ totaldistance + ", carid=" + carid + ", rank=" + rank + ", lat=" + lat + ", lon=" + lon
 				+ ", isinzone=" + isinzone + ", labelzone=" + labelzone + ", speed=" + speed + ", maxspeed=" + maxspeed
 				+ ", totalcourse=" + totalcourse + ", dailycourse=" + dailycourse + ", prinfuelcons=" + prinfuelcons
-				+ ", secoefuelcons=" + seconfuelcons + "]";
+				+ ", seconfuelcons=" + seconfuelcons + ", maxtemperature=" + maxtemperature + "]";
 	}
 }

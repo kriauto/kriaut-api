@@ -227,6 +227,59 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
+	public List<Location> fetchCarTemperatureMoByAgencyId(Long id, String date) {
+		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
+		List<Location> locations = new ArrayList<Location>();
+		for(int i=0; i<cars.size(); i++) {
+			double course = 0.0;
+			Location location = new Location();
+			Car car = cars.get(i);
+			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			Position last = lasts.get(0);
+			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
+            for(int j=0; j<positions.size(); j++) {
+            	course = course + positions.get(j).getCourse();
+            }
+			location.setMark(car.getMark());
+			location.setModel(car.getModel());
+			location.setImmatriculation(car.getImmatriculation());
+			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
+			location.setHtmlColor(car.getHtmlColor());
+			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setCarid(car.getId());
+			location.setMaxtemperature(12.0);
+			locations.add(location);
+		}
+		return locations;
+	}
+	
+	@Override
+	public List<Location> fetchCarTemperatureFrByAgencyId(Long id, String date) {
+		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
+		List<Location> locations = new ArrayList<Location>();
+		for(int i=0; i<cars.size(); i++) {
+			double course = 0.0;
+			Location location = new Location();
+			Car car = cars.get(i);
+			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			Position last = lasts.get(0);
+			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
+            for(int j=0; j<positions.size(); j++) {
+            	course = course + positions.get(j).getCourse();
+            }
+			location.setMark(car.getMark());
+			location.setModel(car.getModel());
+			location.setImmatriculation(car.getImmatriculation());
+			location.setHtmlColor(car.getHtmlColor());
+			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setCarid(car.getId());
+			location.setMaxtemperature(15.0);
+			locations.add(location);
+		}
+		return locations;
+	}
+	
+	@Override
 	public List<Location> fetchLocationsByAgencyIdAndDate(Long id, String date) {
 		List<Location> locations = new ArrayList<Location>();
 		Agency agency = agencyRepository.fetchAgencyByProfileId(id);

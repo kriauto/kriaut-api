@@ -42,21 +42,6 @@ public class ZoneController {
     private CarService carService;
 	
 	@CrossOrigin
-    @PostMapping("/menuzone")
-    public ResponseEntity<?> menuzone(@RequestHeader(value="Authorization") String authorization,@RequestBody Zone zone) {
-      logger.info("--> Start menuzone "+authorization);
-      String token = authorization.replaceAll("Basic", "");
-  	  Profile current = profileService.fetchProfileByToken(token);
-  	  if(null == current){
-		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
-	  }
-  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
-  	  List<Location> cars = carService.fetchCarZoneByAgencyIdAndRank(agency.getId(),zone.getRank());
-  	  logger.info("--> End menuzone");
-  	  return new ResponseEntity<List<Location>>(cars, HttpStatus.OK);
-    }
-	
-	@CrossOrigin
     @PostMapping("/loadcarzone")
     public ResponseEntity<?> loadzone(@RequestHeader(value="Authorization") String authorization, @RequestBody Zone zone) {
       logger.info("--> Start loadzone "+zone);

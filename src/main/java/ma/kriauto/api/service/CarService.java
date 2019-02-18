@@ -15,6 +15,8 @@ public interface CarService {
 	public List<Location> fetchCarMaxCourseByAgencyId(Long id, String date);
 	public List<Location> fetchCarFuelPrincipaleByAgencyId(Long id, String date);
 	public List<Location> fetchCarFuelSecondaireByAgencyId(Long id, String date);
+	public List<Location> fetchCarTemperatureMoByAgencyId(Long id, String date);
+	public List<Location> fetchCarTemperatureFrByAgencyId(Long id, String date);
 	public List<Location> fetchLocationsByCarId(Long id, String date);
 	public List<Location> fetchLocationsByAgencyIdAndDate(Long id, String date);
 }
