@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import ma.kriauto.api.common.ErrorLabel;
+import ma.kriauto.api.dto.HistoryDTO;
+import ma.kriauto.api.dto.HistoryLocationDTO;
+import ma.kriauto.api.dto.LastPositionDTO;
 import ma.kriauto.api.dto.Location;
 import ma.kriauto.api.exception.CustomErrorType;
 import ma.kriauto.api.model.Agency;
@@ -39,6 +42,21 @@ public class CarController {
     private CarService carService;
 	
 	@CrossOrigin
+	@PostMapping("/menulastposition")
+    public ResponseEntity<?> menulastposition(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("-- Start menulastposition : "+authorization+" :"+car);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }
+  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId()); 
+  	  List<LastPositionDTO> locations = carService.fetchLastPositionByAgencyIdAndDate(agency.getId(),car.getDate());
+  	  logger.info("-- End menulastposition --");
+      return new ResponseEntity<List<LastPositionDTO>>(locations, HttpStatus.OK);
+    }
+	
+	@CrossOrigin
     @PostMapping("/menuhistory")
     public ResponseEntity<?> menuhistory(@RequestHeader(value="Authorization") String authorization) {
       logger.info("--> Start menuhistory "+authorization);
@@ -48,25 +66,23 @@ public class CarController {
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
-  	  List<Location> cars = carService.fetchCarHistoryByAgencyId(agency.getId());
+  	  List<HistoryDTO> cars = carService.fetchHistoryByAgencyId(agency.getId());
   	  logger.info("--> End menuhistory");
-  	  return new ResponseEntity<List<Location>>(cars, HttpStatus.OK);
+  	  return new ResponseEntity<List<HistoryDTO>>(cars, HttpStatus.OK);
     }
 	
-	
-    @CrossOrigin
-	@PostMapping("/menulastposition")
-    public ResponseEntity<?> menulastposition(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
-      logger.info("-- Start menulastposition : "+authorization+" :"+car);
+	@CrossOrigin
+	@PostMapping("/historycarlocations")
+    public ResponseEntity<?> historycarlocations(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
+      logger.info("-- Start historycarlocations : "+authorization+" :"+car);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
-  	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId()); 
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
-  	  List<Location> locations = carService.fetchLocationsByAgencyIdAndDate(agency.getId(),car.getDate());
-  	  logger.info("-- End menulastposition --");
-      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
+  	  List<HistoryLocationDTO> historylocations = carService.fetchHistoryCarLocationsByCarIdAndDate(car.getId(), car.getDate());
+  	  logger.info("-- End historycarlocations --");
+      return new ResponseEntity<List<HistoryLocationDTO>>(historylocations, HttpStatus.OK);
     }
     
     @CrossOrigin
@@ -174,17 +190,5 @@ public class CarController {
   	  return new ResponseEntity<List<Location>>(cars, HttpStatus.OK);
     }
 	
-    @CrossOrigin
-	@PostMapping("/loadcarlocations")
-    public ResponseEntity<?> loadcarlocations(@RequestHeader(value="Authorization") String authorization,@RequestBody Car car) {
-      logger.info("-- Start loadcarlocations : "+authorization+" :"+car);
-      String token = authorization.replaceAll("Basic", "");
-  	  Profile current = profileService.fetchProfileByToken(token);
-  	  if(null == current){
-		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
-	  }
-  	  List<Location> locations = carService.fetchLocationsByCarId(car.getId(), car.getDate());
-  	  logger.info("-- End loadcarlocations --");
-      return new ResponseEntity<List<Location>>(locations, HttpStatus.OK);
-    }
+    
 }
