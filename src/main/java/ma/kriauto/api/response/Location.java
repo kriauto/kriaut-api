@@ -1,4 +1,4 @@
-package ma.kriauto.api.dto;
+package ma.kriauto.api.response;
 
 
 public class Location {

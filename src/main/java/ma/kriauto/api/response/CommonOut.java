@@ -1,12 +1,19 @@
-package ma.kriauto.api.dto;
+package ma.kriauto.api.response;
 
-public class CommonDTO {
+public class CommonOut {
 	
+	private Long   carid;
 	private String mark;
 	private String model;
 	private String immatriculation;
 	private String htmlColor;
 	
+	public Long getCarid() {
+		return carid;
+	}
+	public void setCarid(Long carid) {
+		this.carid = carid;
+	}
 	public String getMark() {
 		return mark;
 	}
@@ -34,7 +41,7 @@ public class CommonDTO {
 	
 	@Override
 	public String toString() {
-		return "CommonDTO [mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation + ", htmlColor="
-				+ htmlColor + "]";
+		return "CommonOut [carid=" + carid + ", mark=" + mark + ", model=" + model + ", immatriculation="
+				+ immatriculation + ", htmlColor=" + htmlColor + "]";
 	}
 }

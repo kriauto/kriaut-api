@@ -3,11 +3,11 @@ package ma.kriauto.api.controller;
 import java.util.List;
 
 import ma.kriauto.api.common.ErrorLabel;
-import ma.kriauto.api.dto.Location;
 import ma.kriauto.api.exception.CustomErrorType;
 import ma.kriauto.api.model.Agency;
 import ma.kriauto.api.model.Profile;
 import ma.kriauto.api.model.Zone;
+import ma.kriauto.api.response.Location;
 import ma.kriauto.api.service.AgencyService;
 import ma.kriauto.api.service.CarService;
 import ma.kriauto.api.service.ProfileService;

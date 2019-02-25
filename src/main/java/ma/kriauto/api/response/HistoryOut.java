@@ -1,6 +1,6 @@
-package ma.kriauto.api.dto;
+package ma.kriauto.api.response;
 
-public class HistoryDTO extends CommonDTO {
+public class HistoryOut extends CommonOut {
 	
 	private Integer isrolling;
 	private Double latitude;

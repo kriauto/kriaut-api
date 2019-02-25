@@ -1,11 +1,11 @@
-package ma.kriauto.api.dto;
+package ma.kriauto.api.response;
 
-public class LastPositionDTO extends CommonDTO {
+public class HistoryLocationOut {
 	
 	private Double speed;
-	private String date;
 	private String hour;
 	private Integer markertype;
+	private Integer markerdisplay;
 	private Double latitude;
 	private Double longitude;
 	
@@ -14,12 +14,6 @@ public class LastPositionDTO extends CommonDTO {
 	}
 	public void setSpeed(Double speed) {
 		this.speed = speed;
-	}
-	public String getDate() {
-		return date;
-	}
-	public void setDate(String date) {
-		this.date = date;
 	}
 	public String getHour() {
 		return hour;
@@ -32,6 +26,12 @@ public class LastPositionDTO extends CommonDTO {
 	}
 	public void setMarkertype(Integer markertype) {
 		this.markertype = markertype;
+	}
+	public Integer getMarkerdisplay() {
+		return markerdisplay;
+	}
+	public void setMarkerdisplay(Integer markerdisplay) {
+		this.markerdisplay = markerdisplay;
 	}
 	public Double getLatitude() {
 		return latitude;
@@ -48,11 +48,7 @@ public class LastPositionDTO extends CommonDTO {
 	
 	@Override
 	public String toString() {
-		return "LastPositionDTO [speed=" + speed + ", date=" + date + ", hour=" + hour
-				+ ", markertype=" + markertype + ", latitude=" + latitude + ", longitude=" + longitude
-				+ ", getSpeed()=" + getSpeed() + ", getDate()=" + getDate()
-				+ ", getHour()=" + getHour() + ", getMarkertype()=" + getMarkertype() + ", getLatitude()="
-				+ getLatitude() + ", getLongitude()=" + getLongitude() + "]";
+		return "HistoryLocationDTO [speed=" + speed + ", hour=" + hour + ", markertype=" + markertype
+				+ ", markerdisplay=" + markerdisplay + ", latitude=" + latitude + ", longitude=" + longitude + "]";
 	}
-	
 }

@@ -2,27 +2,37 @@ package ma.kriauto.api.service;
 
 import java.util.List;
 
-import ma.kriauto.api.dto.HistoryDTO;
-import ma.kriauto.api.dto.HistoryLocationDTO;
-import ma.kriauto.api.dto.LastPositionDTO;
-import ma.kriauto.api.dto.Location;
 import ma.kriauto.api.model.Car;
+import ma.kriauto.api.response.HistoryOut;
+import ma.kriauto.api.response.FuelOut;
+import ma.kriauto.api.response.HistoryLocationOut;
+import ma.kriauto.api.response.LastPositionOut;
+import ma.kriauto.api.response.Location;
+import ma.kriauto.api.response.MaxCourseOut;
+import ma.kriauto.api.response.MaxSpeedOut;
+import ma.kriauto.api.response.MaxTemperatureOut;
+import ma.kriauto.api.response.NotificationOut;
+import ma.kriauto.api.response.ZoneOut;
 
 public interface CarService {
 	
-	public List<LastPositionDTO> fetchLastPositionByAgencyIdAndDate(Long id, String date);
-	public List<HistoryDTO> fetchHistoryByAgencyId(Long id);
-	public List<HistoryLocationDTO> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date);
+	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date);
+	public List<HistoryOut> fetchHistoryByAgencyId(Long id);
+	public List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date);
+	public List<MaxSpeedOut> fetchCarMaxSpeedByAgencyId(Long id, String date);
+	public List<MaxCourseOut> fetchCarMaxCourseByAgencyId(Long id, String date);
+	public List<FuelOut> fetchCarFuelPrincipaleByAgencyId(Long id, String date);
+	public List<FuelOut> fetchCarFuelSecondaireByAgencyId(Long id, String date);
+	public List<MaxTemperatureOut> fetchCarTemperatureMoByAgencyId(Long id, String date);
+	public List<MaxTemperatureOut> fetchCarTemperatureFrByAgencyId(Long id, String date);
+	public List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number);
+	public List<NotificationOut> fetchCarNotificationByAgencyIdAndNumber(Long id, String date);
 	
 	public List<Car> fetchAllCarByAgencyId(Long id);
 	public Car fetchCarById(Long id);	
-	public List<Location> fetchCarZoneByAgencyIdAndRank(Long id, Integer rank);
-	public List<Location> fetchCarMaxSpeedByAgencyId(Long id, String date);
-	public List<Location> fetchCarMaxCourseByAgencyId(Long id, String date);
-	public List<Location> fetchCarFuelPrincipaleByAgencyId(Long id, String date);
-	public List<Location> fetchCarFuelSecondaireByAgencyId(Long id, String date);
-	public List<Location> fetchCarTemperatureMoByAgencyId(Long id, String date);
-	public List<Location> fetchCarTemperatureFrByAgencyId(Long id, String date);
+	
+	
+	
 	
 	
 }

@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "api_car")
@@ -33,12 +32,6 @@ public class Car {
 	  
 	  @Column(name="deviceid")
 	  private Integer deviceId;
-	  
-	  @Transient
-	  private String date;
-	  
-	  @Transient
-	  private Integer rank;
 
 	public Long getId() {
 		return id;
@@ -104,26 +97,11 @@ public class Car {
 		this.deviceId = deviceId;
 	}
 	
-	public String getDate() {
-		return date;
-	}
-
-	public void setDate(String date) {
-		this.date = date;
-	}
-	
-	public Integer getRank() {
-		return rank;
-	}
-
-	public void setRank(Integer rank) {
-		this.rank = rank;
-	}
 
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation
 				+ ", htmlColor=" + htmlColor + ", agencyId=" + agencyId + ", consumption=" + consumption + ", deviceId="
-				+ deviceId + ", date=" + date + ", rank=" + rank + "]";
+				+ deviceId + "]";
 	}
 }

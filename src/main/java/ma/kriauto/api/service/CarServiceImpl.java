@@ -6,10 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ma.kriauto.api.dto.HistoryDTO;
-import ma.kriauto.api.dto.HistoryLocationDTO;
-import ma.kriauto.api.dto.LastPositionDTO;
-import ma.kriauto.api.dto.Location;
 import ma.kriauto.api.model.Agency;
 import ma.kriauto.api.model.Car;
 import ma.kriauto.api.model.Position;
@@ -18,6 +14,16 @@ import ma.kriauto.api.repository.AgencyRepository;
 import ma.kriauto.api.repository.CarRepository;
 import ma.kriauto.api.repository.PositionRepository;
 import ma.kriauto.api.repository.ZoneRepository;
+import ma.kriauto.api.response.HistoryOut;
+import ma.kriauto.api.response.FuelOut;
+import ma.kriauto.api.response.HistoryLocationOut;
+import ma.kriauto.api.response.LastPositionOut;
+import ma.kriauto.api.response.Location;
+import ma.kriauto.api.response.MaxCourseOut;
+import ma.kriauto.api.response.MaxSpeedOut;
+import ma.kriauto.api.response.MaxTemperatureOut;
+import ma.kriauto.api.response.NotificationOut;
+import ma.kriauto.api.response.ZoneOut;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -48,15 +54,15 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<LastPositionDTO> fetchLastPositionByAgencyIdAndDate(Long id, String date) {
-		List<LastPositionDTO> lsatpositions = new ArrayList<LastPositionDTO>();
+	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date) {
+		List<LastPositionOut> lsatpositions = new ArrayList<LastPositionOut>();
 		Agency agency = agencyRepository.fetchAgencyByProfileId(id);
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(agency.getId());
 		for(int i=0; i<cars.size() ;i++){
 			Car car = cars.get(i);
 			List<Position> positions = positionRepository.fetchLastPositionByDeviceIdAndDate(car.getDeviceId(), date);
 			Position position = positions.get(0);
-			LastPositionDTO lastposition = new LastPositionDTO();
+			LastPositionOut lastposition = new LastPositionOut();		
 			lastposition.setMark(car.getMark());
 			lastposition.setModel(car.getModel());
 			lastposition.setImmatriculation(car.getImmatriculation());
@@ -73,14 +79,15 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<HistoryDTO> fetchHistoryByAgencyId(Long id) {
+	public List<HistoryOut> fetchHistoryByAgencyId(Long id) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
-		List<HistoryDTO> historys = new ArrayList<HistoryDTO>();
+		List<HistoryOut> historys = new ArrayList<HistoryOut>();
 		for(int i=0; i<cars.size(); i++) {
-			HistoryDTO hystory = new HistoryDTO();
+			HistoryOut hystory = new HistoryOut();
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position position = lasts.get(0);
+			hystory.setCarid(car.getId());
 			hystory.setMark(car.getMark());
 			hystory.setModel(car.getModel());
 			hystory.setImmatriculation(car.getImmatriculation());
@@ -94,38 +101,35 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<Location> fetchCarZoneByAgencyIdAndRank(Long id, Integer rank) {
+	public List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
-		List<Location> locations = new ArrayList<Location>();
+		List<ZoneOut> locations = new ArrayList<ZoneOut>();
 		for(int i=0; i<cars.size(); i++) {
-			Location location = new Location();
+			ZoneOut location = new ZoneOut();
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position position = lasts.get(0);
-			Zone zone = zoneRepository.fetchZoneByCarIdAndRank(id, rank);
+			Zone zone = zoneRepository.fetchZoneByCarIdAndRank(id, number);
+			location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
-			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
 			location.setHtmlColor(car.getHtmlColor());
 			location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
-			location.setCarid(car.getId());
-			location.setIsinzone(0);
-			location.setSpeed(position.getSpeed());
-			location.setLabelzone(zone.getLabel());
+			location.setInzone(true);
 			locations.add(location);
 		}
 		return locations;
 	}
 
 	@Override
-	public List<HistoryLocationDTO> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date) {
-		List<HistoryLocationDTO> historylocations = new ArrayList<HistoryLocationDTO>();
+	public List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date) {
+		List<HistoryLocationOut> historylocations = new ArrayList<HistoryLocationOut>();
 		Car car = carRepository.fetchCarById(id);
 		List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
 		for(int i=0; i<positions.size() ;i++){
 			Position position = positions.get(i);
-			HistoryLocationDTO historylocation = new HistoryLocationDTO();
+			HistoryLocationOut historylocation = new HistoryLocationOut();
 			historylocation.setSpeed(position.getSpeed());
 			historylocation.setHour(utilityService.getHourFromFixTime(position.getFixtime()));
 			historylocation.setMarkertype(0);
@@ -138,37 +142,35 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<Location> fetchCarMaxSpeedByAgencyId(Long id, String date) {
+	public List<MaxSpeedOut> fetchCarMaxSpeedByAgencyId(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
-		List<Location> locations = new ArrayList<Location>();
+		List<MaxSpeedOut> locations = new ArrayList<MaxSpeedOut>();
 		for(int i=0; i<cars.size(); i++) {
-			Location location = new Location();
+			MaxSpeedOut location = new MaxSpeedOut();
 			Car car = cars.get(i);
 			List<Position> maxspeeds = positionRepository.fetchMaxSpeedDeviceIdAndDate(date, car.getDeviceId());
 			Position maxspeed = maxspeeds.get(0);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position last = lasts.get(0);
+			location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
-			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
 			location.setHtmlColor(car.getHtmlColor());
 			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setCarid(car.getId());
-			//location.setTotaldistance(250);
-			location.setMaxspeed(maxspeed.getSpeed());
+			location.setSpeed(maxspeed.getSpeed());
 			locations.add(location);
 		}
 		return locations;
 	}
 	
 	@Override
-	public List<Location> fetchCarMaxCourseByAgencyId(Long id, String date) {
+	public List<MaxCourseOut> fetchCarMaxCourseByAgencyId(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
-		List<Location> locations = new ArrayList<Location>();
+		List<MaxCourseOut> locations = new ArrayList<MaxCourseOut>();
 		for(int i=0; i<cars.size(); i++) {
 			double course = 0.0;
-			Location location = new Location();
+			MaxCourseOut location = new MaxCourseOut();
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position last = lasts.get(0);
@@ -176,14 +178,12 @@ public class CarServiceImpl implements CarService {
             for(int j=0; j<positions.size(); j++) {
             	course = course + positions.get(j).getCourse();
             }
+            location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
-			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
 			location.setHtmlColor(car.getHtmlColor());
 			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setCarid(car.getId());
-			//location.setTotaldistance(250);
 			location.setTotalcourse(course);
 			location.setDailycourse(course/10);
 			locations.add(location);
@@ -192,12 +192,12 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<Location> fetchCarFuelPrincipaleByAgencyId(Long id, String date) {
+	public List<FuelOut> fetchCarFuelPrincipaleByAgencyId(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
-		List<Location> locations = new ArrayList<Location>();
+		List<FuelOut> locations = new ArrayList<FuelOut>();
 		for(int i=0; i<cars.size(); i++) {
 			double course = 0.0;
-			Location location = new Location();
+			FuelOut location = new FuelOut();
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position last = lasts.get(0);
@@ -205,27 +205,26 @@ public class CarServiceImpl implements CarService {
             for(int j=0; j<positions.size(); j++) {
             	course = course + positions.get(j).getCourse();
             }
+            location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
-			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
 			location.setHtmlColor(car.getHtmlColor());
 			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setCarid(car.getId());
-			//location.setTotaldistance(250);
-			location.setPrinfuelcons(course);
+			location.setCurrentlevel(12.0);
+			location.setDailyconsumption(15.6);
 			locations.add(location);
 		}
 		return locations;
 	}
 
 	@Override
-	public List<Location> fetchCarFuelSecondaireByAgencyId(Long id, String date) {
+	public List<FuelOut> fetchCarFuelSecondaireByAgencyId(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
-		List<Location> locations = new ArrayList<Location>();
+		List<FuelOut> locations = new ArrayList<FuelOut>();
 		for(int i=0; i<cars.size(); i++) {
 			double course = 0.0;
-			Location location = new Location();
+			FuelOut location = new FuelOut();
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position last = lasts.get(0);
@@ -233,26 +232,26 @@ public class CarServiceImpl implements CarService {
             for(int j=0; j<positions.size(); j++) {
             	course = course + positions.get(j).getCourse();
             }
+            location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
-			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
 			location.setHtmlColor(car.getHtmlColor());
 			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setCarid(car.getId());
-			location.setSeconfuelcons(course);
+			location.setCurrentlevel(12.0);
+			location.setDailyconsumption(15.6);
 			locations.add(location);
 		}
 		return locations;
 	}
 	
 	@Override
-	public List<Location> fetchCarTemperatureMoByAgencyId(Long id, String date) {
+	public List<MaxTemperatureOut> fetchCarTemperatureMoByAgencyId(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
-		List<Location> locations = new ArrayList<Location>();
+		List<MaxTemperatureOut> locations = new ArrayList<MaxTemperatureOut>();
 		for(int i=0; i<cars.size(); i++) {
 			double course = 0.0;
-			Location location = new Location();
+			MaxTemperatureOut location = new MaxTemperatureOut();
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position last = lasts.get(0);
@@ -260,26 +259,25 @@ public class CarServiceImpl implements CarService {
             for(int j=0; j<positions.size(); j++) {
             	course = course + positions.get(j).getCourse();
             }
+            location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
-			//location.setAddress(utilityService.getAddress(position.getLatitude(), position.getLongitude()));
 			location.setHtmlColor(car.getHtmlColor());
 			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setCarid(car.getId());
-			location.setMaxtemperature(12.0);
+			location.setTemperature(12.0);
 			locations.add(location);
 		}
 		return locations;
 	}
 	
 	@Override
-	public List<Location> fetchCarTemperatureFrByAgencyId(Long id, String date) {
+	public List<MaxTemperatureOut> fetchCarTemperatureFrByAgencyId(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
-		List<Location> locations = new ArrayList<Location>();
+		List<MaxTemperatureOut> locations = new ArrayList<MaxTemperatureOut>();
 		for(int i=0; i<cars.size(); i++) {
 			double course = 0.0;
-			Location location = new Location();
+			MaxTemperatureOut location = new MaxTemperatureOut();
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position last = lasts.get(0);
@@ -287,13 +285,39 @@ public class CarServiceImpl implements CarService {
             for(int j=0; j<positions.size(); j++) {
             	course = course + positions.get(j).getCourse();
             }
+            location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
 			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setCarid(car.getId());
-			location.setMaxtemperature(15.0);
+			location.setTemperature(15.0);
+			locations.add(location);
+		}
+		return locations;
+	}
+	
+	@Override
+	public List<NotificationOut> fetchCarNotificationByAgencyIdAndNumber(Long id, String date) {
+		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
+		List<NotificationOut> locations = new ArrayList<NotificationOut>();
+		for(int i=0; i<cars.size(); i++) {
+			double course = 0.0;
+			NotificationOut location = new NotificationOut();
+			Car car = cars.get(i);
+			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			Position last = lasts.get(0);
+			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
+            for(int j=0; j<positions.size(); j++) {
+            	course = course + positions.get(j).getCourse();
+            }
+            location.setCarid(car.getId());
+			location.setMark(car.getMark());
+			location.setModel(car.getModel());
+			location.setImmatriculation(car.getImmatriculation());
+			location.setHtmlColor(car.getHtmlColor());
+			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setNumber(15);
 			locations.add(location);
 		}
 		return locations;
