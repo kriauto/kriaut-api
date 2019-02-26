@@ -3,15 +3,18 @@ package ma.kriauto.api.service;
 import java.util.List;
 
 import ma.kriauto.api.model.Car;
-import ma.kriauto.api.response.HistoryOut;
+import ma.kriauto.api.response.DoorOut;
+import ma.kriauto.api.response.DriverOut;
 import ma.kriauto.api.response.FuelOut;
 import ma.kriauto.api.response.HistoryLocationOut;
+import ma.kriauto.api.response.HistoryOut;
 import ma.kriauto.api.response.LastPositionOut;
-import ma.kriauto.api.response.Location;
 import ma.kriauto.api.response.MaxCourseOut;
 import ma.kriauto.api.response.MaxSpeedOut;
 import ma.kriauto.api.response.MaxTemperatureOut;
 import ma.kriauto.api.response.NotificationOut;
+import ma.kriauto.api.response.ParametersOut;
+import ma.kriauto.api.response.StartStopOut;
 import ma.kriauto.api.response.ZoneOut;
 
 public interface CarService {
@@ -27,6 +30,10 @@ public interface CarService {
 	public List<MaxTemperatureOut> fetchCarTemperatureFrByAgencyId(Long id, String date);
 	public List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number);
 	public List<NotificationOut> fetchCarNotificationByAgencyIdAndNumber(Long id, String date);
+	public List<DoorOut> fetchCarDoorByAgencyIdAndNumber(Long id, String date);
+	public List<DriverOut> fetchCarDriverByAgencyIdAndNumber(Long id, String date);
+	public List<ParametersOut> fetchCarParametersByAgencyIdAndNumber(Long id, String date);
+	public List<StartStopOut> fetchCarStartStopByAgencyIdAndNumber(Long id, String date);
 	
 	public List<Car> fetchAllCarByAgencyId(Long id);
 	public Car fetchCarById(Long id);	

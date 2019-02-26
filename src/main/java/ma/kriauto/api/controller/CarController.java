@@ -18,6 +18,10 @@ import ma.kriauto.api.exception.CustomErrorType;
 import ma.kriauto.api.model.Agency;
 import ma.kriauto.api.model.Profile;
 import ma.kriauto.api.request.MenuIn;
+import ma.kriauto.api.response.AccountOut;
+import ma.kriauto.api.response.AgencyOut;
+import ma.kriauto.api.response.DoorOut;
+import ma.kriauto.api.response.DriverOut;
 import ma.kriauto.api.response.FuelOut;
 import ma.kriauto.api.response.HistoryOut;
 import ma.kriauto.api.response.LastPositionOut;
@@ -26,6 +30,9 @@ import ma.kriauto.api.response.MaxCourseOut;
 import ma.kriauto.api.response.MaxSpeedOut;
 import ma.kriauto.api.response.MaxTemperatureOut;
 import ma.kriauto.api.response.NotificationOut;
+import ma.kriauto.api.response.ParametersOut;
+import ma.kriauto.api.response.ProfileOut;
+import ma.kriauto.api.response.StartStopOut;
 import ma.kriauto.api.response.ZoneOut;
 import ma.kriauto.api.service.AgencyService;
 import ma.kriauto.api.service.CarService;
@@ -48,11 +55,11 @@ public class CarController {
 	@CrossOrigin
 	@PostMapping("/loadmenu")
     public ResponseEntity<?> menulastposition(@RequestHeader(value="Authorization") String authorization,@RequestBody MenuIn menu) {
-        logger.info("--> Start loadmenu : "+authorization+" : "+menu);
-        String token = authorization.replaceAll("Basic", "");
-  	    Profile current = profileService.fetchProfileByToken(token);
-  	    if(null == current){
-		 return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+      logger.info("--> Start loadmenu : "+authorization+" : "+menu);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
   	  if(menu.getType().equals("00")) {
@@ -103,6 +110,42 @@ public class CarController {
 		List<NotificationOut> locations = carService.fetchCarNotificationByAgencyIdAndNumber(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
+	  }else if (menu.getType().equals("12")) {
+		List<DoorOut> locations = carService.fetchCarDoorByAgencyIdAndNumber(agency.getId(),menu.getDate());
+		logger.info("--> End loadmenu --");
+		return new ResponseEntity<List<DoorOut>>(locations, HttpStatus.OK);
+	  }else if (menu.getType().equals("13")) {
+		List<DriverOut> locations = carService.fetchCarDriverByAgencyIdAndNumber(agency.getId(),menu.getDate());
+		logger.info("--> End loadmenu --");
+		return new ResponseEntity<List<DriverOut>>(locations, HttpStatus.OK);
+	  }else if (menu.getType().equals("14")) {
+		List<ParametersOut> locations = carService.fetchCarParametersByAgencyIdAndNumber(agency.getId(),menu.getDate());
+		logger.info("--> End loadmenu --");
+		return new ResponseEntity<List<ParametersOut>>(locations, HttpStatus.OK);
+	  }else if (menu.getType().equals("15")) {
+		List<StartStopOut> locations = carService.fetchCarStartStopByAgencyIdAndNumber(agency.getId(),menu.getDate());
+		logger.info("--> End loadmenu --");
+		return new ResponseEntity<List<StartStopOut>>(locations, HttpStatus.OK);
+	  }else if (menu.getType().equals("16")) {
+		AccountOut account = new AccountOut();
+		ProfileOut profileout = new ProfileOut();
+		AgencyOut  agencyout  = new AgencyOut();
+		profileout.setId(current.getId());
+		profileout.setLogin(current.getLogin());
+		profileout.setMail(current.getMail());
+		profileout.setName(current.getName());
+		profileout.setPassword(current.getPassword());
+		profileout.setPhone(current.getPhone());
+		account.setProfile(profileout);
+		agencyout.setAddress(agency.getAddress());
+		agencyout.setCity(agency.getCity());
+		agencyout.setFax(agency.getFax());
+		agencyout.setId(agency.getId());
+		agencyout.setName(agency.getName());
+		agencyout.setPhone(agency.getPhone());
+		account.setAgency(agencyout);
+		logger.info("--> End loadmenu --");
+		return new ResponseEntity<AccountOut>(account, HttpStatus.OK);
 	  }else {
   		logger.info("--> End loadmenu --");
   		return new ResponseEntity(new CustomErrorType(ErrorLabel.MENY_TYPE),HttpStatus.NOT_FOUND);
