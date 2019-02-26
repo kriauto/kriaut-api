@@ -5,6 +5,7 @@ public class MenuIn {
 	private String  date;
 	private String  type;
 	private Integer number;
+	private Long    carid;
 
 	public String getDate() {
 		return date;
@@ -24,9 +25,15 @@ public class MenuIn {
 	public void setNumber(Integer number) {
 		this.number = number;
 	}
+	public Long getCarid() {
+		return carid;
+	}
+	public void setCarid(Long carid) {
+		this.carid = carid;
+	}
 	
 	@Override
 	public String toString() {
-		return "MenuIn [date=" + date + ", type=" + type + ", number=" + number + "]";
+		return "MenuIn [date=" + date + ", type=" + type + ", number=" + number + ", carid=" + carid + "]";
 	}
 }

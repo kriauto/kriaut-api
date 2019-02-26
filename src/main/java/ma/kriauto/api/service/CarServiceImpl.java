@@ -47,16 +47,7 @@ public class CarServiceImpl implements CarService {
 	@Autowired
     private UtilityService utilityService;
 
-	@Override
-	public List<Car> fetchAllCarByAgencyId(Long id) {
-		return carRepository.fetchAllCarByAgencyId(id);
-	}
-
-	@Override
-	public Car fetchCarById(Long id) {
-		return carRepository.fetchCarById(id);
-	}
-	
+	/*** menu acces ***/
 	@Override
 	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date) {
 		List<LastPositionOut> lsatpositions = new ArrayList<LastPositionOut>();
@@ -431,5 +422,16 @@ public class CarServiceImpl implements CarService {
 			locations.add(location);
 		}
 		return locations;
+	}
+	
+	/*** data by car access ***/
+	@Override
+	public List<Car> fetchAllCarByAgencyId(Long id) {
+		return carRepository.fetchAllCarByAgencyId(id);
+	}
+
+	@Override
+	public Car fetchCarById(Long id) {
+		return carRepository.fetchCarById(id);
 	}
 }

@@ -19,6 +19,7 @@ import ma.kriauto.api.response.ZoneOut;
 
 public interface CarService {
 	
+	/*** menu acces ***/
 	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date);
 	public List<HistoryOut> fetchHistoryByAgencyId(Long id);
 	public List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date);
@@ -35,6 +36,7 @@ public interface CarService {
 	public List<ParametersOut> fetchCarParametersByAgencyIdAndNumber(Long id, String date);
 	public List<StartStopOut> fetchCarStartStopByAgencyIdAndNumber(Long id, String date);
 	
+	/*** data by car access ***/
 	public List<Car> fetchAllCarByAgencyId(Long id);
 	public Car fetchCarById(Long id);	
 	
