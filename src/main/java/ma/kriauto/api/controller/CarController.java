@@ -17,9 +17,11 @@ import ma.kriauto.api.common.ErrorLabel;
 import ma.kriauto.api.exception.CustomErrorType;
 import ma.kriauto.api.model.Agency;
 import ma.kriauto.api.model.Profile;
+import ma.kriauto.api.request.DataIn;
 import ma.kriauto.api.request.MenuIn;
 import ma.kriauto.api.response.AccountOut;
 import ma.kriauto.api.response.AgencyOut;
+import ma.kriauto.api.response.DetailOut;
 import ma.kriauto.api.response.DoorOut;
 import ma.kriauto.api.response.DriverOut;
 import ma.kriauto.api.response.FuelOut;
@@ -150,23 +152,36 @@ public class CarController {
 		return new ResponseEntity<AccountOut>(account, HttpStatus.OK);
 	  }else {
   		logger.info("--> End loadmenu --");
-  		return new ResponseEntity(new CustomErrorType(ErrorLabel.MENY_TYPE),HttpStatus.NOT_FOUND);
+  		return new ResponseEntity(new CustomErrorType(ErrorLabel.TYPE_NOT_FOUND),HttpStatus.NOT_FOUND);
   	  }
     }
 
 	/*** data by car access ***/
 	@CrossOrigin
-	@PostMapping("/historycarlocations")
-    public ResponseEntity<?> historycarlocations(@RequestHeader(value="Authorization") String authorization,@RequestBody MenuIn menu) {
-      logger.info("-- Start historycarlocations : "+authorization+" :"+menu);
-      String token = authorization.replaceAll("Basic", "");
-  	  Profile current = profileService.fetchProfileByToken(token);
-  	  if(null == current){
-		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	@PostMapping("/loaddata")
+    public ResponseEntity<?> loaddata(@RequestHeader(value="Authorization") String authorization,@RequestBody DataIn data) {
+        logger.info("--> Start loaddata : "+authorization+" :"+data);
+        String token = authorization.replaceAll("Basic", "");
+  	    Profile current = profileService.fetchProfileByToken(token);
+  	    if(null == current){
+		 return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
-  	  List<HistoryLocationOut> historylocations = carService.fetchHistoryCarLocationsByCarIdAndDate(menu.getCarid(), menu.getDate());
-  	  logger.info("-- End historycarlocations --");
-      return new ResponseEntity<List<HistoryLocationOut>>(historylocations, HttpStatus.OK);
+  	  if(data.getType().equals("00")) {
+  	    List<HistoryLocationOut> historylocations = carService.fetchHistoryCarLocationsByCarIdAndDate(data.getCarid(), data.getDate());
+  	    logger.info("--> End loaddata --");
+        return new ResponseEntity<List<HistoryLocationOut>>(historylocations, HttpStatus.OK);
+  	  }else if (data.getType().equals("01")) {
+  		DetailOut detail = carService.fetchMaxSpeedByCarIdAndDate(data.getCarid(), data.getDate());
+  		logger.info("--> End loaddata --");
+  		return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
+  	  }else if (data.getType().equals("02")) {
+    	DetailOut detail = carService.fetchCourseByCarIdAndDate(data.getCarid(), data.getDate());
+      	logger.info("--> End loaddata --");
+      	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
+      }else {
+        logger.info("--> End loaddata --");
+        return new ResponseEntity(new CustomErrorType(ErrorLabel.TYPE_NOT_FOUND),HttpStatus.NOT_FOUND);
+      }
     }
     
 

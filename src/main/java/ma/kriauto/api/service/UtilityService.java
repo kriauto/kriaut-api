@@ -4,8 +4,9 @@ import java.sql.Timestamp;
 
 public interface UtilityService {
 	
-	public String getHourFromFixTime(Timestamp fixtime);
-	public String getDateFromFixTime(Timestamp fixtime);
+	public String getHhMmSsFromFixTime(Timestamp fixtime);
+	public String getHhFromFixTime(Timestamp fixtime);
+	public String getYyyyMmDdFromFixTime(Timestamp fixtime);
 	public String getAddress(Double Lat, Double Lng);
 
 }

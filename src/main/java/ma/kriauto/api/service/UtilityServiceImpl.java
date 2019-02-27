@@ -34,7 +34,7 @@ public class UtilityServiceImpl implements UtilityService {
 	}
 
 	@Override
-	public String getDateFromFixTime(Timestamp fixtime) {
+	public String getYyyyMmDdFromFixTime(Timestamp fixtime) {
 		// TODO Auto-generated method stub
 		SimpleDateFormat std = new SimpleDateFormat("YYYY-MM-DD");
 		String date = std.format(fixtime);
@@ -42,9 +42,17 @@ public class UtilityServiceImpl implements UtilityService {
 	}
 	
 	@Override
-	public String getHourFromFixTime(Timestamp fixtime) {
+	public String getHhMmSsFromFixTime(Timestamp fixtime) {
 		// TODO Auto-generated method stub
 		SimpleDateFormat std = new SimpleDateFormat("HH:mm:ss");
+		String hour = std.format(fixtime);
+		return hour;
+	}
+	
+	@Override
+	public String getHhFromFixTime(Timestamp fixtime) {
+		// TODO Auto-generated method stub
+		SimpleDateFormat std = new SimpleDateFormat("HH");
 		String hour = std.format(fixtime);
 		return hour;
 	}

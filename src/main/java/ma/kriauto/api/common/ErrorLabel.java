@@ -11,5 +11,5 @@ public class ErrorLabel {
 	public static final  String MAIL_NOT_FOUND = "E-mail n'existe pas";
 	public static final  String MAIL_SEND = "Vous allez recevoir un mail avec vos identifiants";
 	public static final  String DATA_SAVED = "Données enregistrées avec succès";
-	public static final  String MENY_TYPE = "le sous menu demandé n'existe pas";
+	public static final  String TYPE_NOT_FOUND = "le type d'action demandé n'existe pas";
 }

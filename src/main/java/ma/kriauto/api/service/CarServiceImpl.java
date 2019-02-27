@@ -15,6 +15,8 @@ import ma.kriauto.api.repository.CarRepository;
 import ma.kriauto.api.repository.PositionRepository;
 import ma.kriauto.api.repository.ZoneRepository;
 import ma.kriauto.api.response.HistoryOut;
+import ma.kriauto.api.response.ItemOut;
+import ma.kriauto.api.response.DetailOut;
 import ma.kriauto.api.response.DoorOut;
 import ma.kriauto.api.response.DriverOut;
 import ma.kriauto.api.response.FuelOut;
@@ -63,8 +65,8 @@ public class CarServiceImpl implements CarService {
 			lastposition.setImmatriculation(car.getImmatriculation());
 			lastposition.setHtmlColor(car.getHtmlColor());
 			lastposition.setSpeed(position.getSpeed());
-			lastposition.setDate(utilityService.getDateFromFixTime(position.getFixtime()));
-			lastposition.setHour(utilityService.getHourFromFixTime(position.getFixtime()));		
+			lastposition.setDate(utilityService.getYyyyMmDdFromFixTime(position.getFixtime()));
+			lastposition.setHour(utilityService.getHhMmSsFromFixTime(position.getFixtime()));		
 			lastposition.setMarkertype(position.getSpeed() > 0 ? 0 : 1);
 			lastposition.setLatitude(position.getLatitude());
 			lastposition.setLongitude(position.getLongitude());
@@ -126,7 +128,7 @@ public class CarServiceImpl implements CarService {
 			Position position = positions.get(i);
 			HistoryLocationOut historylocation = new HistoryLocationOut();
 			historylocation.setSpeed(position.getSpeed());
-			historylocation.setHour(utilityService.getHourFromFixTime(position.getFixtime()));
+			historylocation.setHour(utilityService.getHhMmSsFromFixTime(position.getFixtime()));
 			historylocation.setMarkertype(0);
 			historylocation.setMarkerdisplay(0);
 			historylocation.setLatitude(position.getLatitude());
@@ -422,6 +424,277 @@ public class CarServiceImpl implements CarService {
 			locations.add(location);
 		}
 		return locations;
+	}
+	
+	@Override
+	public DetailOut fetchMaxSpeedByCarIdAndDate(Long carid, String date) {
+		List<ItemOut> byday = new ArrayList<ItemOut>();
+		List<ItemOut> byhour = new ArrayList<ItemOut>();
+		DetailOut detail = new DetailOut();
+		String unit = " km/h";
+		double valueday = 0.0;ItemOut itemday = new ItemOut("Total","0.0"+unit);byday.add(itemday);
+		double value00 = 0.0;double value01 = 0.0;double value02 = 0.0;double value03 = 0.0;
+		ItemOut item00 = new ItemOut("00h00min-00h59min","0.0"+unit);ItemOut item01 = new ItemOut("01h00min-01h59min","0.0"+unit);ItemOut item02 = new ItemOut("02h00min-02h59min","0.0"+unit);ItemOut item03 = new ItemOut("03h00min-03h59min","0.0"+unit);
+		byhour.add(item00);byhour.add(item01);byhour.add(item02);byhour.add(item03);
+		double value04 = 0.0;double value05 = 0.0;double value06 = 0.0;double value07 = 0.0;
+		ItemOut item04 = new ItemOut("04h00min-04h59min","0.0"+unit);ItemOut item05 = new ItemOut("05h00min-05h59min","0.0"+unit);ItemOut item06 = new ItemOut("06h00min-06h59min","0.0"+unit);ItemOut item07 = new ItemOut("07h00min-07h59min","0.0"+unit);
+		byhour.add(item04);byhour.add(item05);byhour.add(item06);byhour.add(item07);
+		double value08 = 0.0;double value09 = 0.0;double value10 = 0.0;double value11 = 0.0;
+		ItemOut item08 = new ItemOut("08h00min-08h59min","0.0"+unit);ItemOut item09 = new ItemOut("09h00min-09h59min","0.0"+unit);ItemOut item10 = new ItemOut("10h00min-10h59min","0.0"+unit);ItemOut item11 = new ItemOut("11h00min-11h59min","0.0"+unit);
+		byhour.add(item08);byhour.add(item09);byhour.add(item10);byhour.add(item11);
+		double value12 = 0.0;double value13 = 0.0;double value14 = 0.0;double value15 = 0.0;
+		ItemOut item12 = new ItemOut("12h00min-12h59min","0.0"+unit);ItemOut item13 = new ItemOut("13h00min-13h59min","0.0"+unit);ItemOut item14 = new ItemOut("14h00min-14h59min","0.0"+unit);ItemOut item15 = new ItemOut("15h00min-15h59min","0.0"+unit);
+		byhour.add(item12);byhour.add(item13);byhour.add(item14);byhour.add(item15);
+		double value16 = 0.0;double value17 = 0.0;double value18 = 0.0;double value19 = 0.0;
+		ItemOut item16 = new ItemOut("16h00min-16h59min","0.0"+unit);ItemOut item17 = new ItemOut("17h00min-17h59min","0.0"+unit);ItemOut item18 = new ItemOut("18h00min-18h59min","0.0"+unit);ItemOut item19 = new ItemOut("19h00min-19h59min","0.0"+unit);
+		byhour.add(item16);byhour.add(item17);byhour.add(item18);byhour.add(item19);
+		double value20 = 0.0;double value21 = 0.0;double value22 = 0.0;double value23 = 0.0;
+		ItemOut item20 = new ItemOut("20h00min-20h59min","0.0"+unit);ItemOut item21 = new ItemOut("21h00min-21h59min","0.0"+unit);ItemOut item22 = new ItemOut("22h00min-22h59min","0.0"+unit);ItemOut item23 = new ItemOut("23h00min-23h59min","0.0"+unit);
+		byhour.add(item20);byhour.add(item21);byhour.add(item22);byhour.add(item23);
+		Car car = carRepository.fetchCarById(carid);
+		List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
+		for(int i=0; i<positions.size(); i++) {
+			Position position = positions.get(i);
+			if(position.getSpeed() > valueday) {
+				valueday = position.getSpeed();
+				itemday.setValue(String.valueOf(valueday)+unit);
+			}
+			String hour = utilityService.getHhFromFixTime(position.getFixtime());
+			if(hour.equals("00") && position.getSpeed() >= value00) {
+				value00 = position.getSpeed();
+				item00.setValue(String.valueOf(value00)+unit);
+			}
+			if(hour.equals("01") && position.getSpeed() >= value01) {
+				value01 = position.getSpeed();
+				item01.setValue(String.valueOf(value01)+unit);
+			}
+			if(hour.equals("02") && position.getSpeed() >= value02) {
+				value02 = position.getSpeed();
+				item02.setValue(String.valueOf(value02)+unit);
+			}
+			if(hour.equals("03") && position.getSpeed() >= value03) {
+				value03 = position.getSpeed();
+				item03.setValue(String.valueOf(value03)+unit);
+			}
+			if(hour.equals("04") && position.getSpeed() >= value04) {
+				value04 = position.getSpeed();
+				item04.setValue(String.valueOf(value04)+unit);
+			}
+			if(hour.equals("05") && position.getSpeed() >= value05) {
+				value05 = position.getSpeed();
+				item05.setValue(String.valueOf(value05)+unit);
+			}
+			if(hour.equals("06") && position.getSpeed() >= value06) {
+				value06 = position.getSpeed();
+				item06.setValue(String.valueOf(value06)+unit);
+			}
+			if(hour.equals("07") && position.getSpeed() >= value07) {
+				value07 = position.getSpeed();
+				item07.setValue(String.valueOf(value07)+unit);
+			}
+			if(hour.equals("08") && position.getSpeed() >= value08) {
+				value08 = position.getSpeed();
+				item08.setValue(String.valueOf(value08)+unit);
+			}
+			if(hour.equals("09") && position.getSpeed() >= value09) {
+				value09 = position.getSpeed();
+				item09.setValue(String.valueOf(value09)+unit);
+			}
+			if(hour.equals("10") && position.getSpeed() >= value10) {
+				value10 = position.getSpeed();
+				item10.setValue(String.valueOf(value10)+unit);
+			}
+			if(hour.equals("11") && position.getSpeed() >= value11) {
+				value11 = position.getSpeed();
+				item11.setValue(String.valueOf(value11)+unit);
+			}
+			if(hour.equals("12") && position.getSpeed() >= value12) {
+				value12 = position.getSpeed();
+				item12.setValue(String.valueOf(value12)+unit);
+			}
+			if(hour.equals("13") && position.getSpeed() >= value13) {
+				value13 = position.getSpeed();
+				item13.setValue(String.valueOf(value13)+unit);
+			}
+			if(hour.equals("14") && position.getSpeed() >= value14) {
+				value14 = position.getSpeed();
+				item14.setValue(String.valueOf(value14)+unit);
+			}
+			if(hour.equals("15") && position.getSpeed() >= value15) {
+				value15 = position.getSpeed();
+				item15.setValue(String.valueOf(value15)+unit);
+			}
+			if(hour.equals("16") && position.getSpeed() >= value16) {
+				value16 = position.getSpeed();
+				item16.setValue(String.valueOf(value16)+unit);
+			}
+			if(hour.equals("17") && position.getSpeed() >= value17) {
+				value17 = position.getSpeed();
+				item17.setValue(String.valueOf(value17)+unit);
+			}
+			if(hour.equals("18") && position.getSpeed() >= value18) {
+				value18 = position.getSpeed();
+				item18.setValue(String.valueOf(value18)+unit);
+			}
+			if(hour.equals("19") && position.getSpeed() >= value19) {
+				value19 = position.getSpeed();
+				item19.setValue(String.valueOf(value19)+unit);
+			}
+			if(hour.equals("20") && position.getSpeed() >= value20) {
+				value20 = position.getSpeed();
+				item20.setValue(String.valueOf(value20)+unit);
+			}
+			if(hour.equals("21") && position.getSpeed() >= value21) {
+				value21 = position.getSpeed();
+				item21.setValue(String.valueOf(value21)+unit);
+			}
+			if(hour.equals("22") && position.getSpeed() >= value22) {
+				value22 = position.getSpeed();
+				item22.setValue(String.valueOf(value22)+unit);
+			}
+			if(hour.equals("23") && position.getSpeed() >= value23) {
+				value23 = position.getSpeed();
+				item23.setValue(String.valueOf(value23)+unit);
+			}
+		}
+		detail.setByday(byday);
+		detail.setByhour(byhour);
+		return detail;
+	}
+	
+	@Override
+	public DetailOut fetchCourseByCarIdAndDate(Long carid, String date) {
+		List<ItemOut> byday = new ArrayList<ItemOut>();
+		List<ItemOut> byhour = new ArrayList<ItemOut>();
+		DetailOut detail = new DetailOut();
+		String unit = " km";
+		double valueday = 0.0;ItemOut itemday = new ItemOut("Total","0.0"+unit);byday.add(itemday);
+		double value00 = 0.0;double value01 = 0.0;double value02 = 0.0;double value03 = 0.0;
+		ItemOut item00 = new ItemOut("00h00min-00h59min","0.0"+unit);ItemOut item01 = new ItemOut("01h00min-01h59min","0.0"+unit);ItemOut item02 = new ItemOut("02h00min-02h59min","0.0"+unit);ItemOut item03 = new ItemOut("03h00min-03h59min","0.0"+unit);
+		byhour.add(item00);byhour.add(item01);byhour.add(item02);byhour.add(item03);
+		double value04 = 0.0;double value05 = 0.0;double value06 = 0.0;double value07 = 0.0;
+		ItemOut item04 = new ItemOut("04h00min-04h59min","0.0"+unit);ItemOut item05 = new ItemOut("05h00min-05h59min","0.0"+unit);ItemOut item06 = new ItemOut("06h00min-06h59min","0.0"+unit);ItemOut item07 = new ItemOut("07h00min-07h59min","0.0"+unit);
+		byhour.add(item04);byhour.add(item05);byhour.add(item06);byhour.add(item07);
+		double value08 = 0.0;double value09 = 0.0;double value10 = 0.0;double value11 = 0.0;
+		ItemOut item08 = new ItemOut("08h00min-08h59min","0.0"+unit);ItemOut item09 = new ItemOut("09h00min-09h59min","0.0"+unit);ItemOut item10 = new ItemOut("10h00min-10h59min","0.0"+unit);ItemOut item11 = new ItemOut("11h00min-11h59min","0.0"+unit);
+		byhour.add(item08);byhour.add(item09);byhour.add(item10);byhour.add(item11);
+		double value12 = 0.0;double value13 = 0.0;double value14 = 0.0;double value15 = 0.0;
+		ItemOut item12 = new ItemOut("12h00min-12h59min","0.0"+unit);ItemOut item13 = new ItemOut("13h00min-13h59min","0.0"+unit);ItemOut item14 = new ItemOut("14h00min-14h59min","0.0"+unit);ItemOut item15 = new ItemOut("15h00min-15h59min","0.0"+unit);
+		byhour.add(item12);byhour.add(item13);byhour.add(item14);byhour.add(item15);
+		double value16 = 0.0;double value17 = 0.0;double value18 = 0.0;double value19 = 0.0;
+		ItemOut item16 = new ItemOut("16h00min-16h59min","0.0"+unit);ItemOut item17 = new ItemOut("17h00min-17h59min","0.0"+unit);ItemOut item18 = new ItemOut("18h00min-18h59min","0.0"+unit);ItemOut item19 = new ItemOut("19h00min-19h59min","0.0"+unit);
+		byhour.add(item16);byhour.add(item17);byhour.add(item18);byhour.add(item19);
+		double value20 = 0.0;double value21 = 0.0;double value22 = 0.0;double value23 = 0.0;
+		ItemOut item20 = new ItemOut("20h00min-20h59min","0.0"+unit);ItemOut item21 = new ItemOut("21h00min-21h59min","0.0"+unit);ItemOut item22 = new ItemOut("22h00min-22h59min","0.0"+unit);ItemOut item23 = new ItemOut("23h00min-23h59min","0.0"+unit);
+		byhour.add(item20);byhour.add(item21);byhour.add(item22);byhour.add(item23);
+		Car car = carRepository.fetchCarById(carid);
+		List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
+		for(int i=0; i<positions.size(); i++) {
+			Position position = positions.get(i);
+		    valueday = valueday+position.getCourse();
+			itemday.setValue(String.valueOf(valueday)+unit);
+
+			String hour = utilityService.getHhFromFixTime(position.getFixtime());
+			if(hour.equals("00")) {
+				value00 = value00+position.getCourse()*1.85;
+				item00.setValue(String.valueOf(value00)+unit);
+			}
+			if(hour.equals("01")) {
+				value01 = +value01+position.getCourse();
+				item01.setValue(String.valueOf(value01)+unit);
+			}
+			if(hour.equals("02")) {
+				value02 = value02+position.getCourse();
+				item02.setValue(String.valueOf(value02)+unit);
+			}
+			if(hour.equals("03")) {
+				value03 = value03+position.getCourse();
+				item03.setValue(String.valueOf(value03)+unit);
+			}
+			if(hour.equals("04")) {
+				value04 = value04+position.getCourse();
+				item04.setValue(String.valueOf(value04)+unit);
+			}
+			if(hour.equals("05")) {
+				value05 = value05+position.getCourse();
+				item05.setValue(String.valueOf(value05)+unit);
+			}
+			if(hour.equals("06")) {
+				value06 = value06+position.getCourse();
+				item06.setValue(String.valueOf(value06)+unit);
+			}
+			if(hour.equals("07")) {
+				value07 = value07+position.getCourse();
+				item07.setValue(String.valueOf(value07)+unit);
+			}
+			if(hour.equals("08")) {
+				value08 = value08+position.getCourse();
+				item08.setValue(String.valueOf(value08)+unit);
+			}
+			if(hour.equals("09")) {
+				value09 = value09+position.getCourse();
+				item09.setValue(String.valueOf(value09)+unit);
+			}
+			if(hour.equals("10")) {
+				value10 = value10+position.getCourse();
+				item10.setValue(String.valueOf(value10)+unit);
+			}
+			if(hour.equals("11")) {
+				value11 = value11+position.getCourse();
+				item11.setValue(String.valueOf(value11)+unit);
+			}
+			if(hour.equals("12")) {
+				value12 = value12+position.getCourse();
+				item12.setValue(String.valueOf(value12)+unit);
+			}
+			if(hour.equals("13")) {
+				value13 = value13+position.getCourse();
+				item13.setValue(String.valueOf(value13)+unit);
+			}
+			if(hour.equals("14")) {
+				value14 = value14+position.getCourse();
+				item14.setValue(String.valueOf(value14)+unit);
+			}
+			if(hour.equals("15")) {
+				value15 = value15+position.getCourse();
+				item15.setValue(String.valueOf(value15)+unit);
+			}
+			if(hour.equals("16")) {
+				value16 = value16+position.getCourse();
+				item16.setValue(String.valueOf(value16)+unit);
+			}
+			if(hour.equals("17")) {
+				value17 = value17+position.getSpeed();
+				item17.setValue(String.valueOf(value17)+unit);
+			}
+			if(hour.equals("18")) {
+				value18 = value18+position.getCourse();
+				item18.setValue(String.valueOf(value18)+unit);
+			}
+			if(hour.equals("19")) {
+				value19 = value19+position.getCourse();
+				item19.setValue(String.valueOf(value19)+unit);
+			}
+			if(hour.equals("20")) {
+				value20 = value20+position.getCourse();
+				item20.setValue(String.valueOf(value20)+unit);
+			}
+			if(hour.equals("21")) {
+				value21 = value21+position.getCourse();
+				item21.setValue(String.valueOf(value21)+unit);
+			}
+			if(hour.equals("22")) {
+				value22 = value22+position.getCourse();
+				item22.setValue(String.valueOf(value22)+unit);
+			}
+			if(hour.equals("23")) {
+				value23 = value23+position.getCourse();
+				item23.setValue(String.valueOf(value23)+unit);
+			}
+		}
+		detail.setByday(byday);
+		detail.setByhour(byhour);
+		return detail;
 	}
 	
 	/*** data by car access ***/
