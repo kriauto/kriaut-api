@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Table(name = "api_positions")
+@Table(name = "positions")
 public class Position {
 	
 	  @Id
