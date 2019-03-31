@@ -1,7 +1,16 @@
 package ma.kriauto.api.service;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
+
+
+
+
+import ma.kriauto.api.model.Profile;
 
 import org.springframework.stereotype.Service;
 
@@ -55,6 +64,26 @@ public class UtilityServiceImpl implements UtilityService {
 		SimpleDateFormat std = new SimpleDateFormat("HH");
 		String hour = std.format(fixtime);
 		return hour;
+	}
+	
+	@Override
+	public String hash256Profile(Profile profile){
+		String textToHash = profile.getLogin()+":"+profile.getPassword(), encoded = null;
+		MessageDigest digest;
+        try {
+			digest = MessageDigest.getInstance("SHA-256");
+			byte[] byteOfTextToHash = textToHash.getBytes("UTF-8");
+		    byte[] hashedByetArray = digest.digest(byteOfTextToHash);
+		    encoded = Base64.getEncoder().encodeToString(hashedByetArray);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+        return encoded;
 	}
 
 }

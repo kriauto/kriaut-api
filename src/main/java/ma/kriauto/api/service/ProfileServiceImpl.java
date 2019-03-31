@@ -75,4 +75,9 @@ public class ProfileServiceImpl implements ProfileService {
 	public Profile fetchProfileById(Long id) {
 		return profileRepository.fetchProfileById(id);
 	}
+
+	@Override
+	public Profile save(Profile profile) {
+		return profileRepository.save(profile);
+	}
 }

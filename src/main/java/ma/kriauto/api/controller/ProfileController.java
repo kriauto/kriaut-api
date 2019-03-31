@@ -21,6 +21,7 @@ import ma.kriauto.api.response.AuthenticationOut;
 import ma.kriauto.api.service.ProfileService;
 import ma.kriauto.api.service.PushNotifService;
 import ma.kriauto.api.service.SenderService;
+import ma.kriauto.api.service.UtilityService;
 
 
 
@@ -38,6 +39,9 @@ public class ProfileController {
     @Autowired
     private SenderService senderService;
     
+    @Autowired
+    private UtilityService utilityService;
+    
     @CrossOrigin
 	@PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthenticationIn auth) {
@@ -47,9 +51,13 @@ public class ProfileController {
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }else if(!current.getPassword().equals(auth.getPassword())){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.PASSWORD_MISSING),HttpStatus.NOT_FOUND);
-	  }else if(null == auth.getNotifToken()){
-		return new ResponseEntity(new CustomErrorType(ErrorLabel.NOTIF_TOKEN_REQUIRED),HttpStatus.NOT_FOUND);
-	  }else{
+	  }else{ 
+		if(null == current.getAuthToken()){
+			String token = utilityService.hash256Profile(current);
+			current.setAuthToken(token);
+	  		profileService.save(current);
+		}
+		
 		PushNotif pushnotif = new PushNotif();
 		if(null == pushnotifService.fetchDeviceByPushToken(auth.getNotifToken())){
 			pushnotif.setIdProfile(current.getId());
@@ -95,7 +103,7 @@ public class ProfileController {
     		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_NOT_FOUND),HttpStatus.NOT_FOUND);
 
     	}
-    	String from = "contact@kriauto.ma";
+    	String from = "noreply@kriauto.ma";
     	String to = current.getMail();
     	String subject = "Identifiants de connexion";
     	String message = "Bonjour "+current.getName()+", <br/><br/> Veuillez trouver vos identifiants de connexion : <br/><br/> - login : "+current.getLogin()+" <br/> - Mot de passe : "+current.getPassword()+" <br/><br/> l'équipe KriAuto.";

@@ -10,4 +10,5 @@ public interface ProfileService {
 	public Profile fetchProfileByToken(String token);
 	public Profile fetchProfileByMail(String mail);
 	public Profile fetchProfileById(Long id);
+	public Profile save(Profile profile);
 }

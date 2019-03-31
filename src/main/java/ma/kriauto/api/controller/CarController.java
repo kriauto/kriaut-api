@@ -66,7 +66,7 @@ public class CarController {
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
-  	  if(menu.getType().equals("00")) {
+  	  if(menu.getType().equals("00")) { //LastPosition
   	    List<LastPositionOut> locations = carService.fetchLastPositionByAgencyIdAndDate(agency.getId(),menu.getDate());
   	    logger.info("--> End loadmenu --");
   	    return new ResponseEntity<List<LastPositionOut>>(locations, HttpStatus.OK);

@@ -21,5 +21,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	
 	@Query("SELECT p FROM Profile p WHERE p.id=:id")
 	public Profile fetchProfileById(@Param("id") Long id);
+	
+	public Profile save(Profile profile);
 
 }
