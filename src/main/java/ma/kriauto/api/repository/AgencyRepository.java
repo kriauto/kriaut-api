@@ -12,4 +12,7 @@ public interface AgencyRepository extends JpaRepository<Agency, Long> {
 	
 	@Query("SELECT a FROM Agency a WHERE a.idProfile=:id")
 	public Agency fetchAgencyByProfileId(@Param("id") Long id);
+	
+	@Query("SELECT a FROM Agency a WHERE a.id=:id")
+	public Agency fetchAgencyById(@Param("id") Long id);
 }

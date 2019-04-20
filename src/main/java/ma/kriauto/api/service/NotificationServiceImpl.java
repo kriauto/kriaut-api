@@ -1,5 +1,7 @@
 package ma.kriauto.api.service;
 
+import java.util.List;
+
 import ma.kriauto.api.model.Notification;
 import ma.kriauto.api.repository.AgencyRepository;
 import ma.kriauto.api.repository.NotificationRepository;
@@ -14,9 +16,9 @@ public class NotificationServiceImpl implements NotificationService {
     private NotificationRepository notificationRepository;
 
 	@Override
-	public Notification fetchNotificationByCarIdAndCreationdate(Long carid,
-			Long date) {
-		return notificationRepository.fetchNotificationByCarIdAndCreationdate(carid, date);
+	public List<Notification> fetchNotificationByCarIdAndDate(Long carid,
+			String date) {
+		return notificationRepository.fetchNotificationByCarIdAndDate(carid, date);
 	}
 
 	@Override

@@ -66,7 +66,7 @@ public class ActiveNotif {
 	@Column(name="zonetwoin")
 	private Boolean zonetwoin;
 	  
-	@Column(name="techcontrol")
+	@Column(name="zonetwoout")
 	private Boolean zonetwoout;
 	  
 	@Column(name="enginestop")
