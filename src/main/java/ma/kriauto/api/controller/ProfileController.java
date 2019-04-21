@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ma.kriauto.api.common.ErrorLabel;
 import ma.kriauto.api.exception.CustomErrorType;
+import ma.kriauto.api.model.Parameter;
 import ma.kriauto.api.model.Profile;
 import ma.kriauto.api.model.PushNotif;
 import ma.kriauto.api.request.AuthenticationIn;
@@ -110,5 +111,19 @@ public class ProfileController {
     	senderService.sendMail(from, to, subject, message);
     	logger.info("--> End initPassword "+auth);
     	return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_SEND),HttpStatus.OK);
+    }
+    
+    @CrossOrigin
+    @PostMapping("/updateprofile")
+    public ResponseEntity<?> updateprofile(@RequestHeader(value="Authorization") String authorization, @RequestBody Profile profile) {
+      logger.info("--> Start updateprofile "+profile);
+      String token = authorization.replaceAll("Basic", "");
+  	  Profile current = profileService.fetchProfileByToken(token);
+  	  if(null == current){
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }
+  	  profileService.save(profile);
+  	  logger.info("--> End updateprofile");
+  	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }
 }

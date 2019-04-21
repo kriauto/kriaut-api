@@ -1639,4 +1639,10 @@ public class CarServiceImpl implements CarService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public Car save(Car car) {
+		// TODO Auto-generated method stub
+		return carRepository.save(car);
+	}
 }

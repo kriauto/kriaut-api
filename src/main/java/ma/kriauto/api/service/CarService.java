@@ -28,7 +28,8 @@ public interface CarService {
 	
 	/*** common ***/
 	public List<Car> fetchAllCarByAgencyId(Long id);
-	public Car fetchCarById(Long id);	
+	public Car fetchCarById(Long id);
+	public Car save(Car car);
 	
 	/*** menu acces ***/
 	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date);

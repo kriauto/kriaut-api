@@ -17,4 +17,10 @@ public class AgencyServiceImpl implements AgencyService {
 		return agencyRepository.fetchAgencyByProfileId(id);
 	}
 
+	@Override
+	public Agency save(Agency agency) {
+		// TODO Auto-generated method stub
+		return agencyRepository.save();
+	}
+
 }

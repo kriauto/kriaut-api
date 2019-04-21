@@ -18,4 +18,6 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 	@Query("SELECT c FROM Car c WHERE c.id=:id")
 	public Car fetchCarById(@Param("id") Long id);
 	
+	public Car save(Car car);
+	
 }

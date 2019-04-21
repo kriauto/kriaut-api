@@ -2,12 +2,10 @@ package ma.kriauto.api.controller;
 
 import ma.kriauto.api.common.ErrorLabel;
 import ma.kriauto.api.exception.CustomErrorType;
+import ma.kriauto.api.model.Parameter;
 import ma.kriauto.api.model.Profile;
-import ma.kriauto.api.model.Zone;
-import ma.kriauto.api.service.AgencyService;
-import ma.kriauto.api.service.CarService;
+import ma.kriauto.api.service.ParameterService;
 import ma.kriauto.api.service.ProfileService;
-import ma.kriauto.api.service.ZoneService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,27 +19,27 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ZoneController {
+public class ParameterController {
 	
-	private static Logger logger = LoggerFactory.getLogger(ZoneController.class);
+	private static Logger logger = LoggerFactory.getLogger(ParameterController.class);
 	
 	@Autowired
-	private ZoneService zoneService;
+	private ParameterService parameterService;
 	
 	@Autowired
 	private ProfileService profileService;
-		
+	
 	@CrossOrigin
-    @PostMapping("/updatezone")
-    public ResponseEntity<?> updatezone(@RequestHeader(value="Authorization") String authorization, @RequestBody Zone zone) {
-      logger.info("--> Start updatezone "+zone);
+    @PostMapping("/updateparameter")
+    public ResponseEntity<?> updateparameter(@RequestHeader(value="Authorization") String authorization, @RequestBody Parameter parameter) {
+      logger.info("--> Start updateparameter "+parameter);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
-  	  zoneService.save(zone);
-  	  logger.info("--> End updatezone");
+  	  parameterService.save(parameter);
+  	  logger.info("--> End updateparameter");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }
 }
