@@ -336,10 +336,6 @@ public class CarServiceImpl implements CarService {
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position last = lasts.get(0);
-			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
-            for(int j=0; j<positions.size(); j++) {
-            	course = course + positions.get(j).getCourse();
-            }
             location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
@@ -362,10 +358,6 @@ public class CarServiceImpl implements CarService {
 			Car car = cars.get(i);
 			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			Position last = lasts.get(0);
-			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
-            for(int j=0; j<positions.size(); j++) {
-            	course = course + positions.get(j).getCourse();
-            }
             location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());

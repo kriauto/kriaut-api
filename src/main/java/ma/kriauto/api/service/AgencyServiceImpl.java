@@ -20,7 +20,7 @@ public class AgencyServiceImpl implements AgencyService {
 	@Override
 	public Agency save(Agency agency) {
 		// TODO Auto-generated method stub
-		return agencyRepository.save();
+		return agencyRepository.save(agency);
 	}
 
 }
