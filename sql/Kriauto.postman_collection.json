@@ -1,0 +1,670 @@
+{
+	"info": {
+		"_postman_id": "a8abcb3d-20a8-4e93-ac91-54b927e1f566",
+		"name": "Kriauto",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"login\":\"demo\",\"password\":\"demo\",\"notifToken\":\"toto\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/login",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo=",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"login\":\"demo\",\"password\":\"demo\",\"notifToken\":\"toto\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/logout",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Initpassword",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo=",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"mail\":\"contact@kriauto.ma\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/initpassword",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"initpassword"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dernièreposition",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo=",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-10\",\"type\":\"00\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Historique",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-10\",\"type\":\"01\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Historiquedétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-05\",\"type\":\"01\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vitesse",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"02\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vitessedétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"02\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Distance",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"03\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Distancedétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"03\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Carburantprincipal",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"04\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Carburantprincipaldétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"04\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Carburantsecondaire",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"05\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Carburantsecondairedétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"05\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Notificationconsultation",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"06\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Notificationconsultation détail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"06\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Notificationconfiguration",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"07\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Notificationconfigurationdétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"07\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "fdfe6bde-7cba-4750-8a61-8cf1b82d54f7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "2390d380-c192-4696-b567-dd24ccaad0f5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "6f54be0b-f3c8-4dcf-9a18-670ce5655007",
+			"key": "local",
+			"value": "localhost:8088",
+			"type": "string"
+		},
+		{
+			"id": "a28a466e-809c-46d2-af84-372eea044700",
+			"key": "remote",
+			"value": "www.kriauto.ma",
+			"type": "string"
+		}
+	]
+}

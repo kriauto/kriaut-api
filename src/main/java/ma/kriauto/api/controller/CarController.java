@@ -77,27 +77,27 @@ public class CarController {
   		List<HistoryOut> cars = carService.fetchHistoryByAgencyId(agency.getId());
     	logger.info("--> End loadmenu");
     	return new ResponseEntity<List<HistoryOut>>(cars, HttpStatus.OK);
-      }else if (menu.getType().equals("02")){
+      }else if (menu.getType().equals("02")){ //Historique
     	List<MaxSpeedOut> locations = carService.fetchCarMaxSpeedByAgencyId(agency.getId(),menu.getDate());
       	logger.info("--> End loadmenu --");
         return new ResponseEntity<List<MaxSpeedOut>>(locations, HttpStatus.OK);
-      }else if (menu.getType().equals("03")) {
+      }else if (menu.getType().equals("03")) {//Distance
     	List<MaxCourseOut> locations = carService.fetchCarMaxCourseByAgencyId(agency.getId(),menu.getDate());
       	logger.info("--> End loadmenu --");
         return new ResponseEntity<List<MaxCourseOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("04")) {
+	  }else if (menu.getType().equals("04")) {//Carburant Principale
 	    List<FuelOut> locations = carService.fetchCarFuelPrincipaleByAgencyId(agency.getId(),menu.getDate());
 	    logger.info("--> End loadmenu --");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("05")) {
+	  }else if (menu.getType().equals("05")) {//Carburant Secondaire
 	    List<FuelOut> locations = carService.fetchCarFuelSecondaireByAgencyId(agency.getId(),menu.getDate());
 	    logger.info("--> End loadmenu --");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("06")) {
+	  }else if (menu.getType().equals("061")) {
 	    List<MaxTemperatureOut> locations = carService.fetchCarTemperatureMoByAgencyId(agency.getId(),menu.getDate());
 	    logger.info("--> End loadmenu --");
 	    return new ResponseEntity<List<MaxTemperatureOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("07")) {
+	  }else if (menu.getType().equals("071")) {
 	    List<MaxTemperatureOut> locations = carService.fetchCarTemperatureFrByAgencyId(agency.getId(),menu.getDate());
 	    logger.info("--> End loadmenu --");
 	    return new ResponseEntity<List<MaxTemperatureOut>>(locations, HttpStatus.OK);
@@ -109,11 +109,11 @@ public class CarController {
 			List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),2);
 			logger.info("--> End loadmenu --");
 			return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
-		  }else if (menu.getType().equals("09")) {
+		  }else if (menu.getType().equals("06")) {//Notification consultation
 		List<NotificationOut> locations = carService.fetchCarNotificationConsulByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("10")) {
+	  }else if (menu.getType().equals("07")) {//Notification configuration
 		List<NotificationOut> locations = carService.fetchCarNotificationConfigByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
@@ -157,35 +157,35 @@ public class CarController {
   	    if(null == current){
 		 return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
-  	  if(data.getType().equals("00")) { //Historique Détail
+  	  if(data.getType().equals("01")) { //Historique Détail
   	    List<HistoryLocationOut> historylocations = carService.fetchHistoryCarLocationsByCarIdAndDate(data.getCarid(), data.getDate());
   	    logger.info("--> End loaddata --");
         return new ResponseEntity<List<HistoryLocationOut>>(historylocations, HttpStatus.OK);
-  	  }else if (data.getType().equals("01")) {
+  	  }else if (data.getType().equals("02")) {
   		DetailOut detail = carService.fetchMaxSpeedByCarIdAndDate(data.getCarid(), data.getDate());
   		logger.info("--> End loaddata --");
   		return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
-  	  }else if (data.getType().equals("02")) {
+  	  }else if (data.getType().equals("03")) {
     	DetailOut detail = carService.fetchCourseByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
-      }else if (data.getType().equals("03")) {
+      }else if (data.getType().equals("04")) {
     	DetailOut detail = carService.fetchCarFuelPrincipaleByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
-      }else if (data.getType().equals("04")) {
+      }else if (data.getType().equals("05")) {
     	DetailOut detail = carService.fetchCarFuelSecondaireByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
-      }else if (data.getType().equals("05")) {
+      }else if (data.getType().equals("06")) {
     	List<NotifMessageOut> messages = carService.fetchCarNotificationMessageByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<List<NotifMessageOut>>(messages, HttpStatus.OK);
-      }else if (data.getType().equals("06")) {
+      }else if (data.getType().equals("07")) {
     	ActiveNotif activnotif = carService.fetchCarActiveNotifByCarId(data.getCarid());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<ActiveNotif>(activnotif, HttpStatus.OK);
-      }else if (data.getType().equals("07")) {
+      }else if (data.getType().equals("071")) {
     	Zone zone = carService.fetchCarZoneByCarIdAndNumber(data.getCarid(),1);
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<Zone>(zone, HttpStatus.OK);
