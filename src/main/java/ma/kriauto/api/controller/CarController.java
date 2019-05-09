@@ -105,11 +105,11 @@ public class CarController {
 		List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),1);
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("16")) { // zone
+	  }else if (menu.getType().equals("09")) { // zone
 			List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),2);
 			logger.info("--> End loadmenu --");
 			return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
-		  }else if (menu.getType().equals("06")) {//Notification consultation
+  	  }else if (menu.getType().equals("091")) {//Notification consultation
 		List<NotificationOut> locations = carService.fetchCarNotificationConsulByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
@@ -185,15 +185,15 @@ public class CarController {
     	ActiveNotif activnotif = carService.fetchCarActiveNotifByCarId(data.getCarid());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<ActiveNotif>(activnotif, HttpStatus.OK);
-      }else if (data.getType().equals("071")) {
+      }else if (data.getType().equals("08")) {
     	Zone zone = carService.fetchCarZoneByCarIdAndNumber(data.getCarid(),1);
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<Zone>(zone, HttpStatus.OK);
-      }else if (data.getType().equals("08")) {
+      }else if (data.getType().equals("09")) {
     	  Zone zone = carService.fetchCarZoneByCarIdAndNumber(data.getCarid(),2);
         	logger.info("--> End loaddata --");
         	return new ResponseEntity<Zone>(zone, HttpStatus.OK);
-      }else if (data.getType().equals("09")) {
+      }else if (data.getType().equals("091")) {
     	DetailOut detail = carService.fetchCarTemperatureMoByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);

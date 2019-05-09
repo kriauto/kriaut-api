@@ -629,6 +629,216 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Zonepremière",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"08\",\"number\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Zonepremièredétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"08\",\"number\":\"1\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Zonepremièremodification",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"carid\": 1,\n    \"rank\": 1,\n    \"label\": \"Medina\",\n    \"lat1\": 6.25,\n    \"lon1\": 5.25,\n    \"lat2\": 6.25,\n    \"lon2\": 5.25,\n    \"lat3\": 6.25,\n    \"lon3\": 5.25,\n    \"lat4\": 6.25,\n    \"lon4\": 5.25,\n    \"lat5\": 6.25,\n    \"lon5\": 5.25,\n    \"lat6\": 6.25,\n    \"lon6\": 5.25\n}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/updatezone",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"updatezone"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Zonedeuxième",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"09\",\"number\":\"2\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Zonedeuxièmedétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"09\",\"number\":\"2\",\"carid\":\"1\"}\n"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Zonedeuxièmemodification",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 2,\n    \"carid\": 1,\n    \"rank\": 2,\n    \"label\": \"Marjane\",\n    \"lat1\": 6.25,\n    \"lon1\": 5.25,\n    \"lat2\": 6.25,\n    \"lon2\": 5.25,\n    \"lat3\": 6.25,\n    \"lon3\": 5.25,\n    \"lat4\": 6.25,\n    \"lon4\": 5.25,\n    \"lat5\": 6.25,\n    \"lon5\": 5.25,\n    \"lat6\": 6.25,\n    \"lon6\": 5.25\n}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/updatezone",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"updatezone"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -655,13 +865,13 @@
 	],
 	"variable": [
 		{
-			"id": "6f54be0b-f3c8-4dcf-9a18-670ce5655007",
+			"id": "cb7f9622-88b3-4344-ae9a-a92cdc108b16",
 			"key": "local",
 			"value": "localhost:8088",
 			"type": "string"
 		},
 		{
-			"id": "a28a466e-809c-46d2-af84-372eea044700",
+			"id": "bf4ed500-5c99-43cc-b940-8b7cae796fa9",
 			"key": "remote",
 			"value": "www.kriauto.ma",
 			"type": "string"
