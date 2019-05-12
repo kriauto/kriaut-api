@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "a8abcb3d-20a8-4e93-ac91-54b927e1f566",
-		"name": "Kriauto",
+		"_postman_id": "58baccf7-a604-4d4e-afac-7d29829d9765",
+		"name": "Remote",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -1495,13 +1495,13 @@
 	],
 	"variable": [
 		{
-			"id": "919bf45e-1822-47bf-97b0-76e63953fe5d",
+			"id": "b8845c03-96d2-4157-9b14-272418ce04c8",
 			"key": "local",
 			"value": "localhost:8088",
 			"type": "string"
 		},
 		{
-			"id": "2d441e23-c7c4-4395-9694-24ad07bf58bb",
+			"id": "edc04232-8940-47fa-a86e-784d6ce9ac60",
 			"key": "remote",
 			"value": "www.kriauto.ma",
 			"type": "string"
