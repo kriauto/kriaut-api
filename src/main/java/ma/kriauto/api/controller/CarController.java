@@ -77,7 +77,7 @@ public class CarController {
   		List<HistoryOut> cars = carService.fetchHistoryByAgencyId(agency.getId());
     	logger.info("--> End loadmenu");
     	return new ResponseEntity<List<HistoryOut>>(cars, HttpStatus.OK);
-      }else if (menu.getType().equals("02")){ //Historique
+      }else if (menu.getType().equals("02")){ //Vitesse
     	List<MaxSpeedOut> locations = carService.fetchCarMaxSpeedByAgencyId(agency.getId(),menu.getDate());
       	logger.info("--> End loadmenu --");
         return new ResponseEntity<List<MaxSpeedOut>>(locations, HttpStatus.OK);
@@ -93,23 +93,23 @@ public class CarController {
 	    List<FuelOut> locations = carService.fetchCarFuelSecondaireByAgencyId(agency.getId(),menu.getDate());
 	    logger.info("--> End loadmenu --");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("061")) {
+	  }else if (menu.getType().equals("10")) { //Température Moteur
 	    List<MaxTemperatureOut> locations = carService.fetchCarTemperatureMoByAgencyId(agency.getId(),menu.getDate());
 	    logger.info("--> End loadmenu --");
 	    return new ResponseEntity<List<MaxTemperatureOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("071")) {
+	  }else if (menu.getType().equals("11")) {//Température Frigot
 	    List<MaxTemperatureOut> locations = carService.fetchCarTemperatureFrByAgencyId(agency.getId(),menu.getDate());
 	    logger.info("--> End loadmenu --");
 	    return new ResponseEntity<List<MaxTemperatureOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("08")) { // zone
+	  }else if (menu.getType().equals("08")) { // zone une
 		List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),1);
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("09")) { // zone
-			List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),2);
-			logger.info("--> End loadmenu --");
+	  }else if (menu.getType().equals("09")) { // zone deux
+  	  	List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),2);
+  	  	logger.info("--> End loadmenu --");
 			return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
-  	  }else if (menu.getType().equals("091")) {//Notification consultation
+  	  }else if (menu.getType().equals("06")) {//Notification consultation
 		List<NotificationOut> locations = carService.fetchCarNotificationConsulByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
@@ -117,27 +117,27 @@ public class CarController {
 		List<NotificationOut> locations = carService.fetchCarNotificationConfigByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("11")) {
+	  }else if (menu.getType().equals("12")) { // Portes
 		List<DoorOut> locations = carService.fetchCarDoorByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<DoorOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("12")) {
+	  }else if (menu.getType().equals("13")) { // Chauffeures
 		List<DriverOut> locations = carService.fetchCarDriverByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<DriverOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("13")) {
+	  }else if (menu.getType().equals("14")) { // Paramètres
 		List<ParametersOut> locations = carService.fetchCarParametersByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<ParametersOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("14")) {
+	  }else if (menu.getType().equals("15")) { // Arret/démarrage
 		List<StartStopOut> locations = carService.fetchCarStartStopByAgencyId(agency.getId(),menu.getDate());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<StartStopOut>>(locations, HttpStatus.OK);
-	  }else if (menu.getType().equals("15")) {
+	  }else if (menu.getType().equals("16")) { // Mon compte
 		AccountOut account = carService.fetchAccountByAgencyId(agency.getId());
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<AccountOut>(account, HttpStatus.OK);
-	  }else if (menu.getType().equals("17")) {
+	  }else if (menu.getType().equals("17")) { // Contacts
 		List<Contact> contact = carService.fetchContacts();
 		logger.info("--> End loadmenu --");
 		return new ResponseEntity<List<Contact>>(contact, HttpStatus.OK);
@@ -190,26 +190,26 @@ public class CarController {
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<Zone>(zone, HttpStatus.OK);
       }else if (data.getType().equals("09")) {
-    	  Zone zone = carService.fetchCarZoneByCarIdAndNumber(data.getCarid(),2);
-        	logger.info("--> End loaddata --");
-        	return new ResponseEntity<Zone>(zone, HttpStatus.OK);
-      }else if (data.getType().equals("091")) {
+  	  	Zone zone = carService.fetchCarZoneByCarIdAndNumber(data.getCarid(),2);
+  	  	logger.info("--> End loaddata --");
+  	  	return new ResponseEntity<Zone>(zone, HttpStatus.OK);
+      }else if (data.getType().equals("10")) {
     	DetailOut detail = carService.fetchCarTemperatureMoByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
-      }else if (data.getType().equals("10")) {
+      }else if (data.getType().equals("11")) {
     	DetailOut detail = carService.fetchCarTemperatureFrByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
-      }else if (data.getType().equals("11")) {
+      }else if (data.getType().equals("12")) {
     	DetailOut detail = carService.fetchCarDoorByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
-      }else if (data.getType().equals("12")) {
+      }else if (data.getType().equals("13")) {
     	DetailOut detail = carService.fetchCarDriverByCarIdAndDate(data.getCarid(), data.getDate());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
-      }else if (data.getType().equals("13")) {
+      }else if (data.getType().equals("14")) {
     	Parameter parameter = carService.fetchCarParametersByCarId(data.getCarid());
       	logger.info("--> End loaddata --");
       	return new ResponseEntity<Parameter>(parameter, HttpStatus.OK);

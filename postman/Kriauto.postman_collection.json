@@ -839,6 +839,636 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Températuremoteur",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"10\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Températuremoteurdétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"10\",\"carid\":\"1\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Températurefrigot",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"11\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Températurefrigotdétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"11\",\"carid\":\"1\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Portes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"12\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Portesdétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"12\",\"carid\":\"1\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Chauffeures",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"13\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Chauffeuresdétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"13\",\"carid\":\"1\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paramètres",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"14\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paramètresdétail",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"14\",\"carid\":\"1\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loaddata",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loaddata"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Paramètresmodifier",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"carid\": 1,\n    \"techcontrol\": \"2019-05-31\",\n    \"emptyingkm\": 10000,\n    \"insuranceend\": \"2019-05-31\",\n    \"circulationend\": \"2019-05-31\",\n    \"maxspeed\": 125,\n    \"maxcourse\": 100,\n    \"maxcarburantpri\": 10,\n    \"maxcarburantsec\": 50,\n    \"mincarburantpri\": 10,\n    \"mincarburantsec\": 50,\n    \"maxtempengine\": 10,\n    \"mintempengine\": 10,\n    \"maxtempfrigot\": 10,\n    \"mintempfrigot\": 10,\n    \"totaldistance\": 5000,\n    \"emptyingkmindex\": 1\n}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/updatecar",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"updatecar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Arretdémarrage",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"date\":\"2019-05-01\",\"type\":\"15\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stopcar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"carid\":\"1\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/stopcar",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"stopcar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Startcar",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"carid\":\"1\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/startcar",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"startcar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Moncompte",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"type\":\"16\"}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Moncomptemodifierprofile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\": 1,\n        \"login\": \"demo\",\n        \"password\": \"demo\",\n        \"authToken\": \"usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo=\",\n        \"name\": \"Abdelhaq El hassnaoui\",\n        \"phone\": \"0033617638348\",\n        \"mail\": \"contact@kriauto.ma\",\n        \"isLastPosition\": true,\n        \"isHistory\": true,\n        \"isSpeedMax\": true,\n        \"isCourse\": true,\n        \"isCarburantP\": true,\n        \"isCarburantS\": true,\n        \"isNotifCons\": true,\n        \"isNotifConf\": true,\n        \"isZoneOne\": true,\n        \"isZoneTwo\": true,\n        \"isTempM\": true,\n        \"isTempF\": true,\n        \"isDoor\": true,\n        \"isDriver\": true,\n        \"isParameters\": true,\n        \"isStartStop\": true,\n        \"isMyAccount\": true,\n        \"isContactUs\": true\n    }"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/updateprofile",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"updateprofile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Moncomptemodifieragence",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"id\": 1,\n        \"name\": \"Autocalifornia\",\n        \"city\": \"Tanger\",\n        \"address\": \"79 Avenue Al massira\",\n        \"phone\": \"0033617638348\",\n        \"fax\": \"0033617638348\",\n        \"idProfile\": 1\n    }"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/updateagency",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"updateagency"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Contacts",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "usG8ghA3q9TPBlouKz8MUk4SxH70yCGMafqacby+RLo="
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"type\": 17}"
+				},
+				"url": {
+					"raw": "http://{{local}}/api/loadmenu",
+					"protocol": "http",
+					"host": [
+						"{{local}}"
+					],
+					"path": [
+						"api",
+						"loadmenu"
+					]
+				}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -865,13 +1495,13 @@
 	],
 	"variable": [
 		{
-			"id": "cb7f9622-88b3-4344-ae9a-a92cdc108b16",
+			"id": "919bf45e-1822-47bf-97b0-76e63953fe5d",
 			"key": "local",
 			"value": "localhost:8088",
 			"type": "string"
 		},
 		{
-			"id": "bf4ed500-5c99-43cc-b940-8b7cae796fa9",
+			"id": "2d441e23-c7c4-4395-9694-24ad07bf58bb",
 			"key": "remote",
 			"value": "www.kriauto.ma",
 			"type": "string"
