@@ -47,8 +47,6 @@ public class ActivenotifController {
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
-  	  //Zone currentzone = zoneService.fetchZoneById(zone.getId());
-  	  //zone.setId(currentzone.getId());
   	  activenotifService.save(activenotif);
   	  logger.info("--> End updateactivenotif");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
