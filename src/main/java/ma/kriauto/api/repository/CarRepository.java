@@ -13,11 +13,11 @@ import ma.kriauto.api.model.Car;
 public interface CarRepository extends JpaRepository<Car, Long> {
 	
 	@Query("SELECT c FROM Car c WHERE c.agencyId=:id ORDER BY mark,model,immatriculation")
-	public List<Car> fetchAllCarByAgencyId(@Param("id") Long id);
+	List<Car> fetchAllCarByAgencyId(@Param("id") Long id);
 	
 	@Query("SELECT c FROM Car c WHERE c.id=:id")
-	public Car fetchCarById(@Param("id") Long id);
+	Car fetchCarById(@Param("id") Long id);
 	
-	public Car save(Car car);
+	Car save(Car car);
 	
 }

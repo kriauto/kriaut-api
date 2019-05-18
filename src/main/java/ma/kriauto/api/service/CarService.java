@@ -27,43 +27,43 @@ import ma.kriauto.api.response.ZoneOut;
 public interface CarService {
 	
 	/*** common ***/
-	public List<Car> fetchAllCarByAgencyId(Long id);
-	public Car fetchCarById(Long id);
-	public Car save(Car car);
+	List<Car> fetchAllCarByAgencyId(Long id);
+	Car fetchCarById(Long id);
+	Car save(Car car);
 	
 	/*** menu acces ***/
-	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date);
-	public List<HistoryOut> fetchHistoryByAgencyId(Long id);
-	public List<MaxSpeedOut> fetchCarMaxSpeedByAgencyId(Long id, String date);
-	public List<MaxCourseOut> fetchCarMaxCourseByAgencyId(Long id, String date);
-	public List<FuelOut> fetchCarFuelPrincipaleByAgencyId(Long id, String date);
-	public List<FuelOut> fetchCarFuelSecondaireByAgencyId(Long id, String date);
-	public List<MaxTemperatureOut> fetchCarTemperatureMoByAgencyId(Long id, String date);
-	public List<MaxTemperatureOut> fetchCarTemperatureFrByAgencyId(Long id, String date);
-	public List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number);
-	public List<NotificationOut> fetchCarNotificationConsulByAgencyId(Long id, String date);
-	public List<NotificationOut> fetchCarNotificationConfigByAgencyId(Long id, String date);
-	public List<DoorOut> fetchCarDoorByAgencyId(Long id, String date);
-	public List<DriverOut> fetchCarDriverByAgencyId(Long id, String date);
-	public List<ParametersOut> fetchCarParametersByAgencyId(Long id, String date);
-	public List<StartStopOut> fetchCarStartStopByAgencyId(Long id, String date);
-	public AccountOut fetchAccountByAgencyId(Long id);
-	public List<Contact> fetchContacts();
+	List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date);
+	List<HistoryOut> fetchHistoryByAgencyId(Long id);
+	List<MaxSpeedOut> fetchCarMaxSpeedByAgencyIdAndDate(Long id, String date);
+	List<MaxCourseOut> fetchCarMaxCourseByAgencyIdAndDate(Long id, String date);
+	List<FuelOut> fetchCarFuelPrincipaleByAgencyIdAndDate(Long id, String date);
+	List<FuelOut> fetchCarFuelSecondaireByAgencyId(Long id, String date);
+	List<MaxTemperatureOut> fetchCarTemperatureMoByAgencyId(Long id, String date);
+	List<MaxTemperatureOut> fetchCarTemperatureFrByAgencyId(Long id, String date);
+	List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number);
+	List<NotificationOut> fetchCarNotificationConsulByAgencyId(Long id, String date);
+	List<NotificationOut> fetchCarNotificationConfigByAgencyId(Long id, String date);
+	List<DoorOut> fetchCarDoorByAgencyId(Long id, String date);
+	List<DriverOut> fetchCarDriverByAgencyId(Long id, String date);
+	List<ParametersOut> fetchCarParametersByAgencyId(Long id, String date);
+	List<StartStopOut> fetchCarStartStopByAgencyId(Long id, String date);
+	AccountOut fetchAccountByAgencyId(Long id);
+	List<Contact> fetchContacts();
 	
 	/*** data by car access ***/
-	public List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date);
-	public DetailOut fetchMaxSpeedByCarIdAndDate(Long id, String date);
-	public DetailOut fetchCourseByCarIdAndDate(Long id, String date);
-	public DetailOut fetchCarFuelPrincipaleByCarIdAndDate(Long id, String date);
-	public DetailOut fetchCarFuelSecondaireByCarIdAndDate(Long id, String date);
-	public List<NotifMessageOut> fetchCarNotificationMessageByCarIdAndDate(Long id, String date);
-	public ActiveNotif fetchCarActiveNotifByCarId(Long id);
-	public Zone fetchCarZoneByCarIdAndNumber(Long id, Integer number);
-	public DetailOut fetchCarTemperatureMoByCarIdAndDate(Long id, String date);
-	public DetailOut fetchCarTemperatureFrByCarIdAndDate(Long id, String date);
-	public DetailOut fetchCarDoorByCarIdAndDate(Long id, String date);
-	public DetailOut fetchCarDriverByCarIdAndDate(Long id, String date);
-	public Parameter fetchCarParametersByCarId(Long id);
+	List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date);
+	DetailOut fetchMaxSpeedByCarIdAndDate(Long id, String date);
+	DetailOut fetchCourseByCarIdAndDate(Long id, String date);
+	DetailOut fetchCarFuelPrincipaleByCarIdAndDate(Long id, String date);
+	DetailOut fetchCarFuelSecondaireByCarIdAndDate(Long id, String date);
+	List<NotifMessageOut> fetchCarNotificationMessageByCarIdAndDate(Long id, String date);
+	ActiveNotif fetchCarActiveNotifByCarId(Long id);
+	Zone fetchCarZoneByCarIdAndNumber(Long id, Integer number);
+	DetailOut fetchCarTemperatureMoByCarIdAndDate(Long id, String date);
+	DetailOut fetchCarTemperatureFrByCarIdAndDate(Long id, String date);
+	DetailOut fetchCarDoorByCarIdAndDate(Long id, String date);
+	DetailOut fetchCarDriverByCarIdAndDate(Long id, String date);
+	Parameter fetchCarParametersByCarId(Long id);
 	
 	
 	

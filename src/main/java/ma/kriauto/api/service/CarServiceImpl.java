@@ -76,33 +76,33 @@ public class CarServiceImpl implements CarService {
     private PaymentRepository paymentRepository;
 	
 	@Autowired
-    private ContactRepository contactRepository;
-	
-	@Autowired
     private UtilityService utilityService;
 
-	/*** menu acces ***/
+	/*** menu access ***/
 	@Override
 	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date) {
 		List<LastPositionOut> lsatpositions = new ArrayList<LastPositionOut>();
-		Agency agency = agencyRepository.fetchAgencyByProfileId(id);
-		List<Car> cars = carRepository.fetchAllCarByAgencyId(agency.getId());
+		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		for(int i=0; i<cars.size() ;i++){
-			Car car = cars.get(i);
-			List<Position> positions = positionRepository.fetchLastPositionByDeviceIdAndDate(car.getDeviceId(), date);
-			Position position = positions.get(0);
-			LastPositionOut lastposition = new LastPositionOut();		
-			lastposition.setMark(car.getMark());
-			lastposition.setModel(car.getModel());
-			lastposition.setImmatriculation(car.getImmatriculation());
-			lastposition.setHtmlColor(car.getHtmlColor());
-			lastposition.setSpeed(position.getSpeed());
-			lastposition.setDate(utilityService.getYyyyMmDdFromFixTime(position.getFixtime()));
-			lastposition.setHour(utilityService.getHhMmSsFromFixTime(position.getFixtime()));		
-			lastposition.setMarkertype(position.getSpeed() > 0 ? 0 : 1);
-			lastposition.setLatitude(position.getLatitude());
-			lastposition.setLongitude(position.getLongitude());
-			lsatpositions.add(lastposition);
+			if(null != cars && null != cars.get(i)){
+				Car car = cars.get(i);
+				LastPositionOut lastposition = new LastPositionOut();
+				lastposition.setMark(car.getMark());
+				lastposition.setModel(car.getModel());
+				lastposition.setImmatriculation(car.getImmatriculation());
+				lastposition.setHtmlColor(car.getHtmlColor());
+				List<Position> positions = positionRepository.fetchLastPositionByDeviceIdAndDate(car.getDeviceId(), date);
+				if(null != positions && !positions.isEmpty()) {
+					Position position = positions.get(0);
+					lastposition.setSpeed(Math.round(position.getSpeed() * 1.85 * 100) / 100.0);
+					lastposition.setDate(utilityService.getYyyyMmDdFromFixTime(position.getFixtime()));
+					lastposition.setHour(utilityService.getHhMmSsFromFixTime(position.getFixtime()));
+					lastposition.setMarkertype(position.getSpeed() > 0 ? "00" : "01");
+					lastposition.setLatitude(position.getLatitude());
+					lastposition.setLongitude(position.getLongitude());
+				}
+				lsatpositions.add(lastposition);
+			}
 		}
 		return lsatpositions;
 	}
@@ -112,19 +112,23 @@ public class CarServiceImpl implements CarService {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<HistoryOut> historys = new ArrayList<HistoryOut>();
 		for(int i=0; i<cars.size(); i++) {
-			HistoryOut hystory = new HistoryOut();
-			Car car = cars.get(i);
-			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			Position position = lasts.get(0);
-			hystory.setCarid(car.getId());
-			hystory.setMark(car.getMark());
-			hystory.setModel(car.getModel());
-			hystory.setImmatriculation(car.getImmatriculation());
-			hystory.setHtmlColor(car.getHtmlColor());
-			hystory.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
-			hystory.setLatitude(position.getLatitude());
-			hystory.setLongitude(position.getLongitude());
-			historys.add(hystory);
+			if (null != cars && null != cars.get(i)) {
+				HistoryOut history = new HistoryOut();
+				Car car = cars.get(i);
+				history.setCarid(car.getId());
+				history.setMark(car.getMark());
+				history.setModel(car.getModel());
+				history.setImmatriculation(car.getImmatriculation());
+				history.setHtmlColor(car.getHtmlColor());
+				List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+				if (null != positions && !positions.isEmpty()) {
+					Position position = positions.get(0);
+					history.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+					history.setLatitude(position.getLatitude());
+					history.setLongitude(position.getLongitude());
+				}
+				historys.add(history);
+			}
 		}
 		return historys;
 	}
@@ -155,14 +159,35 @@ public class CarServiceImpl implements CarService {
 	public List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date) {
 		List<HistoryLocationOut> historylocations = new ArrayList<HistoryLocationOut>();
 		Car car = carRepository.fetchCarById(id);
+		Parameter parameters = parameterRepository.fetchParameterByCarId(car.getId());
 		List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
 		for(int i=0; i<positions.size() ;i++){
 			Position position = positions.get(i);
 			HistoryLocationOut historylocation = new HistoryLocationOut();
-			historylocation.setSpeed(position.getSpeed());
+			historylocation.setSpeed(Math.round(position.getSpeed() * 1.85 *100)/100.0);
 			historylocation.setHour(utilityService.getHhMmSsFromFixTime(position.getFixtime()));
-			historylocation.setMarkertype(0);
-			historylocation.setMarkerdisplay(0);
+			if(i==0) {
+				historylocation.setMarkertype("00");
+			}
+
+			if( i!=0 && (position.getSpeed() * 1.85) > parameters.getMaxspeed()){
+				historylocation.setMarkertype("03");
+			}
+			if( i!=0 && 0 < (position.getSpeed() * 1.85) && (position.getSpeed() * 1.85) < parameters.getMaxspeed()){
+				historylocation.setMarkertype("04");
+			}
+			if(i!=0 && i!=positions.size()-1 && position.getSpeed() == 0){
+				historylocation.setMarkertype("02");
+			}
+			if(i == 0  || i == positions.size()-1){
+				historylocation.setMarkerdisplay(0);
+			}
+			if(i != 0 && i != (positions.size()-1) && (i % 4 == 0)){
+				historylocation.setMarkerdisplay(0);
+			}
+			if(i != 0 && i != (positions.size()-1) && (i % 4 != 0)){
+				historylocation.setMarkerdisplay(1);
+			}
 			historylocation.setLatitude(position.getLatitude());
 			historylocation.setLongitude(position.getLongitude());
 			historylocations.add(historylocation);
@@ -171,57 +196,63 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<MaxSpeedOut> fetchCarMaxSpeedByAgencyId(Long id, String date) {
+	public List<MaxSpeedOut> fetchCarMaxSpeedByAgencyIdAndDate(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<MaxSpeedOut> locations = new ArrayList<MaxSpeedOut>();
 		for(int i=0; i<cars.size(); i++) {
 			MaxSpeedOut location = new MaxSpeedOut();
 			Car car = cars.get(i);
-			List<Position> maxspeeds = positionRepository.fetchMaxSpeedDeviceIdAndDate(date, car.getDeviceId());
-			Position maxspeed = maxspeeds.get(0);
-			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			Position last = lasts.get(0);
 			location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setSpeed(maxspeed.getSpeed());
+			List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			if(null != positions) {
+				Position last = positions.get(0);
+				location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			}
+			List<Position> maxspeeds = positionRepository.fetchMaxSpeedDeviceIdAndDate(date, car.getDeviceId());
+			if(null != maxspeeds) {
+				Position maxspeed = maxspeeds.get(0);
+				location.setSpeed(Math.round(maxspeed.getSpeed()*1.85*100)/100.0);
+			}
 			locations.add(location);
 		}
 		return locations;
 	}
 	
 	@Override
-	public List<MaxCourseOut> fetchCarMaxCourseByAgencyId(Long id, String date) {
+	public List<MaxCourseOut> fetchCarMaxCourseByAgencyIdAndDate(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<MaxCourseOut> locations = new ArrayList<MaxCourseOut>();
 		for(int i=0; i<cars.size(); i++) {
 			double course = 0.0;
 			MaxCourseOut location = new MaxCourseOut();
 			Car car = cars.get(i);
-			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			Position last = lasts.get(0);
 			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
             for(int j=0; j<positions.size(); j++) {
             	course = course + positions.get(j).getCourse();
             }
+			location.setTotalcourse(Math.round(course/1000*100)/100.0);
+			location.setDailycourse(Math.round(course/10000*100)/100.0);
             location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setTotalcourse(course);
-			location.setDailycourse(course/10);
+			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			if(null != lastpositions) {
+				Position position = lastpositions.get(0);
+				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			}
 			locations.add(location);
 		}
 		return locations;
 	}
 	
 	@Override
-	public List<FuelOut> fetchCarFuelPrincipaleByAgencyId(Long id, String date) {
+	public List<FuelOut> fetchCarFuelPrincipaleByAgencyIdAndDate(Long id, String date) {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<FuelOut> locations = new ArrayList<FuelOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -505,105 +536,105 @@ public class CarServiceImpl implements CarService {
 		List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
 		for(int i=0; i<positions.size(); i++) {
 			Position position = positions.get(i);
-			if(position.getSpeed() > valueday) {
-				valueday = position.getSpeed();
+			if( (Math.round(position.getSpeed() * 1.85 * 100)/100.0) > valueday) {
+				valueday = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				itemday.setValue(String.valueOf(valueday)+unit);
 			}
 			String hour = utilityService.getHhFromFixTime(position.getFixtime());
-			if(hour.equals("00") && position.getSpeed() >= value00) {
-				value00 = position.getSpeed();
+			if(hour.equals("00") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value00) {
+				value00 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item00.setValue(String.valueOf(value00)+unit);
 			}
-			if(hour.equals("01") && position.getSpeed() >= value01) {
-				value01 = position.getSpeed();
+			if(hour.equals("01") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value01) {
+				value01 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item01.setValue(String.valueOf(value01)+unit);
 			}
-			if(hour.equals("02") && position.getSpeed() >= value02) {
-				value02 = position.getSpeed();
+			if(hour.equals("02") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value02) {
+				value02 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item02.setValue(String.valueOf(value02)+unit);
 			}
-			if(hour.equals("03") && position.getSpeed() >= value03) {
-				value03 = position.getSpeed();
+			if(hour.equals("03") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value03) {
+				value03 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item03.setValue(String.valueOf(value03)+unit);
 			}
-			if(hour.equals("04") && position.getSpeed() >= value04) {
-				value04 = position.getSpeed();
+			if(hour.equals("04") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value04) {
+				value04 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item04.setValue(String.valueOf(value04)+unit);
 			}
-			if(hour.equals("05") && position.getSpeed() >= value05) {
-				value05 = position.getSpeed();
+			if(hour.equals("05") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value05) {
+				value05 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item05.setValue(String.valueOf(value05)+unit);
 			}
-			if(hour.equals("06") && position.getSpeed() >= value06) {
-				value06 = position.getSpeed();
+			if(hour.equals("06") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value06) {
+				value06 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item06.setValue(String.valueOf(value06)+unit);
 			}
-			if(hour.equals("07") && position.getSpeed() >= value07) {
-				value07 = position.getSpeed();
+			if(hour.equals("07") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value07) {
+				value07 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item07.setValue(String.valueOf(value07)+unit);
 			}
-			if(hour.equals("08") && position.getSpeed() >= value08) {
-				value08 = position.getSpeed();
+			if(hour.equals("08") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value08) {
+				value08 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item08.setValue(String.valueOf(value08)+unit);
 			}
-			if(hour.equals("09") && position.getSpeed() >= value09) {
-				value09 = position.getSpeed();
+			if(hour.equals("09") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value09) {
+				value09 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item09.setValue(String.valueOf(value09)+unit);
 			}
-			if(hour.equals("10") && position.getSpeed() >= value10) {
-				value10 = position.getSpeed();
+			if(hour.equals("10") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value10) {
+				value10 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item10.setValue(String.valueOf(value10)+unit);
 			}
-			if(hour.equals("11") && position.getSpeed() >= value11) {
-				value11 = position.getSpeed();
+			if(hour.equals("11") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value11) {
+				value11 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item11.setValue(String.valueOf(value11)+unit);
 			}
-			if(hour.equals("12") && position.getSpeed() >= value12) {
-				value12 = position.getSpeed();
+			if(hour.equals("12") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value12) {
+				value12 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item12.setValue(String.valueOf(value12)+unit);
 			}
-			if(hour.equals("13") && position.getSpeed() >= value13) {
-				value13 = position.getSpeed();
+			if(hour.equals("13") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value13) {
+				value13 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item13.setValue(String.valueOf(value13)+unit);
 			}
-			if(hour.equals("14") && position.getSpeed() >= value14) {
-				value14 = position.getSpeed();
+			if(hour.equals("14") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value14) {
+				value14 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item14.setValue(String.valueOf(value14)+unit);
 			}
-			if(hour.equals("15") && position.getSpeed() >= value15) {
-				value15 = position.getSpeed();
+			if(hour.equals("15") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value15) {
+				value15 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item15.setValue(String.valueOf(value15)+unit);
 			}
-			if(hour.equals("16") && position.getSpeed() >= value16) {
-				value16 = position.getSpeed();
+			if(hour.equals("16") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value16) {
+				value16 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item16.setValue(String.valueOf(value16)+unit);
 			}
-			if(hour.equals("17") && position.getSpeed() >= value17) {
-				value17 = position.getSpeed();
+			if(hour.equals("17") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value17) {
+				value17 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item17.setValue(String.valueOf(value17)+unit);
 			}
-			if(hour.equals("18") && position.getSpeed() >= value18) {
-				value18 = position.getSpeed();
+			if(hour.equals("18") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value18) {
+				value18 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item18.setValue(String.valueOf(value18)+unit);
 			}
-			if(hour.equals("19") && position.getSpeed() >= value19) {
-				value19 = position.getSpeed();
+			if(hour.equals("19") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value19) {
+				value19 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item19.setValue(String.valueOf(value19)+unit);
 			}
-			if(hour.equals("20") && position.getSpeed() >= value20) {
-				value20 = position.getSpeed();
+			if(hour.equals("20") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value20) {
+				value20 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item20.setValue(String.valueOf(value20)+unit);
 			}
-			if(hour.equals("21") && position.getSpeed() >= value21) {
-				value21 = position.getSpeed();
+			if(hour.equals("21") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value21) {
+				value21 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item21.setValue(String.valueOf(value21)+unit);
 			}
-			if(hour.equals("22") && position.getSpeed() >= value22) {
-				value22 = position.getSpeed();
+			if(hour.equals("22") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value22) {
+				value22 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item22.setValue(String.valueOf(value22)+unit);
 			}
-			if(hour.equals("23") && position.getSpeed() >= value23) {
-				value23 = position.getSpeed();
+			if(hour.equals("23") && (Math.round(position.getSpeed() * 1.85 * 100)/100.0) >= value23) {
+				value23 = (Math.round(position.getSpeed() * 1.85 * 100)/100.0);
 				item23.setValue(String.valueOf(value23)+unit);
 			}
 		}
