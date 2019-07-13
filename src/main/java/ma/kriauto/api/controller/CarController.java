@@ -194,7 +194,8 @@ public class CarController {
 	  }else if (menu.getType().equals("17")) {
 		List<Contact> contact = carService.fetchContacts();
 		logger.info("--> End loadmenu --");
-		return new ResponseEntity<List<Contact>>(contact, HttpStatus.OK);
+		return new ResponseEntity<List<Contact>>(contact, HttpStatus.FORBIDDEN);
+		//return new ResponseEntity<List<Contact>>(contact, HttpStatus.OK);
 	   }else {
   		logger.info("--> End loadmenu --");
   		return new ResponseEntity(new CustomErrorType(ErrorLabel.TYPE_NOT_FOUND),HttpStatus.NOT_FOUND);

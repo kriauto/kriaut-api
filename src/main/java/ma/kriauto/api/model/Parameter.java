@@ -56,12 +56,6 @@ public class Parameter {
 	  
 	@Column(name="mintempfrigot")
 	private Double mintempfrigot;
-	  
-	@Column(name="totaldistance")
-	private Double totaldistance;
-	  
-	@Column(name="emptyingkmindex")
-	private Integer emptyingkmindex;
 
 	public Long getId() {
 		return id;
@@ -191,21 +185,6 @@ public class Parameter {
 		this.mintempfrigot = mintempfrigot;
 	}
 
-	public Double getTotaldistance() {
-		return totaldistance;
-	}
-
-	public void setTotaldistance(Double totaldistance) {
-		this.totaldistance = totaldistance;
-	}
-
-	public Integer getEmptyingkmindex() {
-		return emptyingkmindex;
-	}
-
-	public void setEmptyingkmindex(Integer emptyingkmindex) {
-		this.emptyingkmindex = emptyingkmindex;
-	}
 
 	@Override
 	public String toString() {
@@ -218,7 +197,6 @@ public class Parameter {
 				+ mincarburantpri + ", mincarburantsec=" + mincarburantsec
 				+ ", maxtempengine=" + maxtempengine + ", mintempengine="
 				+ mintempengine + ", maxtempfrigot=" + maxtempfrigot
-				+ ", mintempfrigot=" + mintempfrigot + ", totaldistance="
-				+ totaldistance + ", emptyingkmindex=" + emptyingkmindex + "]";
+				+ ", mintempfrigot=" + mintempfrigot +  "]";
 	}
 }

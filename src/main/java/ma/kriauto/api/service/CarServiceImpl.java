@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import ma.kriauto.api.model.ActiveNotif;
 import ma.kriauto.api.model.Agency;
 import ma.kriauto.api.model.Car;
@@ -46,6 +47,7 @@ import ma.kriauto.api.response.StartStopOut;
 import ma.kriauto.api.response.ZoneOut;
 
 @Service
+@Slf4j
 public class CarServiceImpl implements CarService {
 	
 	@Autowired
@@ -81,29 +83,33 @@ public class CarServiceImpl implements CarService {
 	/*** menu access ***/
 	@Override
 	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date) {
+		//log.info("==> Start fetchLastPositionByAgencyIdAndDate");
 		List<LastPositionOut> lsatpositions = new ArrayList<LastPositionOut>();
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		for(int i=0; i<cars.size() ;i++){
 			if(null != cars && null != cars.get(i)){
 				Car car = cars.get(i);
 				LastPositionOut lastposition = new LastPositionOut();
+				lastposition.setCarid(car.getId());
 				lastposition.setMark(car.getMark());
 				lastposition.setModel(car.getModel());
 				lastposition.setImmatriculation(car.getImmatriculation());
 				lastposition.setHtmlColor(car.getHtmlColor());
 				List<Position> positions = positionRepository.fetchLastPositionByDeviceIdAndDate(car.getDeviceId(), date);
-				if(null != positions && !positions.isEmpty()) {
+				if(null != positions && positions.size() > 0) {
 					Position position = positions.get(0);
 					lastposition.setSpeed(Math.round(position.getSpeed() * 1.85 * 100) / 100.0);
 					lastposition.setDate(utilityService.getYyyyMmDdFromFixTime(position.getFixtime()));
 					lastposition.setHour(utilityService.getHhMmSsFromFixTime(position.getFixtime()));
-					lastposition.setMarkertype(position.getSpeed() > 0 ? "00" : "01");
+					lastposition.setMarkertype(position.getSpeed() > 0 ? "01" : "02");
 					lastposition.setLatitude(position.getLatitude());
 					lastposition.setLongitude(position.getLongitude());
 				}
 				lsatpositions.add(lastposition);
+				
 			}
 		}
+		//log.info("==> End fetchLastPositionByAgencyIdAndDate");
 		return lsatpositions;
 	}
 	
@@ -121,7 +127,7 @@ public class CarServiceImpl implements CarService {
 				history.setImmatriculation(car.getImmatriculation());
 				history.setHtmlColor(car.getHtmlColor());
 				List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-				if (null != positions && !positions.isEmpty()) {
+				if (null != positions && positions.size() > 0) {
 					Position position = positions.get(0);
 					history.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
 					history.setLatitude(position.getLatitude());
@@ -140,16 +146,18 @@ public class CarServiceImpl implements CarService {
 		for(int i=0; i<cars.size(); i++) {
 			ZoneOut location = new ZoneOut();
 			Car car = cars.get(i);
-			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			Position position = lasts.get(0);
-			Zone zone = zoneRepository.fetchZoneByCarIdAndRank(id, number);
-			location.setCarid(car.getId());
-			location.setMark(car.getMark());
-			location.setModel(car.getModel());
-			location.setImmatriculation(car.getImmatriculation());
-			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
-			location.setInzone(true);
+			List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			if (null != positions && positions.size() > 0) {
+			 Position position = positions.get(0);
+			 Zone zone = zoneRepository.fetchZoneByCarIdAndRank(id, number);
+			 location.setCarid(car.getId());
+			 location.setMark(car.getMark());
+			 location.setModel(car.getModel());
+			 location.setImmatriculation(car.getImmatriculation());
+			 location.setHtmlColor(car.getHtmlColor());
+			 location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			 location.setInzone(utilityService.isInZone(zone, position.getLatitude(), position.getLongitude()));
+			}
 			locations.add(location);
 		}
 		return locations;
@@ -174,7 +182,7 @@ public class CarServiceImpl implements CarService {
 				historylocation.setMarkertype("03");
 			}
 			if( i!=0 && 0 < (position.getSpeed() * 1.85) && (position.getSpeed() * 1.85) < parameters.getMaxspeed()){
-				historylocation.setMarkertype("04");
+				historylocation.setMarkertype("01");
 			}
 			if(i!=0 && i!=positions.size()-1 && position.getSpeed() == 0){
 				historylocation.setMarkertype("02");
@@ -182,11 +190,15 @@ public class CarServiceImpl implements CarService {
 			if(i == 0  || i == positions.size()-1){
 				historylocation.setMarkerdisplay(0);
 			}
-			if(i != 0 && i != (positions.size()-1) && (i % 4 == 0)){
+			if(positions.size() > 500) {
+			  if(i != 0 && i != (positions.size()-1) && (i % 4 == 0)){
 				historylocation.setMarkerdisplay(0);
-			}
-			if(i != 0 && i != (positions.size()-1) && (i % 4 != 0)){
+			  }
+			  if(i != 0 && i != (positions.size()-1) && (i % 4 != 0)){
 				historylocation.setMarkerdisplay(1);
+			  }
+			}else {
+				historylocation.setMarkerdisplay(0);	
 			}
 			historylocation.setLatitude(position.getLatitude());
 			historylocation.setLongitude(position.getLongitude());
@@ -207,16 +219,23 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			if(null != positions) {
+			/*List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			if(null != positions && positions.size() > 0) {
 				Position last = positions.get(0);
 				location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			}
+			}else {
+				location.setIsrolling(1);
+			}*/
 			List<Position> maxspeeds = positionRepository.fetchMaxSpeedDeviceIdAndDate(date, car.getDeviceId());
-			if(null != maxspeeds) {
+			if(null != maxspeeds && maxspeeds.size() > 0) {
 				Position maxspeed = maxspeeds.get(0);
-				location.setSpeed(Math.round(maxspeed.getSpeed()*1.85*100)/100.0);
+				location.setSpeed(maxspeed.getSpeed() > 0 ? Math.round(maxspeed.getSpeed()*1.85*100)/100.0 : 0.0);
+				location.setIsrolling(maxspeed.getSpeed() > 0 ? 0 : 1);
+			}else {
+				location.setSpeed(0.0);
+				location.setIsrolling(1);
 			}
+				
 			locations.add(location);
 		}
 		return locations;
@@ -234,17 +253,19 @@ public class CarServiceImpl implements CarService {
             for(int j=0; j<positions.size(); j++) {
             	course = course + positions.get(j).getCourse();
             }
-			location.setTotalcourse(Math.round(course/1000*100)/100.0);
-			location.setDailycourse(Math.round(course/10000*100)/100.0);
+			location.setTotalcourse(car.getTotaldistance());
+			location.setDailycourse(Math.round((course/1000)*100)/100.0);
             location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			if(null != lastpositions) {
+			if(null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
 				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			}else {
+				location.setIsrolling(1);
 			}
 			locations.add(location);
 		}
@@ -513,7 +534,7 @@ public class CarServiceImpl implements CarService {
 		List<ItemOut> byhour = new ArrayList<ItemOut>();
 		DetailOut detail = new DetailOut();
 		String unit = " km/h";
-		double valueday = 0.0;ItemOut itemday = new ItemOut("Total","0.0"+unit);byday.add(itemday);
+		double valueday = 0.0;ItemOut itemday = new ItemOut("Vitesse Maximal","0.0"+unit);byday.add(itemday);
 		double value00 = 0.0;double value01 = 0.0;double value02 = 0.0;double value03 = 0.0;
 		ItemOut item00 = new ItemOut("00h00min-00h59min","0.0"+unit);ItemOut item01 = new ItemOut("01h00min-01h59min","0.0"+unit);ItemOut item02 = new ItemOut("02h00min-02h59min","0.0"+unit);ItemOut item03 = new ItemOut("03h00min-03h59min","0.0"+unit);
 		byhour.add(item00);byhour.add(item01);byhour.add(item02);byhour.add(item03);
@@ -649,7 +670,7 @@ public class CarServiceImpl implements CarService {
 		List<ItemOut> byhour = new ArrayList<ItemOut>();
 		DetailOut detail = new DetailOut();
 		String unit = " km";
-		double valueday = 0.0;ItemOut itemday = new ItemOut("Total","0.0"+unit);byday.add(itemday);
+		double valueday = 0.0;ItemOut itemday = new ItemOut("Distance du jour","0.0"+unit);byday.add(itemday);
 		double value00 = 0.0;double value01 = 0.0;double value02 = 0.0;double value03 = 0.0;
 		ItemOut item00 = new ItemOut("00h00min-00h59min","0.0"+unit);ItemOut item01 = new ItemOut("01h00min-01h59min","0.0"+unit);ItemOut item02 = new ItemOut("02h00min-02h59min","0.0"+unit);ItemOut item03 = new ItemOut("03h00min-03h59min","0.0"+unit);
 		byhour.add(item00);byhour.add(item01);byhour.add(item02);byhour.add(item03);
@@ -677,99 +698,99 @@ public class CarServiceImpl implements CarService {
 
 			String hour = utilityService.getHhFromFixTime(position.getFixtime());
 			if(hour.equals("00")) {
-				value00 = value00+position.getCourse()*1.85;
+				value00 = value00+(Math.round((position.getCourse()/1000)*100/100.0));
 				item00.setValue(String.valueOf(value00)+unit);
 			}
 			if(hour.equals("01")) {
-				value01 = +value01+position.getCourse();
+				value01 = +value01+(Math.round((position.getCourse()/1000)*100/100.0));
 				item01.setValue(String.valueOf(value01)+unit);
 			}
 			if(hour.equals("02")) {
-				value02 = value02+position.getCourse();
+				value02 = value02+(Math.round((position.getCourse()/1000)*100/100.0));
 				item02.setValue(String.valueOf(value02)+unit);
 			}
 			if(hour.equals("03")) {
-				value03 = value03+position.getCourse();
+				value03 = value03+(Math.round((position.getCourse()/1000)*100/100.0));
 				item03.setValue(String.valueOf(value03)+unit);
 			}
 			if(hour.equals("04")) {
-				value04 = value04+position.getCourse();
+				value04 = value04+(Math.round((position.getCourse()/1000)*100/100.0));
 				item04.setValue(String.valueOf(value04)+unit);
 			}
 			if(hour.equals("05")) {
-				value05 = value05+position.getCourse();
+				value05 = value05+(Math.round((position.getCourse()/1000)*100/100.0));
 				item05.setValue(String.valueOf(value05)+unit);
 			}
 			if(hour.equals("06")) {
-				value06 = value06+position.getCourse();
+				value06 = value06+(Math.round((position.getCourse()/1000)*100/100.0));
 				item06.setValue(String.valueOf(value06)+unit);
 			}
 			if(hour.equals("07")) {
-				value07 = value07+position.getCourse();
+				value07 = value07+(Math.round((position.getCourse()/1000)*100/100.0));
 				item07.setValue(String.valueOf(value07)+unit);
 			}
 			if(hour.equals("08")) {
-				value08 = value08+position.getCourse();
+				value08 = value08+(Math.round((position.getCourse()/1000)*100/100.0));
 				item08.setValue(String.valueOf(value08)+unit);
 			}
 			if(hour.equals("09")) {
-				value09 = value09+position.getCourse();
+				value09 = value09+(Math.round((position.getCourse()/1000)*100/100.0));
 				item09.setValue(String.valueOf(value09)+unit);
 			}
 			if(hour.equals("10")) {
-				value10 = value10+position.getCourse();
+				value10 = value10+(Math.round((position.getCourse()/1000)*100/100.0));
 				item10.setValue(String.valueOf(value10)+unit);
 			}
 			if(hour.equals("11")) {
-				value11 = value11+position.getCourse();
+				value11 = value11+(Math.round((position.getCourse()/1000)*100/100.0));
 				item11.setValue(String.valueOf(value11)+unit);
 			}
 			if(hour.equals("12")) {
-				value12 = value12+position.getCourse();
+				value12 = value12+(Math.round((position.getCourse()/1000)*100/100.0));
 				item12.setValue(String.valueOf(value12)+unit);
 			}
 			if(hour.equals("13")) {
-				value13 = value13+position.getCourse();
+				value13 = value13+(Math.round((position.getCourse()/1000)*100/100.0));
 				item13.setValue(String.valueOf(value13)+unit);
 			}
 			if(hour.equals("14")) {
-				value14 = value14+position.getCourse();
+				value14 = value14+(Math.round((position.getCourse()/1000)*100/100.0));
 				item14.setValue(String.valueOf(value14)+unit);
 			}
 			if(hour.equals("15")) {
-				value15 = value15+position.getCourse();
+				value15 = value15+(Math.round((position.getCourse()/1000)*100/100.0));
 				item15.setValue(String.valueOf(value15)+unit);
 			}
 			if(hour.equals("16")) {
-				value16 = value16+position.getCourse();
+				value16 = value16+(Math.round((position.getCourse()/1000)*100/100.0));
 				item16.setValue(String.valueOf(value16)+unit);
 			}
 			if(hour.equals("17")) {
-				value17 = value17+position.getSpeed();
+				value17 = value17+(Math.round((position.getCourse()/1000)*100/100.0));
 				item17.setValue(String.valueOf(value17)+unit);
 			}
 			if(hour.equals("18")) {
-				value18 = value18+position.getCourse();
+				value18 = value18+(Math.round((position.getCourse()/1000)*100/100.0));
 				item18.setValue(String.valueOf(value18)+unit);
 			}
 			if(hour.equals("19")) {
-				value19 = value19+position.getCourse();
+				value19 = value19+(Math.round((position.getCourse()/1000)*100/100.0));
 				item19.setValue(String.valueOf(value19)+unit);
 			}
 			if(hour.equals("20")) {
-				value20 = value20+position.getCourse();
+				value20 = value20+(Math.round((position.getCourse()/1000)*100/100.0));
 				item20.setValue(String.valueOf(value20)+unit);
 			}
 			if(hour.equals("21")) {
-				value21 = value21+position.getCourse();
+				value21 = value21+(Math.round((position.getCourse()/1000)*100/100.0));
 				item21.setValue(String.valueOf(value21)+unit);
 			}
 			if(hour.equals("22")) {
-				value22 = value22+position.getCourse();
+				value22 = value22+(Math.round((position.getCourse()/1000)*100/100.0));
 				item22.setValue(String.valueOf(value22)+unit);
 			}
 			if(hour.equals("23")) {
-				value23 = value23+position.getCourse();
+				value23 = value23+(Math.round((position.getCourse()/1000)*100/100.));
 				item23.setValue(String.valueOf(value23)+unit);
 			}
 		}
@@ -1668,4 +1689,5 @@ public class CarServiceImpl implements CarService {
 		// TODO Auto-generated method stub
 		return carRepository.save(car);
 	}
+	
 }
