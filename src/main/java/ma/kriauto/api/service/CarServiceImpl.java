@@ -81,6 +81,9 @@ public class CarServiceImpl implements CarService {
     private PaymentRepository paymentRepository;
 	
 	@Autowired
+    private ContactRepository contactRepository;
+	
+	@Autowired
     private UtilityService utilityService;
 
 	/*** menu access ***/
@@ -1843,7 +1846,7 @@ public class CarServiceImpl implements CarService {
 	@Override
 	public List<Contact> fetchContacts() {
 		// TODO Auto-generated method stub
-		return null;
+		return contactRepository.fetchAllContact();
 	}
 
 	@Override
