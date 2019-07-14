@@ -65,6 +65,9 @@ public class Car {
 	  
 	  @Column(name="lastfixtime")
 	  private Timestamp lastfixtime;
+	  
+	  @Column(name="dailydistance")
+	  private Double dailydistance;
 
 	public Long getId() {
 		return id;
@@ -209,6 +212,14 @@ public class Car {
 	public void setLastfixtime(Timestamp lastfixtime) {
 		this.lastfixtime = lastfixtime;
 	}
+	
+	public Double getDailydistance() {
+		return dailydistance;
+	}
+
+	public void setDailydistance(Double dailydistance) {
+		this.dailydistance = dailydistance;
+	}
 
 	@Override
 	public String toString() {
@@ -217,7 +228,6 @@ public class Car {
 				+ deviceId + ", simnumber=" + simnumber + ", creationdate=" + creationdate + ", totaldistance="
 				+ totaldistance + ", indextotaldistance=" + indextotaldistance + ", inzoneone=" + inzoneone
 				+ ", inzonetwo=" + inzonetwo + ", lastlat=" + lastlat + ", lastlon=" + lastlon + ", lastspeed="
-				+ lastspeed + ", lastfixtime=" + lastfixtime + "]";
+				+ lastspeed + ", lastfixtime=" + lastfixtime + ", dailydistance=" + dailydistance + "]";
 	}
-
 }

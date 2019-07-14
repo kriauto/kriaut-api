@@ -65,6 +65,13 @@ public interface CarService {
 	DetailOut fetchCarDriverByCarIdAndDate(Long id, String date);
 	Parameter fetchCarParametersByCarId(Long id);
 	
+	/*** batch ***/
+	void calculateDailyDistance();
+	void initDailyDistance();
+	void calculateTotalDistance();
+	double distance(double lat1, double lon1, double lat2, double lon2, char unit);
+
+	
 	
 	
 	

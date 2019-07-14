@@ -46,7 +46,7 @@ public class UtilityServiceImpl implements UtilityService {
 	@Override
 	public String getYyyyMmDdFromFixTime(Timestamp fixtime) {
 		// TODO Auto-generated method stub
-		SimpleDateFormat std = new SimpleDateFormat("YYYY-MM-DD");
+		SimpleDateFormat std = new SimpleDateFormat("yyyy-MM-dd");
 		String date = std.format(fixtime);
 		return date;
 	}
