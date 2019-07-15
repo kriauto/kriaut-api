@@ -70,7 +70,7 @@ public class CarController {
 	  }
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
 		/******************************
-		 *        LastPosition        *
+		 *        Dernière position   *
 		 *****************************/
 		if(menu.getType().equals("00")) {
   	    List<LastPositionOut> locations = carService.fetchLastPositionByAgencyIdAndDate(agency.getId(),menu.getDate());
@@ -87,21 +87,21 @@ public class CarController {
 		 *          Vitesse           *
 		 *****************************/
       }else if (menu.getType().equals("02")){
-    	List<MaxSpeedOut> locations = carService.fetchCarMaxSpeedByAgencyId(agency.getId(),menu.getDate());
+    	List<MaxSpeedOut> locations = carService.fetchCarMaxSpeedByAgencyIdAndDate(agency.getId(),menu.getDate());
       	logger.info("--> End loadmenu --");
         return new ResponseEntity<List<MaxSpeedOut>>(locations, HttpStatus.OK);
         /******************************
 		 *         Distance           *
 		 *****************************/
       }else if (menu.getType().equals("03")) {
-    	List<MaxCourseOut> locations = carService.fetchCarMaxCourseByAgencyId(agency.getId(),menu.getDate());
+    	List<MaxCourseOut> locations = carService.fetchCarMaxCourseByAgencyIdAndDate(agency.getId(),menu.getDate());
       	logger.info("--> End loadmenu --");
         return new ResponseEntity<List<MaxCourseOut>>(locations, HttpStatus.OK);
         /******************************
 		 *    Carburant Principale    *
 		 *****************************/
 	  }else if (menu.getType().equals("04")) {
-	    List<FuelOut> locations = carService.fetchCarFuelPrincipaleByAgencyId(agency.getId(),menu.getDate());
+	    List<FuelOut> locations = carService.fetchCarFuelPrincipaleByAgencyIdAndDate(agency.getId(),menu.getDate());
 	    logger.info("--> End loadmenu --");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
 	    /******************************
@@ -194,7 +194,8 @@ public class CarController {
 	  }else if (menu.getType().equals("17")) {
 		List<Contact> contact = carService.fetchContacts();
 		logger.info("--> End loadmenu --");
-		return new ResponseEntity<List<Contact>>(contact, HttpStatus.OK);
+		return new ResponseEntity<List<Contact>>(contact, HttpStatus.FORBIDDEN);
+		//return new ResponseEntity<List<Contact>>(contact, HttpStatus.OK);
 	   }else {
   		logger.info("--> End loadmenu --");
   		return new ResponseEntity(new CustomErrorType(ErrorLabel.TYPE_NOT_FOUND),HttpStatus.NOT_FOUND);

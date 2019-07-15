@@ -5,7 +5,7 @@ public class LastPositionOut extends CommonOut {
 	private Double speed;
 	private String date;
 	private String hour;
-	private Integer markertype;
+	private String markertype;
 	private Double latitude;
 	private Double longitude;
 	
@@ -27,10 +27,10 @@ public class LastPositionOut extends CommonOut {
 	public void setHour(String hour) {
 		this.hour = hour;
 	}
-	public Integer getMarkertype() {
+	public String getMarkertype() {
 		return markertype;
 	}
-	public void setMarkertype(Integer markertype) {
+	public void setMarkertype(String markertype) {
 		this.markertype = markertype;
 	}
 	public Double getLatitude() {

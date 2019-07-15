@@ -11,6 +11,7 @@ import java.util.Base64;
 
 
 import ma.kriauto.api.model.Profile;
+import ma.kriauto.api.model.Zone;
 
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,7 @@ public class UtilityServiceImpl implements UtilityService {
 	@Override
 	public String getYyyyMmDdFromFixTime(Timestamp fixtime) {
 		// TODO Auto-generated method stub
-		SimpleDateFormat std = new SimpleDateFormat("YYYY-MM-DD");
+		SimpleDateFormat std = new SimpleDateFormat("yyyy-MM-dd");
 		String date = std.format(fixtime);
 		return date;
 	}
@@ -85,5 +86,29 @@ public class UtilityServiceImpl implements UtilityService {
 		
         return encoded;
 	}
+
+	@Override
+	public boolean isInZone(Zone zone, double lat, double lon) {
+		int j=0;
+        boolean inBound = false;
+        double x = lon;
+        double y = lat;
+        if(null != zone.getLat1() && null != zone.getLon1() && null != zone.getLat2() && null != zone.getLon2() && null != zone.getLat3() && null != zone.getLon3() && null != zone.getLat4() && null != zone.getLon4() && null != zone.getLat5() && null != zone.getLon5() && null != zone.getLat6() && null != zone.getLon6()){
+         double zones[][]  = {{zone.getLat1(),zone.getLon1()},{zone.getLat2(),zone.getLon2()},{zone.getLat3(),zone.getLon3()},{zone.getLat4(),zone.getLon4()},{zone.getLat5(),zone.getLon5()},{zone.getLat6(),zone.getLon6()}};
+         for (int i=0; i < 4 ; i++) {
+          j++;
+          if (j == 4) {j = 0;}
+          if (((zones[i][0] < y) && (zones[j][0]  >= y)) || ((zones[j][0] < y) && (zones[i][0] >= y))) {
+            if ( zones[i][1] + (y - zones[i][0])/(zones[j][0]-zones[i][0])*(zones[j][1] - zones[i][1])<x ) 
+               {
+            	inBound = !inBound;
+               }         {
+            	inBound = !inBound;
+               }
+            }
+         } 
+        }
+	    return inBound;
+   }
 
 }
