@@ -62,7 +62,7 @@ public class CarController {
 	@CrossOrigin
 	@PostMapping("/loadmenu")
     public ResponseEntity<?> menulastposition(@RequestHeader(value="Authorization") String authorization,@RequestBody MenuIn menu) {
-      logger.info("--> Start loadmenu : "+authorization+" : "+menu);
+      logger.info("--> Start menulastposition : "+authorization+" : "+menu);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
@@ -74,7 +74,7 @@ public class CarController {
 		 *****************************/
 		if(menu.getType().equals("00")) {
   	    List<LastPositionOut> locations = carService.fetchLastPositionByAgencyIdAndDate(agency.getId(),menu.getDate());
-  	    logger.info("--> End loadmenu --");
+  	    logger.info("--> End menulastposition --");
   	    return new ResponseEntity<List<LastPositionOut>>(locations, HttpStatus.OK);
   	    /******************************
 		 *        Historique          *

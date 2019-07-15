@@ -14,6 +14,9 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 	
 	@Query("SELECT n FROM Notification n WHERE n.carid=:carid AND to_char(n.creationdate,'YYYY-MM-DD')=:date")
 	public List<Notification> fetchNotificationByCarIdAndDate(@Param("carid") Long carid,@Param("date") String date);
+
+	@Query("SELECT COUNT(n) FROM Notification n WHERE n.carid=:carid AND to_char(n.creationdate,'YYYY-MM-DD')=:date")
+	public Integer fetchNumberNotificationByCarIdAndDate(@Param("carid") Long carid,@Param("date") String date);
 	
 	public Notification save(NotificationRepository notification);
 

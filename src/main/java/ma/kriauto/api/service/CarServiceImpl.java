@@ -281,24 +281,28 @@ public class CarServiceImpl implements CarService {
 			double course = 0.0;
 			FuelOut location = new FuelOut();
 			Car car = cars.get(i);
-			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			Position last = lasts.get(0);
-			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
+			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			if(null != lastpositions && lastpositions.size() > 0) {
+				Position position = lastpositions.get(0);
+				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			}else {
+				location.setIsrolling(1);
+			}
+			/*List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
             for(int j=0; j<positions.size(); j++) {
             	Position position = positions.get(j);
     			String[] s1 = position.getAttributes().split("distance\":");
     			String[] s2 = s1[1].split(",");
     			Double distance = Double.valueOf(s2[0]);
             	course = course + distance;
-            }
+            }*/
             location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
 			location.setCurrentlevel(0.0);
-			location.setDailyconsumption(course*5.5);
+			location.setDailyconsumption(Double.valueOf(Math.round((car.getDailydistance()/100*5.5)*100/100.0)));
 			locations.add(location);
 		}
 		return locations;
@@ -312,20 +316,28 @@ public class CarServiceImpl implements CarService {
 			double course = 0.0;
 			FuelOut location = new FuelOut();
 			Car car = cars.get(i);
-			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			Position last = lasts.get(0);
-			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
+			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			if (null != lastpositions && lastpositions.size() > 0) {
+				Position position = lastpositions.get(0);
+				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			} else {
+				location.setIsrolling(1);
+			}
+			/*List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
             for(int j=0; j<positions.size(); j++) {
-            	course = course + positions.get(j).getCourse();
-            }
-            location.setCarid(car.getId());
+            	Position position = positions.get(j);
+    			String[] s1 = position.getAttributes().split("distance\":");
+    			String[] s2 = s1[1].split(",");
+    			Double distance = Double.valueOf(s2[0]);
+            	course = course + distance;
+            }*/
+			location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setCurrentlevel(12.0);
-			location.setDailyconsumption(15.6);
+			location.setCurrentlevel(0.0);
+			location.setDailyconsumption(Double.valueOf(Math.round((car.getDailydistance() / 100 * 5.5) * 100 / 100.0)));
 			locations.add(location);
 		}
 		return locations;
@@ -391,15 +403,20 @@ public class CarServiceImpl implements CarService {
 			double course = 0.0;
 			NotificationOut location = new NotificationOut();
 			Car car = cars.get(i);
-			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			Position last = lasts.get(0);
-            location.setCarid(car.getId());
+			int numbernotif = notificationRepository.fetchNumberNotificationByCarIdAndDate(car.getId(),date);
+			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			if (null != lastpositions && lastpositions.size() > 0) {
+				Position position = lastpositions.get(0);
+				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			} else {
+				location.setIsrolling(1);
+			}
+			location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setNumber(15);
+			location.setNumber(numbernotif);
 			locations.add(location);
 		}
 		return locations;
@@ -413,15 +430,21 @@ public class CarServiceImpl implements CarService {
 			double course = 0.0;
 			NotificationOut location = new NotificationOut();
 			Car car = cars.get(i);
-			List<Position> lasts = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
-			Position last = lasts.get(0);
-            location.setCarid(car.getId());
+			ActiveNotif activation = activenotifRepository.fetchActiveNotifByCarId(car.getId());
+			int numberactiv = (activation.getDrivertracking() ? 1:0)+(activation.getEmptyingkm() ? 1:0);
+			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
+			if (null != lastpositions && lastpositions.size() > 0) {
+				Position position = lastpositions.get(0);
+				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			} else {
+				location.setIsrolling(1);
+			}
+			location.setCarid(car.getId());
 			location.setMark(car.getMark());
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
-			location.setNumber(10);
+			location.setNumber(numberactiv);
 			locations.add(location);
 		}
 		return locations;
@@ -700,110 +723,162 @@ public class CarServiceImpl implements CarService {
 			Position position1 = positions.get(i-1);
         	Position position2 = positions.get(i);
 			Double distance = distance(position1.getLatitude(), position1.getLongitude(), position2.getLatitude(), position2.getLongitude(), 'K');
-			if(distance > 0.0) {
+			/*if(distance > 0.0) {
 				valueday = valueday+distance;
 			}   
-			itemday.setValue(String.valueOf(valueday)+unit);
+			itemday.setValue(String.valueOf(valueday)+unit);*/
 
 			String hour = utilityService.getHhFromFixTime(position1.getFixtime());
 			if(hour.equals("00")) {
-					value00 = value00+distance;
+				if(distance > 0.0) {
+					value00 = value00 + distance;
+				}
 					item00.setValue(String.valueOf(value00)+unit);
 			}
 			if(hour.equals("01")) {
-					value01 = value01+distance;
+				if(distance > 0.0) {
+					value01 = value01 + distance;
+				}
 					item01.setValue(String.valueOf(value01)+unit);
 			}
 			if(hour.equals("02")) {
-					value02 = value02+distance;
+				if(distance > 0.0) {
+					value02 = value02 + distance;
+				}
 					item02.setValue(String.valueOf(value02)+unit);
 			}
 			if(hour.equals("03")) {
-					value03 = value03+distance;
+				if(distance > 0.0) {
+					value03 = value03 + distance;
+				}
 					item03.setValue(String.valueOf(value03)+unit);
 			}
 			if(hour.equals("04")) {
-					value04 = value04+distance;
+				if(distance > 0.0) {
+					value04 = value04 + distance;
+				}
 					item04.setValue(String.valueOf(value04)+unit);
 			}			
 			if(hour.equals("05")) {
-					value05 = value05+distance;
+				if(distance > 0.0) {
+					value05 = value05 + distance;
+				}
 					item05.setValue(String.valueOf(value05)+unit);
 			}
 			if(hour.equals("06")) {
-					value06 = value06+distance;
+				if(distance > 0.0) {
+					value06 = value06 + distance;
+				}
 					item06.setValue(String.valueOf(value06)+unit);
 			}
 			if(hour.equals("07")) {
-					value07 = value07+distance;
+				if(distance > 0.0) {
+					value07 = value07 + distance;
+				}
 					item07.setValue(String.valueOf(value07)+unit);
 			}
 			if(hour.equals("08")) {
-					value08 = value08+distance;
+				if(distance > 0.0) {
+					value08 = value08 + distance;
+				}
 					item08.setValue(String.valueOf(value08)+unit);
 			}
 			if(hour.equals("09")) {
-					value09 = value09+distance;
+				if(distance > 0.0) {
+					value09 = value09 + distance;
+				}
 					item09.setValue(String.valueOf(value09)+unit);
 			}
 			if(hour.equals("10")) {
-					value10 = value10+distance;
+				if(distance > 0.0) {
+					value10 = value10 + distance;
+				}
 					item10.setValue(String.valueOf(value10)+unit);
 			}
 			if(hour.equals("11")) {
-					value11 = value11+distance;
+				if(distance > 0.0) {
+					value11 = value11 + distance;
+				}
 					item11.setValue(String.valueOf(value11)+unit);
 			}
 			if(hour.equals("12")) {
-					value12 = value12+distance;
+				if(distance > 0.0) {
+					value12 = value12 + distance;
+				}
 					item12.setValue(String.valueOf(value12)+unit);
 			}
 			if(hour.equals("13")) {
-					value13 = value13+distance;
+				if(distance > 0.0) {
+					value13 = value13 + distance;
+				}
 					item13.setValue(String.valueOf(value13)+unit);
 			}
 			if(hour.equals("14")) {
-					value14 = value14+distance;
+				if(distance > 0.0) {
+					value14 = value14 + distance;
+				}
 					item14.setValue(String.valueOf(value14)+unit);
 			}
 			if(hour.equals("15")) {
-					value15 = value15+distance;
+				if(distance > 0.0) {
+					value15 = value15 + distance;
+				}
 					item15.setValue(String.valueOf(value15)+unit);
 			}
 			if(hour.equals("16")) {
-					value16 = value16+distance;
+				if(distance > 0.0) {
+					value16 = value16 + distance;
+				}
 					item16.setValue(String.valueOf(value16)+unit);
 			}
 			if(hour.equals("17")) {
-					value17 = value17+distance;
+				if(distance > 0.0) {
+					value17 = value17 + distance;
+				}
 					item17.setValue(String.valueOf(value17)+unit);
 			}
 			if(hour.equals("18")) {
-					value18 = value18+distance;
+				if(distance > 0.0) {
+					value18 = value18 + distance;
+				}
 					item18.setValue(String.valueOf(value18)+unit);
 			}
 			if(hour.equals("19")) {
-					value19 = value19+distance;
+				if(distance > 0.0) {
+					value19 = value19 + distance;
+				}
 					item19.setValue(String.valueOf(value19)+unit);
 			}
 			if(hour.equals("20")) {
-					value20 = value20+distance;
+				if(distance > 0.0) {
+					value20 = value20 + distance;
+				}
 					item20.setValue(String.valueOf(value20)+unit);
 			}
 			if(hour.equals("21")) {
-					value21 = value21+distance;
+				if(distance > 0.0) {
+					value21 = value21 + distance;
+				}
 					item21.setValue(String.valueOf(value21)+unit);
 			}
 			if(hour.equals("22")) {
-					value22 = value22+distance;
+				if(distance > 0.0) {
+					value22 = value22 + distance;
+				}
 					item22.setValue(String.valueOf(value22)+unit);
 			}
 			if(hour.equals("23")) {
-					value23 = value23+distance;
+				if(distance > 0.0) {
+					value23 = value23 + distance;
+				}
 					item23.setValue(String.valueOf(value23)+unit);
 			}
 		}
 		log.info("valueday "+valueday);
+		valueday = Math.round(((value00+value01+value02+value03+value04+value05+value06+value07+value08+value09+value10
+				+value11+value12+value13+value14+value15+value16+value17+value18+value19+value20+value21+value22+value23)/100*5.5)*100/100.0);
+		itemday.setValue(String.valueOf(valueday)+unit);
+
 				value00 = Math.round((value00)*100/100.0);
 				item00.setValue(String.valueOf(value00)+unit);
 			
@@ -876,8 +951,7 @@ public class CarServiceImpl implements CarService {
 				value23 = Math.round((value23)*100/100.0);
 				item23.setValue(String.valueOf(value23)+unit);
 
-		valueday = Math.round((valueday)*100/100.0);
-		itemday.setValue(String.valueOf(valueday)+unit);
+
 		detail.setByday(byday);
 		detail.setByhour(byhour);
 		return detail;
@@ -900,7 +974,7 @@ public class CarServiceImpl implements CarService {
 		List<ItemOut> byhour = new ArrayList<ItemOut>();
 		DetailOut detail = new DetailOut();
 		String unit = " L";
-		double valueday = 0.0;ItemOut itemday = new ItemOut("Total","0.0"+unit);byday.add(itemday);
+		double valueday = 0.0;ItemOut itemday = new ItemOut("Consommation Totale","0.0"+unit);byday.add(itemday);
 		double value00 = 0.0;double value01 = 0.0;double value02 = 0.0;double value03 = 0.0;
 		ItemOut item00 = new ItemOut("00h00min-00h59min","0.0"+unit);ItemOut item01 = new ItemOut("01h00min-01h59min","0.0"+unit);ItemOut item02 = new ItemOut("02h00min-02h59min","0.0"+unit);ItemOut item03 = new ItemOut("03h00min-03h59min","0.0"+unit);
 		byhour.add(item00);byhour.add(item01);byhour.add(item02);byhour.add(item03);
@@ -921,189 +995,237 @@ public class CarServiceImpl implements CarService {
 		byhour.add(item20);byhour.add(item21);byhour.add(item22);byhour.add(item23);
 		Car car = carRepository.fetchCarById(carid);
 		List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
-		for(int i=0; i<positions.size(); i++) {
-			Position position = positions.get(i);
-			String[] s1 = position.getAttributes().split("distance\":");
-			String[] s2 = s1[1].split(",");
-			Double distance = Double.valueOf(s2[0]);
-		    valueday = valueday+distance;
-			itemday.setValue(String.valueOf(valueday)+unit);
+		for(int i=1; i<positions.size(); i++) {
+			Position position1 = positions.get(i-1);
+			Position position2 = positions.get(i);
+			Double distance = distance(position1.getLatitude(), position1.getLongitude(), position2.getLatitude(), position2.getLongitude(), 'K');
+			/*if(distance > 0.0) {
+				valueday = valueday+distance;
+			}
+			itemday.setValue(String.valueOf(valueday)+unit);*/
 
-			String hour = utilityService.getHhFromFixTime(position.getFixtime());
+			String hour = utilityService.getHhFromFixTime(position1.getFixtime());
 			if(hour.equals("00")) {
-					value00 = value00+distance;
-					item00.setValue(String.valueOf(value00)+unit);
+				if(distance > 0.0) {
+					value00 = value00 + distance;
+				}
+				item00.setValue(String.valueOf(value00)+unit);
 			}
 			if(hour.equals("01")) {
-					value01 = value01+distance;
-					item01.setValue(String.valueOf(value01)+unit);
+				if(distance > 0.0) {
+					value01 = value01 + distance;
+				}
+				item01.setValue(String.valueOf(value01)+unit);
 			}
 			if(hour.equals("02")) {
-					value02 = value02+distance;
-					item02.setValue(String.valueOf(value02)+unit);
+				if(distance > 0.0) {
+					value02 = value02 + distance;
+				}
+				item02.setValue(String.valueOf(value02)+unit);
 			}
 			if(hour.equals("03")) {
-					value03 = value03+distance;
-					item03.setValue(String.valueOf(value03)+unit);
+				if(distance > 0.0) {
+					value03 = value03 + distance;
+				}
+				item03.setValue(String.valueOf(value03)+unit);
 			}
 			if(hour.equals("04")) {
-					value04 = value04+distance;
-					item04.setValue(String.valueOf(value04)+unit);
-			}			
+				if(distance > 0.0) {
+					value04 = value04 + distance;
+				}
+				item04.setValue(String.valueOf(value04)+unit);
+			}
 			if(hour.equals("05")) {
-					value05 = value05+distance;
-					item05.setValue(String.valueOf(value05)+unit);
+				if(distance > 0.0) {
+					value05 = value05 + distance;
+				}
+				item05.setValue(String.valueOf(value05)+unit);
 			}
 			if(hour.equals("06")) {
-					value06 = value06+distance;
-					item06.setValue(String.valueOf(value06)+unit);
+				if(distance > 0.0) {
+					value06 = value06 + distance;
+				}
+				item06.setValue(String.valueOf(value06)+unit);
 			}
 			if(hour.equals("07")) {
-					value07 = value07+distance;
-					item07.setValue(String.valueOf(value07)+unit);
+				if(distance > 0.0) {
+					value07 = value07 + distance;
+				}
+				item07.setValue(String.valueOf(value07)+unit);
 			}
 			if(hour.equals("08")) {
-					value08 = value08+distance;
-					item08.setValue(String.valueOf(value08)+unit);
+				if(distance > 0.0) {
+					value08 = value08 + distance;
+				}
+				item08.setValue(String.valueOf(value08)+unit);
 			}
 			if(hour.equals("09")) {
-					value09 = value09+distance;
-					item09.setValue(String.valueOf(value09)+unit);
+				if(distance > 0.0) {
+					value09 = value09 + distance;
+				}
+				item09.setValue(String.valueOf(value09)+unit);
 			}
 			if(hour.equals("10")) {
-					value10 = value10+distance;
-					item10.setValue(String.valueOf(value10)+unit);
+				if(distance > 0.0) {
+					value10 = value10 + distance;
+				}
+				item10.setValue(String.valueOf(value10)+unit);
 			}
 			if(hour.equals("11")) {
-					value11 = value11+distance;
-					item11.setValue(String.valueOf(value11)+unit);
+				if(distance > 0.0) {
+					value11 = value11 + distance;
+				}
+				item11.setValue(String.valueOf(value11)+unit);
 			}
 			if(hour.equals("12")) {
-					value12 = value12+distance;
-					item12.setValue(String.valueOf(value12)+unit);
+				if(distance > 0.0) {
+					value12 = value12 + distance;
+				}
+				item12.setValue(String.valueOf(value12)+unit);
 			}
 			if(hour.equals("13")) {
-					value13 = value13+distance;
-					item13.setValue(String.valueOf(value13)+unit);
+				if(distance > 0.0) {
+					value13 = value13 + distance;
+				}
+				item13.setValue(String.valueOf(value13)+unit);
 			}
 			if(hour.equals("14")) {
-					value14 = value14+distance;
-					item14.setValue(String.valueOf(value14)+unit);
+				if(distance > 0.0) {
+					value14 = value14 + distance;
+				}
+				item14.setValue(String.valueOf(value14)+unit);
 			}
 			if(hour.equals("15")) {
-					value15 = value15+distance;
-					item15.setValue(String.valueOf(value15)+unit);
+				if(distance > 0.0) {
+					value15 = value15 + distance;
+				}
+				item15.setValue(String.valueOf(value15)+unit);
 			}
 			if(hour.equals("16")) {
-					value16 = value16+distance;
-					item16.setValue(String.valueOf(value16)+unit);
+				if(distance > 0.0) {
+					value16 = value16 + distance;
+				}
+				item16.setValue(String.valueOf(value16)+unit);
 			}
 			if(hour.equals("17")) {
-					value17 = value17+distance;
-					item17.setValue(String.valueOf(value17)+unit);
+				if(distance > 0.0) {
+					value17 = value17 + distance;
+				}
+				item17.setValue(String.valueOf(value17)+unit);
 			}
 			if(hour.equals("18")) {
-					value18 = value18+distance;
-					item18.setValue(String.valueOf(value18)+unit);
+				if(distance > 0.0) {
+					value18 = value18 + distance;
+				}
+				item18.setValue(String.valueOf(value18)+unit);
 			}
 			if(hour.equals("19")) {
-					value19 = value19+distance;
-					item19.setValue(String.valueOf(value19)+unit);
+				if(distance > 0.0) {
+					value19 = value19 + distance;
+				}
+				item19.setValue(String.valueOf(value19)+unit);
 			}
 			if(hour.equals("20")) {
-					value20 = value20+distance;
-					item20.setValue(String.valueOf(value20)+unit);
+				if(distance > 0.0) {
+					value20 = value20 + distance;
+				}
+				item20.setValue(String.valueOf(value20)+unit);
 			}
 			if(hour.equals("21")) {
-					value21 = value21+distance;
-					item21.setValue(String.valueOf(value21)+unit);
+				if(distance > 0.0) {
+					value21 = value21 + distance;
+				}
+				item21.setValue(String.valueOf(value21)+unit);
 			}
 			if(hour.equals("22")) {
-					value22 = value22+distance;
-					item22.setValue(String.valueOf(value22)+unit);
+				if(distance > 0.0) {
+					value22 = value22 + distance;
+				}
+				item22.setValue(String.valueOf(value22)+unit);
 			}
 			if(hour.equals("23")) {
-					value23 = value23+distance;
-					item23.setValue(String.valueOf(value23)+unit);
+				if(distance > 0.0) {
+					value23 = value23 + distance;
+				}
+				item23.setValue(String.valueOf(value23)+unit);
 			}
 		}
 		log.info("valueday "+valueday);
-				value00 = Math.round((value00/1000)*100/100.0)/100*5.5;
-				item00.setValue(String.valueOf(value00)+unit);
-			
-				value01 = Math.round((value01/1000)*100/100.0)/100*5.5;
-				item01.setValue(String.valueOf(value01)+unit);
-			
-				value02 = Math.round((value02/1000)*100/100.0)/100*5.5;
-				item02.setValue(String.valueOf(value02)+unit);
-			
-				value03 = Math.round((value03/1000)*100/100.0)/100*5.5;
-				item03.setValue(String.valueOf(value03)+unit);
-			
-				value04 = Math.round((value04/1000)*100/100.0)/100*5.5;
-				item04.setValue(String.valueOf(value04)+unit);
-			
-				value05 = Math.round((value05/1000)*100/100.0)/100*5.5;
-				item05.setValue(String.valueOf(value05)+unit);
-			
-				value06 = Math.round((value06/1000)*100/100.0)/100*5.5;
-				item06.setValue(String.valueOf(value06)+unit);
-			
-				value07 = Math.round((value07/1000)*100/100.0)/100*5.5;
-				item07.setValue(String.valueOf(value07)+unit);
-			
-				value08 = Math.round((value08/1000)*100/100.0)/100*5.5;
-				item08.setValue(String.valueOf(value08)+unit);
-			
-				value09 = Math.round((value09/1000)*100/100.0)/100*5.5;
-				item09.setValue(String.valueOf(value09)+unit);
-			
-				value10 = Math.round((value10/1000)*100/100.0)/100*5.5;
-				item10.setValue(String.valueOf(value10)+unit);
-			
-				value11 = Math.round((value11/1000)*100/100.0)/100*5.5;
-				item11.setValue(String.valueOf(value11)+unit);
-			
-				value12 = Math.round((value12/1000)*100/100.0)/100*5.5;
-				item12.setValue(String.valueOf(value12)+unit);
-			
-				value13 = Math.round((value13/1000)*100/100.0)/100*5.5;
-				item13.setValue(String.valueOf(value13)+unit);
-			
-				value14 = Math.round((value14/1000)*100/100.0)/100*5.5;
-				item14.setValue(String.valueOf(value14)+unit);
-			
-				value15 = Math.round((value15/1000)*100/100.0)/100*5.5;
-				item15.setValue(String.valueOf(value15)+unit);
-			
-				value16 = Math.round((value16/1000)*100/100.0)/100*5.5;
-				item16.setValue(String.valueOf(value16)+unit);
-			
-				value17 = Math.round((value17/1000)*100/100.0)/100*5.5;
-				item17.setValue(String.valueOf(value17)+unit);
-			
-				value18 = Math.round((value18/1000)*100/100.0)/100*5.5;
-				item18.setValue(String.valueOf(value18)+unit);
-			
-				value19 = Math.round((value19/1000)*100/100.0)/100*5.5;
-				item19.setValue(String.valueOf(value19)+unit);
-			
-				value20 = Math.round((value20/1000)*100/100.0)/100*5.5;
-				item20.setValue(String.valueOf(value20)+unit);
-			
-				value21 = Math.round((value21/1000)*100/100.0)/100*5.5;
-				item21.setValue(String.valueOf(value21)+unit);
-			
-				value22 = Math.round((value22/1000)*100/100.0)/100*5.5;
-				item22.setValue(String.valueOf(value22)+unit);
-			
-				value23 = Math.round((value23/1000)*100/100.0)/100*5.5;
-				item23.setValue(String.valueOf(value23)+unit);
-
-		valueday = Math.round((valueday/1000)*100/100.0)/100*5.5;
+		valueday = Math.round(((value00+value01+value02+value03+value04+value05+value06+value07+value08+value09+value10
+				+value11+value12+value13+value14+value15+value16+value17+value18+value19+value20+value21+value22+value23)/100*5.5)*100/100.0);
 		itemday.setValue(String.valueOf(valueday)+unit);
-		detail.setByday(byday);
-		detail.setByhour(byhour);
+
+		value00 = Math.round((value00/100*5.5)*100/100.0);
+		item00.setValue(String.valueOf(value00)+unit);
+
+		value01 = Math.round((value01/100*5.5)*100/100.0);
+		item01.setValue(String.valueOf(value01)+unit);
+
+		value02 = Math.round((value02/100*5.5)*100/100.0);
+		item02.setValue(String.valueOf(value02)+unit);
+
+		value03 = Math.round((value03/100*5.5)*100/100.0);
+		item03.setValue(String.valueOf(value03)+unit);
+
+		value04 = Math.round((value04/100*5.5)*100/100.0);
+		item04.setValue(String.valueOf(value04)+unit);
+
+		value05 = Math.round((value05/100*5.5)*100/100.0);
+		item05.setValue(String.valueOf(value05)+unit);
+
+		value06 = Math.round((value06/100*5.5)*100/100.0);
+		item06.setValue(String.valueOf(value06)+unit);
+
+		value07 = Math.round((value07/100*5.5)*100/100.0);
+		item07.setValue(String.valueOf(value07)+unit);
+
+		value08 = Math.round((value08/100*5.5)*100/100.0);
+		item08.setValue(String.valueOf(value08)+unit);
+
+		value09 = Math.round((value09/100*5.5)*100/100.0);
+		item09.setValue(String.valueOf(value09)+unit);
+
+		value10 = Math.round((value10/100*5.5)*100/100.0);
+		item10.setValue(String.valueOf(value10)+unit);
+
+		value11 = Math.round((value11/100*5.5)*100/100.0);
+		item11.setValue(String.valueOf(value11)+unit);
+
+		value12 = Math.round((value12/100*5.5)*100/100.0);
+		item12.setValue(String.valueOf(value12)+unit);
+
+		value13 = Math.round((value13/100*5.5)*100/100.0);
+		item13.setValue(String.valueOf(value13)+unit);
+
+		value14 = Math.round((value14/100*5.5)*100/100.0);
+		item14.setValue(String.valueOf(value14)+unit);
+
+		value15 = Math.round((value15/100*5.5)*100/100.0);
+		item15.setValue(String.valueOf(value15)+unit);
+
+		value16 = Math.round((value16/100*5.5)*100/100.0);
+		item16.setValue(String.valueOf(value16)+unit);
+
+		value17 = Math.round((value17/100*5.5)*100/100.0);
+		item17.setValue(String.valueOf(value17)+unit);
+
+		value18 = Math.round((value18/100*5.5)*100/100.0);
+		item18.setValue(String.valueOf(value18)+unit);
+
+		value19 = Math.round((value19/100*5.5)*100/100.0);
+		item19.setValue(String.valueOf(value19)+unit);
+
+		value20 = Math.round((value20/100*5.5)*100/100.0);
+		item20.setValue(String.valueOf(value20)+unit);
+
+		value21 = Math.round((value21/100*5.5)*100/100.0);
+		item21.setValue(String.valueOf(value21)+unit);
+
+		value22 = Math.round((value22/100*5.5)*100/100.0);
+		item22.setValue(String.valueOf(value22)+unit);
+
+		value23 = Math.round((value23/100*5.5)*100/100.0);
+		item23.setValue(String.valueOf(value23)+unit);
 
 		detail.setByday(byday);
 		detail.setByhour(byhour);
@@ -1116,7 +1238,7 @@ public class CarServiceImpl implements CarService {
 		List<ItemOut> byhour = new ArrayList<ItemOut>();
 		DetailOut detail = new DetailOut();
 		String unit = " L";
-		double valueday = 0.0;ItemOut itemday = new ItemOut("Total","0.0"+unit);byday.add(itemday);
+		double valueday = 0.0;ItemOut itemday = new ItemOut("Consommation Totale","0.0"+unit);byday.add(itemday);
 		double value00 = 0.0;double value01 = 0.0;double value02 = 0.0;double value03 = 0.0;
 		ItemOut item00 = new ItemOut("00h00min-00h59min","0.0"+unit);ItemOut item01 = new ItemOut("01h00min-01h59min","0.0"+unit);ItemOut item02 = new ItemOut("02h00min-02h59min","0.0"+unit);ItemOut item03 = new ItemOut("03h00min-03h59min","0.0"+unit);
 		byhour.add(item00);byhour.add(item01);byhour.add(item02);byhour.add(item03);
@@ -1137,109 +1259,238 @@ public class CarServiceImpl implements CarService {
 		byhour.add(item20);byhour.add(item21);byhour.add(item22);byhour.add(item23);
 		Car car = carRepository.fetchCarById(carid);
 		List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
-		for(int i=0; i<positions.size(); i++) {
-			Position position = positions.get(i);
-		    valueday = valueday+position.getCourse();
-			itemday.setValue(String.valueOf(valueday)+unit);
+		for(int i=1; i<positions.size(); i++) {
+			Position position1 = positions.get(i-1);
+			Position position2 = positions.get(i);
+			Double distance = distance(position1.getLatitude(), position1.getLongitude(), position2.getLatitude(), position2.getLongitude(), 'K');
+			/*if(distance > 0.0) {
+				valueday = valueday+distance;
+			}
+			itemday.setValue(String.valueOf(valueday)+unit);*/
 
-			String hour = utilityService.getHhFromFixTime(position.getFixtime());
+			String hour = utilityService.getHhFromFixTime(position1.getFixtime());
 			if(hour.equals("00")) {
-				value00 = value00+position.getCourse()*1.85;
+				if(distance > 0.0) {
+					value00 = value00 + distance;
+				}
 				item00.setValue(String.valueOf(value00)+unit);
 			}
 			if(hour.equals("01")) {
-				value01 = +value01+position.getCourse();
+				if(distance > 0.0) {
+					value01 = value01 + distance;
+				}
 				item01.setValue(String.valueOf(value01)+unit);
 			}
 			if(hour.equals("02")) {
-				value02 = value02+position.getCourse();
+				if(distance > 0.0) {
+					value02 = value02 + distance;
+				}
 				item02.setValue(String.valueOf(value02)+unit);
 			}
 			if(hour.equals("03")) {
-				value03 = value03+position.getCourse();
+				if(distance > 0.0) {
+					value03 = value03 + distance;
+				}
 				item03.setValue(String.valueOf(value03)+unit);
 			}
 			if(hour.equals("04")) {
-				value04 = value04+position.getCourse();
+				if(distance > 0.0) {
+					value04 = value04 + distance;
+				}
 				item04.setValue(String.valueOf(value04)+unit);
 			}
 			if(hour.equals("05")) {
-				value05 = value05+position.getCourse();
+				if(distance > 0.0) {
+					value05 = value05 + distance;
+				}
 				item05.setValue(String.valueOf(value05)+unit);
 			}
 			if(hour.equals("06")) {
-				value06 = value06+position.getCourse();
+				if(distance > 0.0) {
+					value06 = value06 + distance;
+				}
 				item06.setValue(String.valueOf(value06)+unit);
 			}
 			if(hour.equals("07")) {
-				value07 = value07+position.getCourse();
+				if(distance > 0.0) {
+					value07 = value07 + distance;
+				}
 				item07.setValue(String.valueOf(value07)+unit);
 			}
 			if(hour.equals("08")) {
-				value08 = value08+position.getCourse();
+				if(distance > 0.0) {
+					value08 = value08 + distance;
+				}
 				item08.setValue(String.valueOf(value08)+unit);
 			}
 			if(hour.equals("09")) {
-				value09 = value09+position.getCourse();
+				if(distance > 0.0) {
+					value09 = value09 + distance;
+				}
 				item09.setValue(String.valueOf(value09)+unit);
 			}
 			if(hour.equals("10")) {
-				value10 = value10+position.getCourse();
+				if(distance > 0.0) {
+					value10 = value10 + distance;
+				}
 				item10.setValue(String.valueOf(value10)+unit);
 			}
 			if(hour.equals("11")) {
-				value11 = value11+position.getCourse();
+				if(distance > 0.0) {
+					value11 = value11 + distance;
+				}
 				item11.setValue(String.valueOf(value11)+unit);
 			}
 			if(hour.equals("12")) {
-				value12 = value12+position.getCourse();
+				if(distance > 0.0) {
+					value12 = value12 + distance;
+				}
 				item12.setValue(String.valueOf(value12)+unit);
 			}
 			if(hour.equals("13")) {
-				value13 = value13+position.getCourse();
+				if(distance > 0.0) {
+					value13 = value13 + distance;
+				}
 				item13.setValue(String.valueOf(value13)+unit);
 			}
 			if(hour.equals("14")) {
-				value14 = value14+position.getCourse();
+				if(distance > 0.0) {
+					value14 = value14 + distance;
+				}
 				item14.setValue(String.valueOf(value14)+unit);
 			}
 			if(hour.equals("15")) {
-				value15 = value15+position.getCourse();
+				if(distance > 0.0) {
+					value15 = value15 + distance;
+				}
 				item15.setValue(String.valueOf(value15)+unit);
 			}
 			if(hour.equals("16")) {
-				value16 = value16+position.getCourse();
+				if(distance > 0.0) {
+					value16 = value16 + distance;
+				}
 				item16.setValue(String.valueOf(value16)+unit);
 			}
 			if(hour.equals("17")) {
-				value17 = value17+position.getSpeed();
+				if(distance > 0.0) {
+					value17 = value17 + distance;
+				}
 				item17.setValue(String.valueOf(value17)+unit);
 			}
 			if(hour.equals("18")) {
-				value18 = value18+position.getCourse();
+				if(distance > 0.0) {
+					value18 = value18 + distance;
+				}
 				item18.setValue(String.valueOf(value18)+unit);
 			}
 			if(hour.equals("19")) {
-				value19 = value19+position.getCourse();
+				if(distance > 0.0) {
+					value19 = value19 + distance;
+				}
 				item19.setValue(String.valueOf(value19)+unit);
 			}
 			if(hour.equals("20")) {
-				value20 = value20+position.getCourse();
+				if(distance > 0.0) {
+					value20 = value20 + distance;
+				}
 				item20.setValue(String.valueOf(value20)+unit);
 			}
 			if(hour.equals("21")) {
-				value21 = value21+position.getCourse();
+				if(distance > 0.0) {
+					value21 = value21 + distance;
+				}
 				item21.setValue(String.valueOf(value21)+unit);
 			}
 			if(hour.equals("22")) {
-				value22 = value22+position.getCourse();
+				if(distance > 0.0) {
+					value22 = value22 + distance;
+				}
 				item22.setValue(String.valueOf(value22)+unit);
 			}
 			if(hour.equals("23")) {
-				value23 = value23+position.getCourse();
+				if(distance > 0.0) {
+					value23 = value23 + distance;
+				}
 				item23.setValue(String.valueOf(value23)+unit);
 			}
 		}
+		log.info("valueday "+valueday);
+		valueday = Math.round(((value00+value01+value02+value03+value04+value05+value06+value07+value08+value09+value10
+				+value11+value12+value13+value14+value15+value16+value17+value18+value19+value20+value21+value22+value23)/100*5.5)*100/100.0);
+		itemday.setValue(String.valueOf(valueday)+unit);
+
+		value00 = Math.round((value00/100*5.5)*100/100.0);
+		item00.setValue(String.valueOf(value00)+unit);
+
+		value01 = Math.round((value01/100*5.5)*100/100.0);
+		item01.setValue(String.valueOf(value01)+unit);
+
+		value02 = Math.round((value02/100*5.5)*100/100.0);
+		item02.setValue(String.valueOf(value02)+unit);
+
+		value03 = Math.round((value03/100*5.5)*100/100.0);
+		item03.setValue(String.valueOf(value03)+unit);
+
+		value04 = Math.round((value04/100*5.5)*100/100.0);
+		item04.setValue(String.valueOf(value04)+unit);
+
+		value05 = Math.round((value05/100*5.5)*100/100.0);
+		item05.setValue(String.valueOf(value05)+unit);
+
+		value06 = Math.round((value06/100*5.5)*100/100.0);
+		item06.setValue(String.valueOf(value06)+unit);
+
+		value07 = Math.round((value07/100*5.5)*100/100.0);
+		item07.setValue(String.valueOf(value07)+unit);
+
+		value08 = Math.round((value08/100*5.5)*100/100.0);
+		item08.setValue(String.valueOf(value08)+unit);
+
+		value09 = Math.round((value09/100*5.5)*100/100.0);
+		item09.setValue(String.valueOf(value09)+unit);
+
+		value10 = Math.round((value10/100*5.5)*100/100.0);
+		item10.setValue(String.valueOf(value10)+unit);
+
+		value11 = Math.round((value11/100*5.5)*100/100.0);
+		item11.setValue(String.valueOf(value11)+unit);
+
+		value12 = Math.round((value12/100*5.5)*100/100.0);
+		item12.setValue(String.valueOf(value12)+unit);
+
+		value13 = Math.round((value13/100*5.5)*100/100.0);
+		item13.setValue(String.valueOf(value13)+unit);
+
+		value14 = Math.round((value14/100*5.5)*100/100.0);
+		item14.setValue(String.valueOf(value14)+unit);
+
+		value15 = Math.round((value15/100*5.5)*100/100.0);
+		item15.setValue(String.valueOf(value15)+unit);
+
+		value16 = Math.round((value16/100*5.5)*100/100.0);
+		item16.setValue(String.valueOf(value16)+unit);
+
+		value17 = Math.round((value17/100*5.5)*100/100.0);
+		item17.setValue(String.valueOf(value17)+unit);
+
+		value18 = Math.round((value18/100*5.5)*100/100.0);
+		item18.setValue(String.valueOf(value18)+unit);
+
+		value19 = Math.round((value19/100*5.5)*100/100.0);
+		item19.setValue(String.valueOf(value19)+unit);
+
+		value20 = Math.round((value20/100*5.5)*100/100.0);
+		item20.setValue(String.valueOf(value20)+unit);
+
+		value21 = Math.round((value21/100*5.5)*100/100.0);
+		item21.setValue(String.valueOf(value21)+unit);
+
+		value22 = Math.round((value22/100*5.5)*100/100.0);
+		item22.setValue(String.valueOf(value22)+unit);
+
+		value23 = Math.round((value23/100*5.5)*100/100.0);
+		item23.setValue(String.valueOf(value23)+unit);
+
 		detail.setByday(byday);
 		detail.setByhour(byhour);
 		return detail;
