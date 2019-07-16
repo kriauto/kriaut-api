@@ -45,14 +45,14 @@ public class Car {
 	  @Column(name="totaldistance")
 	  private Double totaldistance;
 	  
-	  @Column(name="indextotaldistance")
-	  private Integer indextotaldistance;
+	  @Column(name="indexemptyingkm")
+	  private Integer indexemptyingkm;
 	  
 	  @Column(name="inzoneone")
-	  private Integer inzoneone;
+	  private Boolean inzoneone;
 	  
 	  @Column(name="inzonetwo")
-	  private Integer inzonetwo;
+	  private Boolean inzonetwo;
 	  
 	  @Column(name="lastlat")
 	  private Double lastlat;
@@ -68,6 +68,9 @@ public class Car {
 	  
 	  @Column(name="dailydistance")
 	  private Double dailydistance;
+	  
+	  @Column(name="color")
+	  private String color;
 
 	public Long getId() {
 		return id;
@@ -140,7 +143,15 @@ public class Car {
 	public void setSimnumber(String simnumber) {
 		this.simnumber = simnumber;
 	}
-	
+
+	public Date getCreationdate() {
+		return creationdate;
+	}
+
+	public void setCreationdate(Date creationdate) {
+		this.creationdate = creationdate;
+	}
+
 	public Double getTotaldistance() {
 		return totaldistance;
 	}
@@ -149,36 +160,28 @@ public class Car {
 		this.totaldistance = totaldistance;
 	}
 
-	public Integer getIndextotaldistance() {
-		return indextotaldistance;
+	public Integer getIndexemptyingkm() {
+		return indexemptyingkm;
 	}
 
-	public void setIndextotaldistance(Integer indextotaldistance) {
-		this.indextotaldistance = indextotaldistance;
+	public void setIndexemptyingkm(Integer indexemptyingkm) {
+		this.indexemptyingkm = indexemptyingkm;
 	}
 
-	public Integer getInzoneone() {
+	public Boolean getInzoneone() {
 		return inzoneone;
 	}
 
-	public void setInzoneone(Integer inzoneone) {
+	public void setInzoneone(Boolean inzoneone) {
 		this.inzoneone = inzoneone;
 	}
 
-	public Integer getInzonetwo() {
+	public Boolean getInzonetwo() {
 		return inzonetwo;
 	}
 
-	public void setInzonetwo(Integer inzonetwo) {
+	public void setInzonetwo(Boolean inzonetwo) {
 		this.inzonetwo = inzonetwo;
-	}
-	
-	public Date getCreationdate() {
-		return creationdate;
-	}
-
-	public void setCreationdate(Date creationdate) {
-		this.creationdate = creationdate;
 	}
 
 	public Double getLastlat() {
@@ -212,7 +215,7 @@ public class Car {
 	public void setLastfixtime(Timestamp lastfixtime) {
 		this.lastfixtime = lastfixtime;
 	}
-	
+
 	public Double getDailydistance() {
 		return dailydistance;
 	}
@@ -221,13 +224,21 @@ public class Car {
 		this.dailydistance = dailydistance;
 	}
 
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation
 				+ ", htmlColor=" + htmlColor + ", agencyId=" + agencyId + ", consumption=" + consumption + ", deviceId="
 				+ deviceId + ", simnumber=" + simnumber + ", creationdate=" + creationdate + ", totaldistance="
-				+ totaldistance + ", indextotaldistance=" + indextotaldistance + ", inzoneone=" + inzoneone
-				+ ", inzonetwo=" + inzonetwo + ", lastlat=" + lastlat + ", lastlon=" + lastlon + ", lastspeed="
-				+ lastspeed + ", lastfixtime=" + lastfixtime + ", dailydistance=" + dailydistance + "]";
-	}
+				+ totaldistance + ", indexemptyingkm=" + indexemptyingkm + ", inzoneone=" + inzoneone + ", inzonetwo="
+				+ inzonetwo + ", lastlat=" + lastlat + ", lastlon=" + lastlon + ", lastspeed=" + lastspeed
+				+ ", lastfixtime=" + lastfixtime + ", dailydistance=" + dailydistance + ", color=" + color + "]";
+	} 
 }
