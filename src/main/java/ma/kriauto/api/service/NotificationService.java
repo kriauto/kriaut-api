@@ -8,5 +8,5 @@ import ma.kriauto.api.repository.NotificationRepository;
 public interface NotificationService {
 
 	public List<Notification> fetchNotificationByCarIdAndDate(Long carid, String date);
-	public Notification save(NotificationRepository notification);
+	public Notification save(Notification notification);
 }

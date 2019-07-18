@@ -71,6 +71,9 @@ public class Car {
 	  
 	  @Column(name="color")
 	  private String color;
+	  
+	  @Column(name="status")
+	  private Integer status;
 
 	public Long getId() {
 		return id;
@@ -232,6 +235,14 @@ public class Car {
 		this.color = color;
 	}
 
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+
 	@Override
 	public String toString() {
 		return "Car [id=" + id + ", mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation
@@ -239,6 +250,7 @@ public class Car {
 				+ deviceId + ", simnumber=" + simnumber + ", creationdate=" + creationdate + ", totaldistance="
 				+ totaldistance + ", indexemptyingkm=" + indexemptyingkm + ", inzoneone=" + inzoneone + ", inzonetwo="
 				+ inzonetwo + ", lastlat=" + lastlat + ", lastlon=" + lastlon + ", lastspeed=" + lastspeed
-				+ ", lastfixtime=" + lastfixtime + ", dailydistance=" + dailydistance + ", color=" + color + "]";
-	} 
+				+ ", lastfixtime=" + lastfixtime + ", dailydistance=" + dailydistance + ", color=" + color + ", status="
+				+ status + "]";
+	}
 }

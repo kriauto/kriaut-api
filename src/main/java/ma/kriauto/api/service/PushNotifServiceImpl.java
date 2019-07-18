@@ -1,5 +1,7 @@
 package ma.kriauto.api.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,12 @@ public class PushNotifServiceImpl implements PushNotifService {
 	public PushNotif fetchDeviceByPushToken(String push) {
 		// TODO Auto-generated method stub
 		return pushnotifRepository.fetchDeviceByPushToken(push);
+	}
+
+	@Override
+	public List<PushNotif> fetchPushNotifByProfileId(Long profileid) {
+		// TODO Auto-generated method stub
+		return pushnotifRepository.fetchPushNotifByProfileId(profileid);
 	}
 
 }

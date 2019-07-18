@@ -5,11 +5,15 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -18,6 +22,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 public class Notification {
 	
 	@Id
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="generator_notification")
+	@SequenceGenerator(name="generator_notification",sequenceName="api_notification_sequence",allocationSize=1)
 	private Long id;
 	  
 	@Column(name="carid")
@@ -26,8 +32,8 @@ public class Notification {
 	@Column(name="message")
 	private String message;
 	  
-	@Column(name = "creationdate", nullable = false)
-	@CreatedDate
+	@Column(name = "creationdate", nullable = false, updatable = false)
+	@CreationTimestamp
 	private Timestamp creationdate;
 
 	public Long getId() {

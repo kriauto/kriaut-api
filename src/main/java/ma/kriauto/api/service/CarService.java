@@ -2,10 +2,14 @@ package ma.kriauto.api.service;
 
 import java.util.List;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import ma.kriauto.api.model.ActiveNotif;
 import ma.kriauto.api.model.Car;
 import ma.kriauto.api.model.Contact;
 import ma.kriauto.api.model.Parameter;
+import ma.kriauto.api.model.Position;
 import ma.kriauto.api.model.Zone;
 import ma.kriauto.api.response.AccountOut;
 import ma.kriauto.api.response.DetailOut;
@@ -70,6 +74,9 @@ public interface CarService {
 	void initDailyDistance();
 	void calculateTotalDistance();
 	double distance(double lat1, double lon1, double lat2, double lon2, char unit);
+	List<Position> fetchMaxSpeedByDeviceIdAndPeriod(String date, Integer deviceid);
+	List<Position> fetchLastPositionByDeviceId(Integer deviceid);
+	List<Position> fetchCarIgnition(String date, Integer deviceid);
 
 	
 	

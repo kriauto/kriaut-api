@@ -339,6 +339,9 @@ public class CarController {
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
+  	  Car car = carService.fetchCarById(data.getCarid());
+  	  car.setStatus(1);
+  	  carService.save(car);
   	  //profileService.save(profile);
   	  logger.info("--> End stopcar");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
@@ -353,6 +356,9 @@ public class CarController {
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }
+  	  Car car = carService.fetchCarById(data.getCarid());
+	  car.setStatus(3);
+	  carService.save(car);
   	  //profileService.save(profile);
   	  logger.info("--> End startcar");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);

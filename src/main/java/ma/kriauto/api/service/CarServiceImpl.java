@@ -2188,5 +2188,23 @@ public class CarServiceImpl implements CarService {
 	 public double rad2deg(double rad) {
 	      return (rad * 180.0 / Math.PI);
 }
+
+	@Override
+	public List<Position> fetchMaxSpeedByDeviceIdAndPeriod(String date, Integer deviceid) {
+		// TODO Auto-generated method stub
+		return positionRepository.fetchMaxSpeedByDeviceIdAndPeriod(date, deviceid);
+	}
+
+	@Override
+	public List<Position> fetchLastPositionByDeviceId(Integer deviceid) {
+		// TODO Auto-generated method stub
+		return positionRepository.fetchLastPositionByDeviceId(deviceid);
+	}
+
+	public@Override
+	 List<Position> fetchCarIgnition(String date, Integer deviceid) {
+		// TODO Auto-generated method stub
+		return positionRepository.fetchCarIgnition(date, deviceid);
+	}
 	
 }

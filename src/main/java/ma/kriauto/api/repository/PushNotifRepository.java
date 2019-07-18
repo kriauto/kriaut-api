@@ -1,5 +1,7 @@
 package ma.kriauto.api.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,5 +18,8 @@ public interface PushNotifRepository extends JpaRepository<PushNotif, Long> {
 	
 	@Query("SELECT p FROM PushNotif p WHERE p.pushToken=:push")
 	public PushNotif fetchDeviceByPushToken(@Param("push") String push);
+	
+	@Query("SELECT p FROM PushNotif p WHERE p.idProfile=:profileid")
+	public List<PushNotif> fetchPushNotifByProfileId(@Param("profileid") Long profileid);
 
 }

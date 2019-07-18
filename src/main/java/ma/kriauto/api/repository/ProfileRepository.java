@@ -1,5 +1,7 @@
 package ma.kriauto.api.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,6 +23,9 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	
 	@Query("SELECT p FROM Profile p WHERE p.id=:id")
 	public Profile fetchProfileById(@Param("id") Long id);
+	
+	@Query("SELECT p FROM Profile p")
+	public List<Profile> fetchAllProfile();
 	
 	public Profile save(Profile profile);
 
