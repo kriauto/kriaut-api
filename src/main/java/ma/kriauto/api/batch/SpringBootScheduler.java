@@ -81,7 +81,8 @@ public class SpringBootScheduler {
 	/** controle Technique 
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "13 00 00 * * *")
+	//@Scheduled(fixedDelay = 60000)
 	public void technicalControleNotif() throws ParseException, IOException {
 		log.info("==> Start technicalControleNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -123,7 +124,8 @@ public class SpringBootScheduler {
 	/** vidange 
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "13 30 00 * * *")
+	//@Scheduled(fixedDelay = 60000)
 	public void emptyingkmNotif() throws ParseException, IOException {
 		log.info("==> Start emptyingkmNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -160,7 +162,8 @@ public class SpringBootScheduler {
 	/** Assurance
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "14 00 00 * * *")
+	//@Scheduled(fixedDelay = 60000)
 	public void insuranceEndNotif() throws ParseException, IOException {
 		log.info("==> Start insuranceEndNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -202,7 +205,8 @@ public class SpringBootScheduler {
 	/** Circulation
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "14 30 00 * * *")
+	//@Scheduled(fixedDelay = 60000)
 	public void circulationEndNotif() throws ParseException, IOException {
 		log.info("==> Start circulationEndNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -244,7 +248,7 @@ public class SpringBootScheduler {
 	/** Vitesse
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelay = 3600000)
 	public void vitesseMaxNotif() throws ParseException, IOException {
 		log.info("==> Start vitesseMaxNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -288,7 +292,8 @@ public class SpringBootScheduler {
 	/** Distance
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "23 59 00 * * *")
+	//@Scheduled(fixedDelay = 60000)
 	public void distanceMaxNotif() throws ParseException, IOException {
 		log.info("==> Start distanceMaxNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -426,7 +431,7 @@ public class SpringBootScheduler {
 	/** Moteur allumé/coupé
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 600000)
+	//@Scheduled(fixedDelay = 600000)
 	public void engineStartStopNotif() throws ParseException, IOException {
 		log.info("==> Start engineStartStopNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -488,14 +493,14 @@ public class SpringBootScheduler {
  	}
 		
 	
-	@Scheduled(fixedDelay = 120000)
+	@Scheduled(fixedDelay = 900000)
     public void calculateDailyDistance() throws ParseException {
        log.info("==> Start calculateDailyDistance");
        carService.calculateDailyDistance();
        log.info("==> Finished calculateDailyDistance");
     }
 	
-	//@Scheduled(cron = "00 00 00 * * *")
+	@Scheduled(cron = "00 00 00 * * *")
     public void initDailyDistance() throws ParseException {
        log.info("==> Start calculateDailyDistance");
        carService.initDailyDistance();
@@ -503,7 +508,7 @@ public class SpringBootScheduler {
     }
 	
 	//@Scheduled(cron = "00 00 05 * * *")
-    @Scheduled(fixedDelay = 120000)
+    @Scheduled(fixedDelay = 900000)
     public void calculateTotalDistance() throws ParseException {
        log.info("==> Start calculateDailyDistance");
        carService.calculateTotalDistance();

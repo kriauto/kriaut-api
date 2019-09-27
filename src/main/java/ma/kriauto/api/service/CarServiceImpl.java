@@ -135,7 +135,7 @@ public class CarServiceImpl implements CarService {
 				List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 				if (null != positions && positions.size() > 0) {
 					Position position = positions.get(0);
-					history.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+					history.setIsrolling(position.getSpeed() > 0 ? 1 : 0);
 					history.setLatitude(position.getLatitude());
 					history.setLongitude(position.getLongitude());
 				}
@@ -161,7 +161,7 @@ public class CarServiceImpl implements CarService {
 			 location.setModel(car.getModel());
 			 location.setImmatriculation(car.getImmatriculation());
 			 location.setHtmlColor(car.getHtmlColor());
-			 location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			 location.setIsrolling(position.getSpeed() > 0 ? 1 : 0);
 			 location.setInzone(utilityService.isInZone(zone, position.getLatitude(), position.getLongitude()));
 			}
 			locations.add(location);
@@ -236,10 +236,10 @@ public class CarServiceImpl implements CarService {
 			if(null != maxspeeds && maxspeeds.size() > 0) {
 				Position maxspeed = maxspeeds.get(0);
 				location.setSpeed(maxspeed.getSpeed() > 0 ? Math.round(maxspeed.getSpeed()*1.85*100)/100.0 : 0.0);
-				location.setIsrolling(maxspeed.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(maxspeed.getSpeed() > 0 ? 1 : 0);
 			}else {
 				location.setSpeed(0.0);
-				location.setIsrolling(1);
+				location.setIsrolling(0);
 			}
 				
 			locations.add(location);
@@ -264,9 +264,9 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if(null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 ? 1 : 0);
 			}else {
-				location.setIsrolling(1);
+				location.setIsrolling(0);
 			}
 			locations.add(location);
 		}
@@ -284,9 +284,9 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if(null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 ? 1 : 0);
 			}else {
-				location.setIsrolling(1);
+				location.setIsrolling(0);
 			}
 			/*List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
             for(int j=0; j<positions.size(); j++) {
@@ -319,7 +319,7 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if (null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 ? 1 : 0);
 			} else {
 				location.setIsrolling(1);
 			}
@@ -362,7 +362,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setIsrolling(last.getSpeed() > 0 ? 1 : 0);
 			location.setTemperature(12.0);
 			locations.add(location);
 		}
@@ -388,7 +388,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setIsrolling(last.getSpeed() > 0 ? 1 : 0);
 			location.setTemperature(15.0);
 			locations.add(location);
 		}
@@ -407,7 +407,7 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if (null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 ? 1 : 0);
 			} else {
 				location.setIsrolling(1);
 			}
@@ -435,9 +435,9 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if (null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 ? 1 : 0);
 			} else {
-				location.setIsrolling(1);
+				location.setIsrolling(0);
 			}
 			location.setCarid(car.getId());
 			location.setMark(car.getMark());
@@ -469,7 +469,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setIsrolling(last.getSpeed() > 0 ? 1 : 0);
 			location.setOpeningnumber(14);
 			location.setClosingnumber(10);
 			locations.add(location);
@@ -496,7 +496,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setIsrolling(last.getSpeed() > 0 ? 1 : 0);
 			location.setDrivingduration(12.5);
 			locations.add(location);
 		}
@@ -522,7 +522,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setIsrolling(last.getSpeed() > 0 ? 1 : 0);
 			location.setParametersnumber(14);
 			locations.add(location);
 		}
@@ -548,7 +548,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setIsrolling(last.getSpeed() > 0 ? 1 : 0);
 			location.setStatus(0);
 			location.setAction(1);
 			locations.add(location);
