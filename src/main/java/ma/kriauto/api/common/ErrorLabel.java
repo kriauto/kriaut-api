@@ -12,4 +12,5 @@ public class ErrorLabel {
 	public static final  String MAIL_SEND = "Vous allez recevoir un mail avec vos identifiants";
 	public static final  String DATA_SAVED = "Données enregistrées avec succès";
 	public static final  String TYPE_NOT_FOUND = "le type d'action demandé n'existe pas";
+	public static final  String USER_NOT_ACTIVE = "le compte est désactivé";
 }

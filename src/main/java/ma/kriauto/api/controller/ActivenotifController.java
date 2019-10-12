@@ -36,6 +36,8 @@ public class ActivenotifController {
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }else if(!current.getIsActive()){
+		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }
   	  activenotifService.save(activenotif);
   	  log.info("--> End updateactivenotif");

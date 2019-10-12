@@ -62,54 +62,44 @@ public class CarController {
 	@CrossOrigin
 	@PostMapping("/loadmenu")
     public ResponseEntity<?> menulastposition(@RequestHeader(value="Authorization") String authorization,@RequestBody MenuIn menu) {
-      log.info("--> Start menulastposition : "+authorization+" : "+menu);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }else if(!current.getIsActive() && !menu.getType().equals("17")){
+		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.FORBIDDEN);
 	  }
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
-		/******************************
-		 *        Dernière position   *
-		 *****************************/
-		if(menu.getType().equals("00")) {
+
+  	  if(menu.getType().equals("00")) {
+		log.info("-- Start Dernière Position : "+menu);
   	    List<LastPositionOut> locations = carService.fetchLastPositionByAgencyIdAndDate(agency.getId(),menu.getDate());
-  	    log.info("--> End menulastposition --");
+  	    log.info("-- End   Dernière Position --");
   	    return new ResponseEntity<List<LastPositionOut>>(locations, HttpStatus.OK);
-  	    /******************************
-		 *        Historique          *
-		 *****************************/
   	  }else if(menu.getType().equals("01")) {
+		log.info("-- Start Historique : "+menu);
   		List<HistoryOut> cars = carService.fetchHistoryByAgencyId(agency.getId());
-    	log.info("--> End loadmenu");
+    	log.info("-- End   Historique --");
     	return new ResponseEntity<List<HistoryOut>>(cars, HttpStatus.OK);
-    	/******************************
-		 *          Vitesse           *
-		 *****************************/
       }else if (menu.getType().equals("02")){
+		log.info("-- Start Vitesse : "+menu);
     	List<MaxSpeedOut> locations = carService.fetchCarMaxSpeedByAgencyIdAndDate(agency.getId(),menu.getDate());
-      	log.info("--> End loadmenu --");
+      	log.info("-- End   Vitesse --");
         return new ResponseEntity<List<MaxSpeedOut>>(locations, HttpStatus.OK);
-        /******************************
-		 *         Distance           *
-		 *****************************/
       }else if (menu.getType().equals("03")) {
+		log.info("-- Start Distance : "+menu);
     	List<MaxCourseOut> locations = carService.fetchCarMaxCourseByAgencyIdAndDate(agency.getId(),menu.getDate());
-      	log.info("--> End loadmenu --");
+		log.info("-- End   Distance --");
         return new ResponseEntity<List<MaxCourseOut>>(locations, HttpStatus.OK);
-        /******************************
-		 *    Carburant Principale    *
-		 *****************************/
 	  }else if (menu.getType().equals("04")) {
+		log.info("-- Start Carburant Principal : "+menu);
 	    List<FuelOut> locations = carService.fetchCarFuelPrincipaleByAgencyIdAndDate(agency.getId(),menu.getDate());
-	    log.info("--> End loadmenu --");
+		log.info("-- End   Carburant Principal ");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
-	    /******************************
-		 *    Carburant Secondaire    *
-		 *****************************/
 	  }else if (menu.getType().equals("05")) {
+		log.info("-- Start Carburant Secondaire : "+menu);
 	    List<FuelOut> locations = carService.fetchCarFuelSecondaireByAgencyId(agency.getId(),menu.getDate());
-	    log.info("--> End loadmenu --");
+		log.info("-- End   Carburant Secondaire ");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
 	    /******************************
 		 *     Température Moteur     *
@@ -125,33 +115,25 @@ public class CarController {
 	    List<MaxTemperatureOut> locations = carService.fetchCarTemperatureFrByAgencyId(agency.getId(),menu.getDate());
 	    log.info("--> End loadmenu --");
 	    return new ResponseEntity<List<MaxTemperatureOut>>(locations, HttpStatus.OK);
-	    /******************************
-		 *          zone une          *
-		 *****************************/
 	  }else if (menu.getType().equals("08")) {
+		log.info("-- Start Zone Une : "+menu);
 		List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),1);
-		log.info("--> End loadmenu --");
+		log.info("-- End   Zone Une --");
 		return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
-		/******************************
-		 *          zone deux         *
-		 *****************************/
 	  }else if (menu.getType().equals("09")) {
+		log.info("-- Start Zone Deux : "+menu);
   	  	List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),2);
-  	  	log.info("--> End loadmenu --");
+		log.info("-- End   Zone Deux --");
   	  	return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
-  	  	/******************************
-		 *  Notification consultation *
-		 *****************************/
   	  }else if (menu.getType().equals("06")) {
+		log.info("-- Start Notification Consultation : "+menu);
 		List<NotificationOut> locations = carService.fetchCarNotificationConsulByAgencyId(agency.getId(),menu.getDate());
-		log.info("--> End loadmenu --");
+		log.info("-- End   Notification Consultation --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
-		/******************************
-		 * Notification configuration *
-		 *****************************/
 	  }else if (menu.getType().equals("07")) {
+		log.info("-- Start Notification Configuration : "+menu);
 		List<NotificationOut> locations = carService.fetchCarNotificationConfigByAgencyId(agency.getId(),menu.getDate());
-		log.info("--> End loadmenu --");
+		log.info("-- End   Notification Configuration --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
 		/******************************
 		 *           Portes           *
@@ -167,37 +149,28 @@ public class CarController {
 		List<DriverOut> locations = carService.fetchCarDriverByAgencyId(agency.getId(),menu.getDate());
 		log.info("--> End loadmenu --");
 		return new ResponseEntity<List<DriverOut>>(locations, HttpStatus.OK);
-		/******************************
-		 *         Paramètres        *
-		 *****************************/
 	  }else if (menu.getType().equals("14")) {
+		log.info("-- Start Paramètres : "+menu);
 		List<ParametersOut> locations = carService.fetchCarParametersByAgencyId(agency.getId(),menu.getDate());
-		log.info("--> End loadmenu --");
+		log.info("-- End   Paramètres --");
 		return new ResponseEntity<List<ParametersOut>>(locations, HttpStatus.OK);
-		/******************************
-		 *       Arret/démarrage      *
-		 *****************************/
 	  }else if (menu.getType().equals("15")) {
+		log.info("-- Start Arret/Démarrage : "+menu);
 		List<StartStopOut> locations = carService.fetchCarStartStopByAgencyId(agency.getId(),menu.getDate());
-		log.info("--> End loadmenu --");
+		log.info("-- End   Arret/Démarrage --");
 		return new ResponseEntity<List<StartStopOut>>(locations, HttpStatus.OK);
-		/******************************
-		 *         Mon compte         *
-		 *****************************/
 	  }else if (menu.getType().equals("16")) {
+		log.info("-- Start Mon Compte : "+menu);
 		AccountOut account = carService.fetchAccountByAgencyId(agency.getId());
-		log.info("--> End loadmenu --");
+		log.info("-- End   Mon Compte --");
 		return new ResponseEntity<AccountOut>(account, HttpStatus.OK);
-		/******************************
-		 *          Contacts          *
-		 *****************************/
 	  }else if (menu.getType().equals("17")) {
+		log.info("-- Start Contacts : "+menu);
 		List<Contact> contact = carService.fetchContacts();
-		log.info("--> End loadmenu --");
-		return new ResponseEntity<List<Contact>>(contact, HttpStatus.FORBIDDEN);
-		//return new ResponseEntity<List<Contact>>(contact, HttpStatus.OK);
+		log.info("-- End   Contacts --");
+		return new ResponseEntity<List<Contact>>(contact, HttpStatus.OK);
 	   }else {
-  		log.info("--> End loadmenu --");
+  		log.info("--> Action Not Find --");
   		return new ResponseEntity(new CustomErrorType(ErrorLabel.TYPE_NOT_FOUND),HttpStatus.NOT_FOUND);
   	  }
     }

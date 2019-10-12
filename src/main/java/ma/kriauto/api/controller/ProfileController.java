@@ -46,6 +46,8 @@ public class ProfileController {
   	  Profile current = profileService.fetchProfileByLogin(auth.getLogin());
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }else if(!current.getIsActive()){
+  	  	return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }else if(!current.getPassword().equals(auth.getPassword())){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.PASSWORD_MISSING),HttpStatus.NOT_FOUND);
 	  }else{ 
@@ -62,7 +64,7 @@ public class ProfileController {
 			pushnotifService.save(pushnotif);
 		}
 	  }
-  	  log.info("-- End login --");
+  	  log.info("-- End   login --");
   	  AuthenticationOut menu = profileService.fetchMenuDtoByLogin(auth.getLogin());
       return new ResponseEntity<AuthenticationOut>(menu, HttpStatus.OK);
     }
@@ -70,12 +72,14 @@ public class ProfileController {
     @CrossOrigin
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader(value="Authorization") String authorization, @RequestBody AuthenticationIn auth) {
-      log.info("--> Start logout "+auth);
+      log.info("-- Start logout : "+auth);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  PushNotif pushnotif  = pushnotifService.fetchDeviceByPushToken(auth.getNotifToken());
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }else if(!current.getIsActive()){
+		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }else if(null == pushnotif){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.NOTIF_TOKEN_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }else if(!pushnotif.getIdProfile().equals(current.getId())){
@@ -83,7 +87,7 @@ public class ProfileController {
 	  }else{
 		  pushnotifService.delete(pushnotif);
 	  }
-  	  log.info("--> End logout");
+  	  log.info("-- End logout --");
   	    return new ResponseEntity(new CustomErrorType(ErrorLabel.LOGOUT_SUCCESS),HttpStatus.OK);
     }
     
@@ -94,6 +98,8 @@ public class ProfileController {
   	  Profile current = profileService.fetchProfileByLogin(auth.getLogin());
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }else if(!current.getIsActive()){
+		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }else if(!current.getPassword().equals(auth.getPassword())){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.PASSWORD_MISSING),HttpStatus.NOT_FOUND);
 	  }else{ 
@@ -125,7 +131,7 @@ public class ProfileController {
     @CrossOrigin
     @PostMapping("/initpassword")
     public ResponseEntity<?> initPassword(@RequestBody AuthenticationIn auth) {
-    	log.info("--> Start initPassword "+auth);
+    	log.info("-- Start initPassword : "+auth);
     	if(null == auth.getMail()){
     		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_REQUIRED),HttpStatus.NOT_FOUND);
     	}
@@ -133,13 +139,15 @@ public class ProfileController {
     	if(null == current){
     		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_NOT_FOUND),HttpStatus.NOT_FOUND);
 
-    	}
+		}else if(!current.getIsActive()){
+			return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
+		}
     	String from = "noreply@kriauto.ma";
     	String to = current.getMail();
     	String subject = "Identifiants de connexion";
     	String message = "Bonjour "+current.getName()+", <br/><br/> Veuillez trouver vos identifiants de connexion : <br/><br/> - login : "+current.getLogin()+" <br/> - Mot de passe : "+current.getPassword()+" <br/><br/> l'équipe KriAuto.";
     	senderService.sendMail(from, to, subject, message);
-    	log.info("--> End initPassword "+auth);
+    	log.info("-- End initPassword --");
     	return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_SEND),HttpStatus.OK);
     }
     

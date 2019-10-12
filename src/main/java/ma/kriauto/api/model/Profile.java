@@ -84,6 +84,9 @@ public class Profile {
     @Column(name="iscontactus")
     private Boolean isContactUs;
 
+	@Column(name="isactive")
+	private Boolean isActive;
+
 	public Long getId() {
 		return id;
 	}
@@ -284,21 +287,43 @@ public class Profile {
 		this.isContactUs = isContactUs;
 	}
 
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isactive) {
+		isActive = isactive;
+	}
+
 	@Override
 	public String toString() {
-		return "Profile [id=" + id + ", login=" + login + ", password="
-				+ password + ", authToken=" + authToken + ", name=" + name
-				+ ", phone=" + phone + ", mail=" + mail + ", isLastPosition="
-				+ isLastPosition + ", isHistory=" + isHistory + ", isSpeedMax="
-				+ isSpeedMax + ", isCourse=" + isCourse + ", isCarburantP="
-				+ isCarburantP + ", isCarburantS=" + isCarburantS
-				+ ", isNotifCons=" + isNotifCons + ", isNotifConf="
-				+ isNotifConf + ", isZoneOne=" + isZoneOne + ", isZoneTwo="
-				+ isZoneTwo + ", isTempM=" + isTempM + ", isTempF=" + isTempF
-				+ ", isDoor=" + isDoor + ", isDriver=" + isDriver
-				+ ", isParameters=" + isParameters + ", isStartStop="
-				+ isStartStop + ", isMyAccount=" + isMyAccount
-				+ ", isContactUs=" + isContactUs 
-				+ "]";
+		return "Profile{" +
+				"id=" + id +
+				", login='" + login + '\'' +
+				", password='" + password + '\'' +
+				", authToken='" + authToken + '\'' +
+				", name='" + name + '\'' +
+				", phone='" + phone + '\'' +
+				", mail='" + mail + '\'' +
+				", isLastPosition=" + isLastPosition +
+				", isHistory=" + isHistory +
+				", isSpeedMax=" + isSpeedMax +
+				", isCourse=" + isCourse +
+				", isCarburantP=" + isCarburantP +
+				", isCarburantS=" + isCarburantS +
+				", isNotifCons=" + isNotifCons +
+				", isNotifConf=" + isNotifConf +
+				", isZoneOne=" + isZoneOne +
+				", isZoneTwo=" + isZoneTwo +
+				", isTempM=" + isTempM +
+				", isTempF=" + isTempF +
+				", isDoor=" + isDoor +
+				", isDriver=" + isDriver +
+				", isParameters=" + isParameters +
+				", isStartStop=" + isStartStop +
+				", isMyAccount=" + isMyAccount +
+				", isContactUs=" + isContactUs +
+				", isActive=" + isActive +
+				'}';
 	}
 }

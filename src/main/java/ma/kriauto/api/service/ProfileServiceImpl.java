@@ -60,6 +60,7 @@ public class ProfileServiceImpl implements ProfileService {
 		menu.setIsParameters(profile.getIsParameters());
 		menu.setIsStartStop(profile.getIsStartStop());
 		menu.setIsMyAccount(profile.getIsMyAccount());
+		menu.setIsContactUs(profile.getIsContactUs());
 		return menu;
 	}
 
