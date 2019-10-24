@@ -43,24 +43,24 @@ public class ProfileServiceImpl implements ProfileService {
 		Agency agency = agencyRepository.fetchAgencyByProfileId(profile.getId());
 		menu.setAuthToken(profile.getAuthToken());
 		menu.setAgencyName(agency.getName());
-		menu.setIsLastPosition(profile.getIsLastPosition());
-		menu.setIsHistory(profile.getIsHistory());
-		menu.setIsSpeedMax(profile.getIsSpeedMax());
-		menu.setIsCourse(profile.getIsCourse());
-		menu.setIsCarburantP(profile.getIsCarburantP());
-		menu.setIsCarburantS(profile.getIsCarburantS());
-		menu.setIsNotifCons(profile.getIsNotifCons());
-		menu.setIsNotifConf(profile.getIsNotifConf());
-		menu.setIsZoneOne(profile.getIsZoneOne());
-		menu.setIsZoneTwo(profile.getIsZoneTwo());
-		menu.setIsTempM(profile.getIsTempM());
-		menu.setIsTempF(profile.getIsTempF());
-		menu.setIsDoor(profile.getIsDoor());
-		menu.setIsDriver(profile.getIsDriver());
-		menu.setIsParameters(profile.getIsParameters());
-		menu.setIsStartStop(profile.getIsStartStop());
-		menu.setIsMyAccount(profile.getIsMyAccount());
-		menu.setIsContactUs(profile.getIsContactUs());
+		menu.setIsLastPosition(profile.getIsActive() == true? profile.getIsLastPosition() : false);
+		menu.setIsHistory(profile.getIsActive() == true? profile.getIsHistory() : false);
+		menu.setIsSpeedMax(profile.getIsActive() == true? profile.getIsSpeedMax() : false);
+		menu.setIsCourse(profile.getIsActive() == true? profile.getIsCourse() : false);
+		menu.setIsCarburantP(profile.getIsActive() == true? profile.getIsCarburantP() : false);
+		menu.setIsCarburantS(profile.getIsActive() == true? profile.getIsCarburantS() : false);
+		menu.setIsNotifCons(profile.getIsActive() == true? profile.getIsNotifCons() : false);
+		menu.setIsNotifConf(profile.getIsActive() == true? profile.getIsNotifConf() : false);
+		menu.setIsZoneOne(profile.getIsActive() == true? profile.getIsZoneOne() : false);
+		menu.setIsZoneTwo(profile.getIsActive() == true? profile.getIsZoneTwo() : false);
+		menu.setIsTempM(profile.getIsActive() == true? profile.getIsTempM() : false);
+		menu.setIsTempF(profile.getIsActive() == true? profile.getIsTempF() : false);
+		menu.setIsDoor(profile.getIsActive() == true? profile.getIsDoor() : false);
+		menu.setIsDriver(profile.getIsActive() == true? profile.getIsDriver() : false);
+		menu.setIsParameters(profile.getIsActive() == true? profile.getIsParameters() : false);
+		menu.setIsStartStop(profile.getIsActive() == true? profile.getIsStartStop() : false);
+		menu.setIsMyAccount(profile.getIsActive() == true? profile.getIsMyAccount() : false);
+		menu.setIsContactUs(true);
 		return menu;
 	}
 
@@ -87,5 +87,14 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public Profile save(Profile profile) {
 		return profileRepository.save(profile);
+	}
+
+	@Override
+	public void completeProfile(Profile profilein, Profile profileout) {
+		profileout.setLogin(profilein.getLogin() != null ? profilein.getLogin() : profileout.getLogin());
+		profileout.setPassword(profilein.getPassword() != null ? profilein.getPassword() : profileout.getPassword());
+		profileout.setName(profilein.getName() != null ? profilein.getName() : profileout.getName());
+		profileout.setPhone(profilein.getPhone() != null ? profilein.getPhone() : profileout.getPhone());
+		profileout.setMail(profilein.getMail() != null ? profilein.getMail() : profileout.getMail());
 	}
 }

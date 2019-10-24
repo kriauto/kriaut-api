@@ -12,6 +12,9 @@ public interface ActiveNotifRepository extends JpaRepository<ActiveNotif, Long> 
 	
 	@Query("SELECT a FROM ActiveNotif a WHERE a.carid=:carid")
 	public ActiveNotif fetchActiveNotifByCarId(@Param("carid") Long carid);
+
+	@Query("SELECT a FROM ActiveNotif a WHERE a.id=:id")
+	public ActiveNotif fetchActiveNotifById(@Param("id") Long id);
 	
 	public ActiveNotif save(ActiveNotif activenotif);
 }

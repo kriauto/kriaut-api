@@ -13,4 +13,5 @@ public class ErrorLabel {
 	public static final  String DATA_SAVED = "Données enregistrées avec succès";
 	public static final  String TYPE_NOT_FOUND = "le type d'action demandé n'existe pas";
 	public static final  String USER_NOT_ACTIVE = "le compte est désactivé";
+	public static final  String ZONE_NOT_DEFINED = "zone avec nom non définie";
 }

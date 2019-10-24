@@ -24,7 +24,7 @@ import com.nexmo.client.sms.messages.TextMessage;
 @Service
 public class SenderServiceImpl implements SenderService {
 	
-	public final static String AUTH_KEY_FCM = "AAAAGCh6u8g:APA91bGM-jPzZI1BIasa0IdW6SUNCXAa78mWXI0mACvYXmawU5ptyT3iCIjcEhS1_b7V6XaEwsuL-rppJ_AgH_O1Q_XBXttUYoVIlwVamJEr6grmo4qxWGWPMELZar1bRsXCpJCaEaFq";
+	public final static String AUTH_KEY_FCM = "AAAAWUZHKlI:APA91bFucxdPdJ-halQ1UoOo8RrdG71RsDFsCUz1TEODgn1YHVdJ6FOF7_U23yWTepib-Qaaqk5lwlVlEpYbHyGuGJrZXlRKk8GHi7WebOXJN0EdN0V4LByDdxLR1tFX_mbTo3zIB7fk";
 	public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
 
 	@Override

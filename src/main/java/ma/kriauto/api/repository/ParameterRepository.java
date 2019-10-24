@@ -12,6 +12,9 @@ public interface ParameterRepository extends JpaRepository<Parameter, Long> {
 	
 	@Query("SELECT p FROM Parameter p WHERE p.carid=:carid")
 	public Parameter fetchParameterByCarId(@Param("carid") Long carid);
+
+	@Query("SELECT p FROM Parameter p WHERE p.id=:id")
+	public Parameter fetchParameterById(@Param("id") Long id);
 	
 	public Parameter save(Parameter parameter);
 }

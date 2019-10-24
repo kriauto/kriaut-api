@@ -14,4 +14,5 @@ public interface ProfileService {
 	public Profile fetchProfileById(Long id);
 	public List<Profile> fetchAllProfile();
 	public Profile save(Profile profile);
+	public void completeProfile(Profile in, Profile out);
 }

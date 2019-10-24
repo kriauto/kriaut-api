@@ -32,16 +32,18 @@ public class ParameterController {
 	@CrossOrigin
     @PostMapping("/updateparameter")
     public ResponseEntity<?> updateparameter(@RequestHeader(value="Authorization") String authorization, @RequestBody Parameter parameter) {
-      log.info("--> Start updateparameter "+parameter);
+      log.info("-- Start Update Parameters :  "+parameter);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
+  	  Parameter currentparameter = parameterService.fetchParameterById(parameter.getId());
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }else if(!current.getIsActive()){
 		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }
-  	  parameterService.save(parameter);
-  	  log.info("--> End updateparameter");
+  	  parameterService.completeParameter(parameter, currentparameter);
+  	  parameterService.save(currentparameter);
+	  log.info("-- End   Update Parameters --");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }
 }

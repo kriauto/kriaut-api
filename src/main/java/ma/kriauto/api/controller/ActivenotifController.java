@@ -34,12 +34,14 @@ public class ActivenotifController {
       log.info("--> Start updateactivenotif "+activenotif);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
+  	  ActiveNotif currentactivenotif = activenotifService.fetchActiveNotifById(activenotif.getId());
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }else if(!current.getIsActive()){
 		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }
-  	  activenotifService.save(activenotif);
+  	  activenotifService.completeActiveNotif(activenotif,currentactivenotif);
+  	  activenotifService.save(currentactivenotif);
   	  log.info("--> End updateactivenotif");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }

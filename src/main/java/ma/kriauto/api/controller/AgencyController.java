@@ -34,12 +34,14 @@ public class AgencyController {
       log.info("--> Start updateagency "+agency);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
+  	  Agency  currentagency = agencyService.fetchAgencyByProfileId(current.getId());
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
 	  }else if(!current.getIsActive()){
 		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }
-  	  agencyService.save(agency);
+	  agencyService.completeAgency(agency, currentagency);
+  	  agencyService.save(currentagency);
   	  log.info("--> End updateagency");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }

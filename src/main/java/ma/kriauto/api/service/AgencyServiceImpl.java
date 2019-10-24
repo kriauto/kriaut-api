@@ -23,4 +23,13 @@ public class AgencyServiceImpl implements AgencyService {
 		return agencyRepository.save(agency);
 	}
 
+	@Override
+	public void completeAgency(Agency agencyin, Agency agencyout) {
+		agencyout.setName(agencyin.getName() != null ? agencyin.getName() : agencyout.getName());
+		agencyout.setCity(agencyin.getCity() != null ? agencyin.getCity() : agencyout.getCity());
+		agencyout.setAddress(agencyin.getAddress() != null ? agencyin.getAddress() : agencyout.getAddress());
+		agencyout.setPhone(agencyin.getPhone() != null ? agencyin.getPhone() : agencyout.getPhone());
+		agencyout.setFax(agencyin.getFax() != null ? agencyin.getFax() : agencyout.getFax());
+	}
+
 }

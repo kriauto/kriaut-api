@@ -22,9 +22,6 @@ import com.google.maps.model.LatLng;
 
 @Service
 public class UtilityServiceImpl implements UtilityService {
-	
-	public final static String AUTH_KEY_FCM = "AAAAGCh6u8g:APA91bGM-jPzZI1BIasa0IdW6SUNCXAa78mWXI0mACvYXmawU5ptyT3iCIjcEhS1_b7V6XaEwsuL-rppJ_AgH_O1Q_XBXttUYoVIlwVamJEr6grmo4qxWGWPMELZar1bRsXCpJCaEaFq";
-	public final static String API_URL_FCM = "https://fcm.googleapis.com/fcm/send";
 
 
 	@Override

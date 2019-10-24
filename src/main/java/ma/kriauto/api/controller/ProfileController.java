@@ -46,8 +46,6 @@ public class ProfileController {
   	  Profile current = profileService.fetchProfileByLogin(auth.getLogin());
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
-	  }else if(!current.getIsActive()){
-  	  	return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }else if(!current.getPassword().equals(auth.getPassword())){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.PASSWORD_MISSING),HttpStatus.NOT_FOUND);
 	  }else{ 
@@ -159,8 +157,11 @@ public class ProfileController {
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
 		return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_FOUND),HttpStatus.NOT_FOUND);
+	  }else if(!current.getIsActive()){
+  	  	return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }
-  	  profileService.save(profile);
+  	  profileService.completeProfile(profile,current);
+  	  profileService.save(current);
   	  log.info("--> End updateprofile");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }

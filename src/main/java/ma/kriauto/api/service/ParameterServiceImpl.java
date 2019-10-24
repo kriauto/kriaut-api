@@ -22,4 +22,21 @@ public class ParameterServiceImpl implements  ParameterService  {
 		return parameterRepository.save(parameter);
 	}
 
+	@Override
+	public void completeParameter(Parameter parameterin, Parameter parameterout) {
+		parameterout.setMaxcarburantpri(parameterin.getMaxcarburantpri() != null ? parameterin.getMaxcarburantpri() : parameterout.getMaxcarburantpri());
+		parameterout.setMincarburantpri(parameterin.getMincarburantpri() != null ? parameterin.getMincarburantpri() : parameterout.getMincarburantpri());
+		parameterout.setMaxcarburantsec(parameterin.getMaxcarburantsec() != null ? parameterin.getMaxcarburantsec() : parameterout.getMaxcarburantsec());
+		parameterout.setMincarburantsec(parameterin.getMincarburantsec() != null ? parameterin.getMincarburantsec() : parameterout.getMincarburantsec());
+		parameterout.setMaxtempengine(parameterin.getMaxtempengine() != null ? parameterin.getMaxtempengine() : parameterout.getMaxtempengine());
+		parameterout.setMintempengine(parameterin.getMintempengine() != null ? parameterin.getMintempengine() : parameterout.getMintempengine());
+		parameterout.setMaxtempfrigot(parameterin.getMaxtempfrigot() != null ? parameterin.getMaxtempfrigot() : parameterout.getMaxtempfrigot());
+		parameterout.setMintempfrigot(parameterin.getMaxtempfrigot() != null ? parameterin.getMaxtempfrigot() : parameterout.getMaxtempfrigot());
+	}
+
+	@Override
+	public Parameter fetchParameterById(Long id) {
+		return parameterRepository.fetchParameterById(id);
+	}
+
 }
