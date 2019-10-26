@@ -30,5 +30,8 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
 	
 	@Query("SELECT p.attributes, p.fixtime  FROM Position p where p.attributes LIKE '%\"ignition\":true%' OR p.attributes LIKE '\"ignition\":false'  AND to_char(p.fixtime,'YYYY-MM-DD HH:mm:ss') >=:date AND p.deviceid=:deviceid ORDER BY fixtime")
 	List<Position> fetchCarIgnition(@Param("date") String date, @Param("deviceid") Integer deviceid);
+
+	@Query("DELETE FROM Position p WHERE p.deviceid=:deviceid AND to_char(p.fixtime,'YYYY-MM-DD') <=:date AND p.id !=:id")
+	void deletePositions(@Param("date") String date, @Param("deviceid") Integer deviceid, @Param("id") Integer id);
 	
 }

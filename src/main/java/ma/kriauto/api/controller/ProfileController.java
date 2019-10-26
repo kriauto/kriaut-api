@@ -152,7 +152,7 @@ public class ProfileController {
     @CrossOrigin
     @PostMapping("/updateprofile")
     public ResponseEntity<?> updateprofile(@RequestHeader(value="Authorization") String authorization, @RequestBody Profile profile) {
-      log.info("--> Start updateprofile "+profile);
+      log.info("-- Start updateprofile "+profile);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
@@ -162,7 +162,7 @@ public class ProfileController {
 	  }
   	  profileService.completeProfile(profile,current);
   	  profileService.save(current);
-  	  log.info("--> End updateprofile");
+  	  log.info("-- End updateprofile");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }
 }

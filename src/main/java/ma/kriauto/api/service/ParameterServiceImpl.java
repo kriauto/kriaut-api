@@ -24,6 +24,12 @@ public class ParameterServiceImpl implements  ParameterService  {
 
 	@Override
 	public void completeParameter(Parameter parameterin, Parameter parameterout) {
+		parameterout.setTechcontrol(parameterin.getTechcontrol() != null ? parameterin.getTechcontrol() : parameterout.getTechcontrol());
+		parameterout.setEmptyingkm(parameterin.getEmptyingkm() != null ? parameterin.getEmptyingkm() : parameterout.getEmptyingkm());
+		parameterout.setInsuranceend(parameterin.getInsuranceend() != null ? parameterin.getInsuranceend() : parameterout.getInsuranceend());
+		parameterout.setCirculationend(parameterin.getCirculationend() != null ? parameterin.getCirculationend() : parameterout.getCirculationend());
+		parameterout.setMaxspeed(parameterin.getMaxspeed() != null ? parameterin.getMaxspeed() : parameterout.getMaxspeed());
+		parameterout.setMaxcourse(parameterin.getMaxcourse() != null ? parameterin.getMaxcourse() : parameterout.getMaxcourse());
 		parameterout.setMaxcarburantpri(parameterin.getMaxcarburantpri() != null ? parameterin.getMaxcarburantpri() : parameterout.getMaxcarburantpri());
 		parameterout.setMincarburantpri(parameterin.getMincarburantpri() != null ? parameterin.getMincarburantpri() : parameterout.getMincarburantpri());
 		parameterout.setMaxcarburantsec(parameterin.getMaxcarburantsec() != null ? parameterin.getMaxcarburantsec() : parameterout.getMaxcarburantsec());

@@ -33,6 +33,7 @@ import ma.kriauto.api.service.AgencyService;
 import ma.kriauto.api.service.CarService;
 import ma.kriauto.api.service.ProfileService;
 
+import ma.kriauto.api.service.SenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,9 @@ public class CarController {
 	
 	@Autowired
     private CarService carService;
+
+	@Autowired
+	private SenderService senderService;
 	
 	/*** menu acces ***/
 	@CrossOrigin
@@ -297,7 +301,8 @@ public class CarController {
   	  Car car = carService.fetchCarById(data.getCarid());
   	  car.setStatus(2);
   	  carService.save(car);
-  	  //profileService.save(profile);
+  	  String content = ""+car.getImmatriculation()+" "+car.getSimnumber();
+  	  senderService.sendMail("contact@kriauto.ma","contact@kriauto.ma","Stop Car",content);
   	  log.info("--> End stopcar");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }
@@ -314,7 +319,8 @@ public class CarController {
   	  Car car = carService.fetchCarById(data.getCarid());
 	  car.setStatus(3);
 	  carService.save(car);
-  	  //profileService.save(profile);
+	  String content = ""+car.getImmatriculation()+" "+car.getSimnumber()+"";
+	  senderService.sendMail("contact@kriauto.ma","contact@kriauto.ma","Start Car",content);
   	  log.info("--> End startcar");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }

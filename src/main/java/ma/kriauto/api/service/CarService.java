@@ -32,6 +32,8 @@ public interface CarService {
 	
 	/*** common ***/
 	List<Car> fetchAllCarByAgencyId(Long id);
+	List<Car> fetchAllCar();
+	void deletePositions(String date, Integer deviceid, Integer id);
 	Car fetchCarById(Long id);
 	Car save(Car car);
 	
