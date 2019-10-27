@@ -459,7 +459,7 @@ public class SpringBootScheduler {
 					List<Position> positions = carService.fetchLastPositionByDeviceId(c.getDeviceId());
 					if(c.getStatus() == 2 && positions.size() > 0){
 						if(positions.get(0).getSpeed() < 30){
-							int status = senderService.sendSms("KriAuto.ma", c.getSimnumber(), "kauto 13579 setdigout 00");
+							int status = senderService.sendSms("KriAuto.ma", c.getSimnumber(), "kauto 13579 setdigout 11");
 							if(status == 0) {
 								String message1 = "Arret de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + " est en cours veuillez patienter 2 minutes en cas de problème veuillez nous contacter";
 								String message2 = "Arret de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + "";
@@ -512,7 +512,7 @@ public class SpringBootScheduler {
 				List<Car> cars = carService.fetchAllCarByAgencyIdAndStatus(agency.getId(), 3);
 				for (Car c : cars) {
 					if (c.getStatus() == 3) {
-						int status = senderService.sendSms("KriAuto.ma", c.getSimnumber(), "kauto 13579 setdigout 11");
+						int status = senderService.sendSms("KriAuto.ma", c.getSimnumber(), "kauto 13579 setdigout 00");
 						if (status == 0) {
 							String message1 = "Démarrage de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + " est en cours veuillez patienter 2 minutes en cas de problème veuillez nous contacter";
 							String message2 = "Démarrage de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + "";
