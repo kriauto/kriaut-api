@@ -32,6 +32,7 @@ public interface CarService {
 	
 	/*** common ***/
 	List<Car> fetchAllCarByAgencyId(Long id);
+	List<Car> fetchAllCarByAgencyIdAndStatus(Long id, Integer status);
 	List<Car> fetchAllCar();
 	void deletePositions(String date, Integer deviceid, Integer id);
 	Car fetchCarById(Long id);
@@ -72,7 +73,7 @@ public interface CarService {
 	Parameter fetchCarParametersByCarId(Long id);
 	
 	/*** batch ***/
-	void calculateDailyDistance();
+	double calculateDailyDistance(Integer deviceid, String date);
 	void initDailyDistance();
 	void calculateTotalDistance();
 	double distance(double lat1, double lon1, double lat2, double lon2, char unit);

@@ -7,7 +7,7 @@
             </pattern>
         </encoder>
     </appender>
-    <appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--appender name="SAVE-TO-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
         <file>/home/PlateForme/getway_node1/logs/kriauto.log</file>
 
@@ -26,9 +26,9 @@
             <totalSizeCap>100MB</totalSizeCap>
         </rollingPolicy>
 
-    </appender>
+    </appender-->
     <root level="info">
         <appender-ref ref="STDOUT"/>
-        <appender-ref ref="SAVE-TO-FILE"/>
+        <!--appender-ref ref="SAVE-TO-FILE"/-->
     </root>
 </configuration>

@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
 import ma.kriauto.api.common.Mailin;
 
 import org.json.JSONObject;
@@ -22,6 +23,7 @@ import com.nexmo.client.sms.SmsSubmissionResult;
 import com.nexmo.client.sms.messages.TextMessage;
 
 @Service
+@Slf4j
 public class SenderServiceImpl implements SenderService {
 	
 	public final static String AUTH_KEY_FCM = "AAAAWUZHKlI:APA91bFucxdPdJ-halQ1UoOo8RrdG71RsDFsCUz1TEODgn1YHVdJ6FOF7_U23yWTepib-Qaaqk5lwlVlEpYbHyGuGJrZXlRKk8GHi7WebOXJN0EdN0V4LByDdxLR1tFX_mbTo3zIB7fk";
@@ -29,29 +31,22 @@ public class SenderServiceImpl implements SenderService {
 
 	@Override
 	public int sendSms(String from, String to, String message) {
-		System.out.println("from -> "+from+"to -> "+to+"message -> "+message);
+		log.info("-- Start Sending SMS from -> "+from+" to -> "+to+" message -> "+message);
 		AuthMethod auth = new TokenAuthMethod("9db9ffd9", "DKADpFPTj0RJbRq2");
 		NexmoClient client = new NexmoClient(auth);
-		System.out.println("FROM_NUMBER");
-
-		SmsSubmissionResult[] responses;
+		SmsSubmissionResult[] responses = new SmsSubmissionResult[0];
 		try {
-			responses = client.getSmsClient().submitMessage(new TextMessage(
-			        "kriauto",
-			        to,
-			        message));
+			responses = client.getSmsClient().submitMessage(new TextMessage("kriauto", to, message));
 		} catch (IOException | NexmoClientException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		for (SmsSubmissionResult response : responses) {
-//		    System.out.println(response);
-//		}
-		//if(responses. == 200){
-		   return 0;
-//		}else{
-//		   return 1;
-//		}
+		if(responses[0].getStatus() == 0){
+			log.info("-- End Success Sending SMS from -> "+from+" to -> "+to+" message -> "+message);
+			return 0;
+		}else {
+			log.info("-- End Failed Sending SMS from -> "+from+" to -> "+to+" message -> "+message);
+			return 1;
+		}
 	}
 
 	@Override
@@ -104,6 +99,7 @@ public class SenderServiceImpl implements SenderService {
 
 	@Override
 	public int sendPushNotification(String pushToken, String message) throws IOException {
+		log.info("-- Start Sending Notification To -> "+pushToken+" message -> "+message);
 		int result = 1;
         URL url = new URL(API_URL_FCM);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -137,13 +133,13 @@ public class SenderServiceImpl implements SenderService {
             String output;
             System.out.println("Output from Server .... \n");
             while ((output = br.readLine()) != null) {
-                System.out.println(output);
+                //System.out.println(output);
             }
         } catch (Exception e) {
             e.printStackTrace();
             result = 0;
         }
-        System.out.println("GCM Notification is sent successfully");
+		log.info("-- End Sending Notification To -> "+pushToken+" message -> "+message);
  
         return result;
 	}

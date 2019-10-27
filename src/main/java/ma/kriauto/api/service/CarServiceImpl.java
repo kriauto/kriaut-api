@@ -1245,6 +1245,11 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
+	public List<Car> fetchAllCarByAgencyIdAndStatus(Long id, Integer status) {
+		return carRepository.fetchAllCarByAgencyIdAndStatus(id, status);
+	}
+
+	@Override
 	public List<Car> fetchAllCar() {
 		return carRepository.fetchAllCar();
 	}
@@ -2343,25 +2348,18 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
-	public void calculateDailyDistance() {
-		List<Car> cars = carRepository.fetchAllCar();
-		Date now = new Date();
-		String date = utilityService.getYyyyMmDdFromFixTime(new Timestamp(now.getTime()));
-		for(int i=0; i<cars.size(); i++) {
-			double course = 0.0;
-			Car car = cars.get(i);
-			List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, car.getDeviceId());
-            for(int j=1; j<positions.size(); j++) {
-            	Position position1 = positions.get(j-1);
-            	Position position2 = positions.get(j);
-    			Double distance = distance(position1.getLatitude(), position1.getLongitude(), position2.getLatitude(), position2.getLongitude(), 'K');
-    			if(distance > 0.0) {
-    			  course = course + distance;
-    			}
-            }
-			car.setDailydistance(Double.valueOf(Math.round(course*100/100.0)));
-			carRepository.save(car);
-		}
+	public double calculateDailyDistance(Integer deviceid, String date) {
+		double course = 0.0;
+		List<Position> positions = positionRepository.fetchAllPositionByDeviceIdAndDate(date, deviceid);
+			for(int j=1; j<positions.size(); j++) {
+				Position position1 = positions.get(j-1);
+				Position position2 = positions.get(j);
+				Double distance = distance(position1.getLatitude(), position1.getLongitude(), position2.getLatitude(), position2.getLongitude(), 'K');
+				if(distance > 0.0) {
+					course = course + distance;
+			    }
+		    }
+		return Math.round(course*100/100.0);
 	}
 	
 	@Override

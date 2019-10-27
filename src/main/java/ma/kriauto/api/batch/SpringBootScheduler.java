@@ -74,6 +74,7 @@ public class SpringBootScheduler {
     private UtilityService utilityService;
 
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
+	private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
 	
 	@Bean
 	public TaskScheduler taskScheduler() {
@@ -99,7 +100,7 @@ public class SpringBootScheduler {
 					if(null != activenotif && activenotif.getTechcontrol() && null != parameter && null != parameter.getTechcontrol()) {
 					   Date now = new Date();
    				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date technicaldate = sdf.parse(parameter.getTechcontrol());
+   				       Date technicaldate = sdf2.parse(parameter.getTechcontrol());
 					   long diffInMillies = technicaldate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
@@ -179,11 +180,11 @@ public class SpringBootScheduler {
 					if(null != activenotif && activenotif.getInsuranceend() && null != parameter && null != parameter.getInsuranceend()) {
 					   Date now = new Date();
    				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date insuranceenddate = sdf.parse(parameter.getInsuranceend());
+   				       Date insuranceenddate = sdf2.parse(parameter.getInsuranceend());
 					   long diffInMillies = insuranceenddate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
-                    	 String message1 = "Fin d'assurance pour la date "+parameter.getInsuranceend()+" :"+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
+                    	 String message1 = "Fin d'assurance pour la date "+parameter.getInsuranceend()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Fin d'assurance pour la date "+parameter.getInsuranceend();
 	    				 for(PushNotif pushnotif : pushnotifs){
 	    					if(null != pushnotif && null != pushnotif.getPushToken()){
@@ -221,12 +222,12 @@ public class SpringBootScheduler {
 					if(null != activenotif && activenotif.getCirculationend() && null != parameter && null != parameter.getCirculationend()) {
 					   Date now = new Date();
    				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date circulationenddate = sdf.parse(parameter.getCirculationend());
+   				       Date circulationenddate = sdf2.parse(parameter.getCirculationend());
 					   long diffInMillies = circulationenddate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
-                    	 String message1 = "Fin d'assurance pour la date "+parameter.getCirculationend()+" :"+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
-                    	 String message2 = "Fin d'assurance pour la date "+parameter.getCirculationend();
+                    	 String message1 = "Fin de l'autorisation de circulation pour la date "+parameter.getCirculationend()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
+                    	 String message2 = "Fin de l'autorisation de circulation pour la date "+parameter.getCirculationend();
 	    				 for(PushNotif pushnotif : pushnotifs){
 	    					if(null != pushnotif && null != pushnotif.getPushToken()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
@@ -294,6 +295,11 @@ public class SpringBootScheduler {
 	//@Scheduled(fixedDelay = 60000)
 	public void distanceMaxNotif() throws ParseException, IOException {
 		log.info("==> Start Distance Notifications");
+		Date now = new Date();
+		Calendar cal = Calendar.getInstance();
+		// remove next line if you're always using the current time.
+		cal.setTime(now);
+		String currentdate =sdf.format(cal.getTime());
 		List<Profile> profiles = profileService.fetchAllProfile();
 		for(Profile p : profiles) {
 			Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
@@ -303,7 +309,8 @@ public class SpringBootScheduler {
 				for(Car c : cars) {
 					Parameter parameter = parameteService.fetchParameterByCarId(c.getId());
 					ActiveNotif activenotif = activeNotifService.fetchActiveNotifByCarId(c.getId());
-					if(null != activenotif && activenotif.getMaxcourse() && null != parameter && null != parameter.getMaxcourse() && c.getDailydistance() >= parameter.getMaxcourse()) {
+					double course = carService.calculateDailyDistance(c.getDeviceId(),currentdate);
+					if(null != activenotif && activenotif.getMaxcourse() && null != parameter && null != parameter.getMaxcourse() && course >= parameter.getMaxcourse()) {
                     	 String message1 = "Dépassement de distance journalière : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Dépassement de distance journalière ";
 	    				 for(PushNotif pushnotif : pushnotifs){
@@ -322,82 +329,11 @@ public class SpringBootScheduler {
 		log.info("==> End Distance Notifications");
  	}
 
-	/** Stop Car
-	 * @throws ParseException
-	 * @throws IOException **/
-	//@Scheduled(cron = "23 59 00 * * *")
-	@Scheduled(fixedDelay = 60000)
-	public void stopCar() throws ParseException, IOException {
-		log.info("==> Start Stop Car");
-		List<Profile> profiles = profileService.fetchAllProfile();
-		for(Profile p : profiles) {
-			Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
-			List<PushNotif> pushnotifs = pushNotifService.fetchPushNotifByProfileId(p.getId());
-			if(null != agency) {
-				List<Car> cars = carService.fetchAllCarByAgencyId(agency.getId());
-				for(Car c : cars) {
-					List<Position> positions = carService.fetchLastPositionByDeviceId(c.getDeviceId());
-					if(c.getStatus() == 2 && positions.size() > 0){
-						if(positions.get(0).getSpeed() < 30){
-							int status = senderService.sendSms("KriAuto.ma", c.getSimnumber(), "kauto 13579 setdigout 00");
-							String message = "l'arret de la voiture "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation()+" est en cours veuillez patienter 2 minutes en cas de problème veuillez nous contacter";
-							for(PushNotif pushnotif : pushnotifs){
-								if(null != pushnotif && null != pushnotif.getPushToken()){
-									senderService.sendPushNotification(pushnotif.getPushToken(), message);
-								}
-							}
-							c.setStatus(1);
-							carService.save(c);
-						}else{
-							String message = "l'arret de la voiture "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation()+" est impossible actuelement à cause de sa vitesse de circulation";
-							for(PushNotif pushnotif : pushnotifs){
-								if(null != pushnotif && null != pushnotif.getPushToken()){
-									senderService.sendPushNotification(pushnotif.getPushToken(), message);
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		log.info("==> End Stop Car");
-	}
-
-	/** Start Car
-	 * @throws ParseException
-	 * @throws IOException **/
-	//@Scheduled(cron = "23 59 00 * * *")
-	@Scheduled(fixedDelay = 60000)
-	public void startCar() throws ParseException, IOException {
-		log.info("==> Start Start Car");
-		List<Profile> profiles = profileService.fetchAllProfile();
-		for(Profile p : profiles) {
-			Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
-			List<PushNotif> pushnotifs = pushNotifService.fetchPushNotifByProfileId(p.getId());
-			if(null != agency) {
-				List<Car> cars = carService.fetchAllCarByAgencyId(agency.getId());
-				for(Car c : cars) {
-					if(c.getStatus() == 3){
-							int status = senderService.sendSms("KriAuto.ma", c.getSimnumber(), "kauto 13579 setdigout 11");
-							String message = "le démarrage de la voiture "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation()+" est en cours veuillez patienter 2 minutes en cas de problème veuillez nous contacter";
-							for(PushNotif pushnotif : pushnotifs){
-								if(null != pushnotif && null != pushnotif.getPushToken()){
-									senderService.sendPushNotification(pushnotif.getPushToken(), message);
-								}
-							}
-							c.setStatus(0);
-							carService.save(c);
-					}
-				}
-			}
-		}
-		log.info("==> End Start Car");
-	}
 	
 	/** Zone une
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelay = 600000)
 	public void zoneUneNotif() throws ParseException, IOException {
 		log.info("==> Start Zone Une Notifications");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -453,7 +389,7 @@ public class SpringBootScheduler {
 	/** Zone deux
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelay = 600000)
 	public void zoneTwoNotif() throws ParseException, IOException {
 		log.info("==> Start Zone Deux Notifications");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -483,7 +419,7 @@ public class SpringBootScheduler {
  						 carService.save(c);
 					  }
 					}
-					if(null != activenotif && activenotif.getZonetwoin() && null != positions && positions.size() > 0 && null != zone) {
+					if(null != activenotif && activenotif.getZonetwoout() && null != positions && positions.size() > 0 && null != zone) {
 					  if(!utilityService.isInZone(zone, positions.get(0).getLatitude(), positions.get(0).getLongitude()) && c.getInzonetwo()){
 	                    	 String message1 = "Sortie de la zone "+zone.getLabel()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
 	                    	 String message2 = "Sortie de la zone  "+zone.getLabel();
@@ -503,8 +439,108 @@ public class SpringBootScheduler {
 				}
 			}
 		}
-		log.info("==> Start Zone Deux Notifications");
+		log.info("==> End Zone Deux Notifications");
  	}
+
+	/** Stop Car
+	 * @throws ParseException
+	 * @throws IOException **/
+	//@Scheduled(cron = "23 59 00 * * *")
+	@Scheduled(fixedDelay = 60000)
+	public void stopCar() throws ParseException, IOException {
+		log.info("==> Start Stop Car");
+		List<Profile> profiles = profileService.fetchAllProfile();
+		for(Profile p : profiles) {
+			Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
+			List<PushNotif> pushnotifs = pushNotifService.fetchPushNotifByProfileId(p.getId());
+			if(null != agency) {
+				List<Car> cars = carService.fetchAllCarByAgencyIdAndStatus(agency.getId(),2);
+				for(Car c : cars) {
+					List<Position> positions = carService.fetchLastPositionByDeviceId(c.getDeviceId());
+					if(c.getStatus() == 2 && positions.size() > 0){
+						if(positions.get(0).getSpeed() < 30){
+							int status = senderService.sendSms("KriAuto.ma", c.getSimnumber(), "kauto 13579 setdigout 00");
+							if(status == 0) {
+								String message1 = "Arret de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + " est en cours veuillez patienter 2 minutes en cas de problème veuillez nous contacter";
+								String message2 = "Arret de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + "";
+								for (PushNotif pushnotif : pushnotifs) {
+									if (null != pushnotif && null != pushnotif.getPushToken()) {
+										senderService.sendPushNotification(pushnotif.getPushToken(), message1);
+									}
+								}
+								Notification notification = new Notification();
+								notification.setCarid(c.getId());
+								notification.setMessage(message2);
+								notificationService.save(notification);
+								c.setStatus(1);
+								carService.save(c);
+							}else{
+								String message = "l'arret de la voiture "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation()+" est impossible actuelement à cause de sa vitesse de circulation";
+								for(PushNotif pushnotif : pushnotifs){
+									if(null != pushnotif && null != pushnotif.getPushToken()){
+										senderService.sendPushNotification(pushnotif.getPushToken(), message);
+									}
+								}
+							}
+						}else{
+							String message = "l'arret de la voiture "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation()+" est impossible actuelement à cause de sa vitesse de circulation";
+							for(PushNotif pushnotif : pushnotifs){
+								if(null != pushnotif && null != pushnotif.getPushToken()){
+									senderService.sendPushNotification(pushnotif.getPushToken(), message);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		log.info("==> End Stop Car");
+	}
+
+	/** Start Car
+	 * @throws ParseException
+	 * @throws IOException **/
+	//@Scheduled(cron = "23 59 00 * * *")
+	@Scheduled(fixedDelay = 60000)
+	public void startCar() throws ParseException, IOException {
+		log.info("==> Start Start Car");
+		List<Profile> profiles = profileService.fetchAllProfile();
+		for(Profile p : profiles) {
+			Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
+			List<PushNotif> pushnotifs = pushNotifService.fetchPushNotifByProfileId(p.getId());
+			if (null != agency) {
+				List<Car> cars = carService.fetchAllCarByAgencyIdAndStatus(agency.getId(), 3);
+				for (Car c : cars) {
+					if (c.getStatus() == 3) {
+						int status = senderService.sendSms("KriAuto.ma", c.getSimnumber(), "kauto 13579 setdigout 11");
+						if (status == 0) {
+							String message1 = "Démarrage de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + " est en cours veuillez patienter 2 minutes en cas de problème veuillez nous contacter";
+							String message2 = "Démarrage de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + "";
+							for (PushNotif pushnotif : pushnotifs) {
+								if (null != pushnotif && null != pushnotif.getPushToken()) {
+									senderService.sendPushNotification(pushnotif.getPushToken(), message1);
+								}
+							}
+							Notification notification = new Notification();
+							notification.setCarid(c.getId());
+							notification.setMessage(message2);
+							notificationService.save(notification);
+							c.setStatus(0);
+							carService.save(c);
+						} else {
+							String message = "le Démarrage de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + " est impossible actuelement suite à un problème de couverture réseau";
+							for (PushNotif pushnotif : pushnotifs) {
+								if (null != pushnotif && null != pushnotif.getPushToken()) {
+									senderService.sendPushNotification(pushnotif.getPushToken(), message);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		log.info("==> End Start Car");
+	}
 	
 	/** Moteur allumé/coupé
 	 * @throws ParseException 
@@ -573,7 +609,7 @@ public class SpringBootScheduler {
 	//@Scheduled(fixedDelay = 900000)
     public void calculateDailyDistance() throws ParseException {
        log.info("==> Start calculateDailyDistance");
-       carService.calculateDailyDistance();
+       //carService.calculateDailyDistance();
        log.info("==> Finished calculateDailyDistance");
     }
 	
@@ -584,7 +620,7 @@ public class SpringBootScheduler {
        log.info("==> Finished calculateDailyDistance");
     }
 	
-	@Scheduled(cron = "02 00 00 * * *")
+	@Scheduled(cron = "01 00 00 * * *")
     //@Scheduled(fixedDelay = 900000)
     public void calculateTotalDistance() throws ParseException {
        log.info("==> Start calculateTotalDistance");

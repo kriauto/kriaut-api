@@ -76,32 +76,32 @@ public class CarController {
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
 
   	  if(menu.getType().equals("00")) {
-		log.info("-- Start Dernière Position : "+menu);
+		log.info("-- Start Dernière Position : "+menu+" --Profile : "+current);
   	    List<LastPositionOut> locations = carService.fetchLastPositionByAgencyIdAndDate(agency.getId(),menu.getDate());
   	    log.info("-- End   Dernière Position --");
   	    return new ResponseEntity<List<LastPositionOut>>(locations, HttpStatus.OK);
   	  }else if(menu.getType().equals("01")) {
-		log.info("-- Start Historique : "+menu);
+		log.info("-- Start Historique : "+menu+" --Profile : "+current);
   		List<HistoryOut> cars = carService.fetchHistoryByAgencyId(agency.getId());
     	log.info("-- End   Historique --");
     	return new ResponseEntity<List<HistoryOut>>(cars, HttpStatus.OK);
       }else if (menu.getType().equals("02")){
-		log.info("-- Start Vitesse : "+menu);
+		log.info("-- Start Vitesse : "+menu+" --Profile : "+current);
     	List<MaxSpeedOut> locations = carService.fetchCarMaxSpeedByAgencyIdAndDate(agency.getId(),menu.getDate());
       	log.info("-- End   Vitesse --");
         return new ResponseEntity<List<MaxSpeedOut>>(locations, HttpStatus.OK);
       }else if (menu.getType().equals("03")) {
-		log.info("-- Start Distance : "+menu);
+		log.info("-- Start Distance : "+menu+" --Profile : "+current);
     	List<MaxCourseOut> locations = carService.fetchCarMaxCourseByAgencyIdAndDate(agency.getId(),menu.getDate());
 		log.info("-- End   Distance --");
         return new ResponseEntity<List<MaxCourseOut>>(locations, HttpStatus.OK);
 	  }else if (menu.getType().equals("04")) {
-		log.info("-- Start Carburant Principal : "+menu);
+		log.info("-- Start Carburant Principal : "+menu+" --Profile : "+current);
 	    List<FuelOut> locations = carService.fetchCarFuelPrincipaleByAgencyIdAndDate(agency.getId(),menu.getDate());
 		log.info("-- End   Carburant Principal ");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
 	  }else if (menu.getType().equals("05")) {
-		log.info("-- Start Carburant Secondaire : "+menu);
+		log.info("-- Start Carburant Secondaire : "+menu+" --Profile : "+current);
 	    List<FuelOut> locations = carService.fetchCarFuelSecondaireByAgencyId(agency.getId(),menu.getDate());
 		log.info("-- End   Carburant Secondaire ");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
@@ -120,22 +120,22 @@ public class CarController {
 	    log.info("--> End loadmenu --");
 	    return new ResponseEntity<List<MaxTemperatureOut>>(locations, HttpStatus.OK);
 	  }else if (menu.getType().equals("08")) {
-		log.info("-- Start Zone Une : "+menu);
+		log.info("-- Start Zone Une : "+menu+" --Profile : "+current);
 		List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),1);
 		log.info("-- End   Zone Une --");
 		return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
 	  }else if (menu.getType().equals("09")) {
-		log.info("-- Start Zone Deux : "+menu);
+		log.info("-- Start Zone Deux : "+menu+" --Profile : "+current);
   	  	List<ZoneOut> locations = carService.fetchCarZoneByAgencyIdAndNumber(agency.getId(),2);
 		log.info("-- End   Zone Deux --");
   	  	return new ResponseEntity<List<ZoneOut>>(locations, HttpStatus.OK);
   	  }else if (menu.getType().equals("06")) {
-		log.info("-- Start Notification Consultation : "+menu);
+		log.info("-- Start Notification Consultation : "+menu+" --Profile : "+current);
 		List<NotificationOut> locations = carService.fetchCarNotificationConsulByAgencyId(agency.getId(),menu.getDate());
 		log.info("-- End   Notification Consultation --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
 	  }else if (menu.getType().equals("07")) {
-		log.info("-- Start Notification Configuration : "+menu);
+		log.info("-- Start Notification Configuration : "+menu+" --Profile : "+current);
 		List<NotificationOut> locations = carService.fetchCarNotificationConfigByAgencyId(agency.getId(),menu.getDate());
 		log.info("-- End   Notification Configuration --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
@@ -154,22 +154,22 @@ public class CarController {
 		log.info("--> End loadmenu --");
 		return new ResponseEntity<List<DriverOut>>(locations, HttpStatus.OK);
 	  }else if (menu.getType().equals("14")) {
-		log.info("-- Start Paramètres : "+menu);
+		log.info("-- Start Paramètres : "+menu+" --Profile : "+current);
 		List<ParametersOut> locations = carService.fetchCarParametersByAgencyId(agency.getId(),menu.getDate());
 		log.info("-- End   Paramètres --");
 		return new ResponseEntity<List<ParametersOut>>(locations, HttpStatus.OK);
 	  }else if (menu.getType().equals("15")) {
-		log.info("-- Start Arret/Démarrage : "+menu);
+		log.info("-- Start Arret/Démarrage : "+menu+" --Profile : "+current);
 		List<StartStopOut> locations = carService.fetchCarStartStopByAgencyId(agency.getId(),menu.getDate());
 		log.info("-- End   Arret/Démarrage --");
 		return new ResponseEntity<List<StartStopOut>>(locations, HttpStatus.OK);
 	  }else if (menu.getType().equals("16")) {
-		log.info("-- Start Mon Compte : "+menu);
+		log.info("-- Start Mon Compte : "+menu+" --Profile : "+current);
 		AccountOut account = carService.fetchAccountByAgencyId(agency.getId());
 		log.info("-- End   Mon Compte --");
 		return new ResponseEntity<AccountOut>(account, HttpStatus.OK);
 	  }else if (menu.getType().equals("17")) {
-		log.info("-- Start Contacts : "+menu);
+		log.info("-- Start Contacts : "+menu+" --Profile : "+current);
 		List<Contact> contact = carService.fetchContacts();
 		log.info("-- End   Contacts --");
 		return new ResponseEntity<List<Contact>>(contact, HttpStatus.OK);
@@ -192,47 +192,47 @@ public class CarController {
 	  }
 
   	  if(data.getType().equals("01")) {
-		log.info("-- Start Historique Détail : "+data);
+		log.info("-- Start Historique Détail : "+data+" --Profile : "+current);
   	    List<HistoryLocationOut> historylocations = carService.fetchHistoryCarLocationsByCarIdAndDate(data.getCarid(), data.getDate());
   	    log.info("-- End   Historique Détail --");
         return new ResponseEntity<List<HistoryLocationOut>>(historylocations, HttpStatus.OK);
   	  }else if (data.getType().equals("02")) {
-		log.info("-- Start Vitesse Détail : "+data);
+		log.info("-- Start Vitesse Détail : "+data+" --Profile : "+current);
   		DetailOut detail = carService.fetchMaxSpeedByCarIdAndDate(data.getCarid(), data.getDate());
 		log.info("-- End   Vitesse Détail --");
   		return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
   	  }else if (data.getType().equals("03")) {
-		log.info("-- Start Distance Détail : "+data);
+		log.info("-- Start Distance Détail : "+data+" --Profile : "+current);
     	DetailOut detail = carService.fetchCourseByCarIdAndDate(data.getCarid(), data.getDate());
 		log.info("-- End   Distance Détail --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
       }else if (data.getType().equals("04")) {
-		log.info("-- Start Carburant Principal Détail : "+data);
+		log.info("-- Start Carburant Principal Détail : "+data+" --Profile : "+current);
     	DetailOut detail = carService.fetchCarFuelPrincipaleByCarIdAndDate(data.getCarid(), data.getDate());
 		log.info("-- End   Carburant Principal Détail --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
       }else if (data.getType().equals("05")) {
-		log.info("-- Start Carburant Secondaire Détail : "+data);
+		log.info("-- Start Carburant Secondaire Détail : "+data+" --Profile : "+current);
     	DetailOut detail = carService.fetchCarFuelSecondaireByCarIdAndDate(data.getCarid(), data.getDate());
 		log.info("-- End   Carburant Secondaire Détail --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
       }else if (data.getType().equals("06")) {
-		log.info("-- Start Notifications Consultation : "+data);
+		log.info("-- Start Notifications Consultation : "+data+" --Profile : "+current);
     	List<NotifMessageOut> messages = carService.fetchCarNotificationMessageByCarIdAndDate(data.getCarid(), data.getDate());
 		log.info("-- End   Notifications Consultation --");
       	return new ResponseEntity<List<NotifMessageOut>>(messages, HttpStatus.OK);
       }else if (data.getType().equals("07")) {
-		log.info("-- Start Notifications Configuration : "+data);
+		log.info("-- Start Notifications Configuration : "+data+" --Profile : "+current);
     	ActiveNotif activnotif = carService.fetchCarActiveNotifByCarId(data.getCarid());
 		log.info("-- End   Notifications Configuration --");
       	return new ResponseEntity<ActiveNotif>(activnotif, HttpStatus.OK);
       }else if (data.getType().equals("08")) {
-		log.info("-- Start Zone Une : "+data);
+		log.info("-- Start Zone Une : "+data+" --Profile : "+current);
     	Zone zone = carService.fetchCarZoneByCarIdAndNumber(data.getCarid(),1);
 		log.info("-- End   Zone Une --");
       	return new ResponseEntity<Zone>(zone, HttpStatus.OK);
       }else if (data.getType().equals("09")) {
-		log.info("-- Start Zone Deux : "+data);
+		log.info("-- Start Zone Deux : "+data+" --Profile : "+current);
   	  	Zone zone = carService.fetchCarZoneByCarIdAndNumber(data.getCarid(),2);
 		log.info("-- End   Zone Deux --");
   	  	return new ResponseEntity<Zone>(zone, HttpStatus.OK);
@@ -265,7 +265,7 @@ public class CarController {
       	log.info("--> End loaddata --");
       	return new ResponseEntity<DetailOut>(detail, HttpStatus.OK);
       }else if (data.getType().equals("14")) {
-		log.info("-- Start Paramètres : "+data);
+		log.info("-- Start Paramètres : "+data+" --Profile : "+current);
     	Parameter parameter = carService.fetchCarParametersByCarId(data.getCarid());
 		log.info("-- End   Paramètres --");
       	return new ResponseEntity<Parameter>(parameter, HttpStatus.OK);
@@ -292,7 +292,7 @@ public class CarController {
 	@CrossOrigin
     @PostMapping("/stopcar")
     public ResponseEntity<?> stopcar(@RequestHeader(value="Authorization") String authorization, @RequestBody DataIn data) {
-      log.info("--> Start stopcar "+data);
+      log.info("-- Start stopcar "+data);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
@@ -303,14 +303,14 @@ public class CarController {
   	  carService.save(car);
   	  String content = ""+car.getImmatriculation()+" "+car.getSimnumber();
   	  senderService.sendMail("contact@kriauto.ma","contact@kriauto.ma","Stop Car",content);
-  	  log.info("--> End stopcar");
+  	  log.info("-- End stopcar");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }
 	
 	@CrossOrigin
     @PostMapping("/startcar")
     public ResponseEntity<?> startcar(@RequestHeader(value="Authorization") String authorization, @RequestBody DataIn data) {
-      log.info("--> Start startcar "+data);
+      log.info("-- Start startcar "+data);
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
@@ -321,7 +321,7 @@ public class CarController {
 	  carService.save(car);
 	  String content = ""+car.getImmatriculation()+" "+car.getSimnumber()+"";
 	  senderService.sendMail("contact@kriauto.ma","contact@kriauto.ma","Start Car",content);
-  	  log.info("--> End startcar");
+  	  log.info("-- End startcar");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }
 }

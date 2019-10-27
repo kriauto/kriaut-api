@@ -14,6 +14,9 @@ public interface CarRepository extends JpaRepository<Car, Long> {
 	
 	@Query("SELECT c FROM Car c WHERE c.agencyId=:id ORDER BY mark,model,immatriculation")
 	List<Car> fetchAllCarByAgencyId(@Param("id") Long id);
+
+	@Query("SELECT c FROM Car c WHERE c.agencyId=:id AND c.status=:status ORDER BY mark,model,immatriculation")
+	List<Car> fetchAllCarByAgencyIdAndStatus(@Param("id") Long id, @Param("status") Integer status);
 	
 	@Query("SELECT c FROM Car c")
 	List<Car> fetchAllCar();
