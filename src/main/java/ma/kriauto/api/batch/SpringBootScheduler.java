@@ -541,6 +541,23 @@ public class SpringBootScheduler {
 		}
 		log.info("==> End Start Car");
 	}
+
+
+	/** New Version
+	 * @throws ParseException
+	 * @throws IOException **/
+	@Scheduled(cron = "11 00 00 * * *")
+	//@Scheduled(fixedDelay = 60000)
+	public void newVersionKriauto() throws ParseException, IOException {
+		log.info("==> Start New Version Kriauto");
+		List<Profile> profiles = profileService.fetchAllProfile();
+		for(Profile p : profiles) {
+			int status = senderService.sendSms("KriAuto.ma", p.getPhone(), "Bonjour," +
+					"Pour les utilisateurs IPhone une nouvelle version Kriauto est disponible sur l'App Store, l'application actuelle sera plus accessible dans une semaine." +
+					"Equipe Kriauto.");
+		}
+		log.info("==> End New Version Kriauto");
+	}
 	
 	/** Moteur allumé/coupé
 	 * @throws ParseException 
@@ -635,7 +652,7 @@ public class SpringBootScheduler {
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
-		cal.add(Calendar.MONTH, -1);
+		cal.add(Calendar.DAY_OF_YEAR, -10);
 		String currentdate =sdf.format(cal.getTime());
 		List<Car> cars = carService.fetchAllCar();
 		for(Car car : cars){
