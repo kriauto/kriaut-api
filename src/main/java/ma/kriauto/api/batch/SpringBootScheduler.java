@@ -84,7 +84,7 @@ public class SpringBootScheduler {
 	/** controle Technique 
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(cron = "12 00 00 * * *")
+	@Scheduled(cron = "00 00 12 * * *")
 	//@Scheduled(fixedDelay = 60000)
 	public void technicalControleNotif() throws ParseException, IOException {
 		log.info("==> Start Technical Controle Notifications");
@@ -100,7 +100,7 @@ public class SpringBootScheduler {
 					if(null != activenotif && activenotif.getTechcontrol() && null != parameter && null != parameter.getTechcontrol()) {
 					   Date now = new Date();
    				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date technicaldate = sdf2.parse(parameter.getTechcontrol());
+   				       Date technicaldate = sdf.parse(parameter.getTechcontrol());
 					   long diffInMillies = technicaldate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
@@ -126,7 +126,7 @@ public class SpringBootScheduler {
 	/** vidange 
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(cron = "13 00 00 * * *")
+	@Scheduled(cron = "00 00 13 * * *")
 	//@Scheduled(fixedDelay = 60000)
 	public void emptyingkmNotif() throws ParseException, IOException {
 		log.info("==> Start Vidange Notifications");
@@ -164,7 +164,7 @@ public class SpringBootScheduler {
 	/** Assurance
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(cron = "14 00 00 * * *")
+	@Scheduled(cron = "00 00 14 * * *")
 	//@Scheduled(fixedDelay = 60000)
 	public void insuranceEndNotif() throws ParseException, IOException {
 		log.info("==> Start Assurance Notifications");
@@ -180,7 +180,7 @@ public class SpringBootScheduler {
 					if(null != activenotif && activenotif.getInsuranceend() && null != parameter && null != parameter.getInsuranceend()) {
 					   Date now = new Date();
    				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date insuranceenddate = sdf2.parse(parameter.getInsuranceend());
+   				       Date insuranceenddate = sdf.parse(parameter.getInsuranceend());
 					   long diffInMillies = insuranceenddate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
@@ -206,7 +206,7 @@ public class SpringBootScheduler {
 	/** Circulation
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(cron = "15 00 00 * * *")
+	@Scheduled(cron = "00 00 15 * * *")
 	//@Scheduled(fixedDelay = 60000)
 	public void circulationEndNotif() throws ParseException, IOException {
 		log.info("==> Start Circulations Notifications");
@@ -222,7 +222,7 @@ public class SpringBootScheduler {
 					if(null != activenotif && activenotif.getCirculationend() && null != parameter && null != parameter.getCirculationend()) {
 					   Date now = new Date();
    				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date circulationenddate = sdf2.parse(parameter.getCirculationend());
+   				       Date circulationenddate = sdf.parse(parameter.getCirculationend());
 					   long diffInMillies = circulationenddate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
@@ -266,7 +266,7 @@ public class SpringBootScheduler {
    				       // remove next line if you're always using the current time.
    				       cal.setTime(now);
    				       cal.add(Calendar.HOUR, -1);
-   				       String currentdate =sdf.format(cal.getTime());
+   				       String currentdate =sdf2.format(cal.getTime());
    				       List<Position> positions = carService.fetchMaxSpeedByDeviceIdAndPeriod(currentdate, c.getDeviceId());
                        if(null != positions && positions.size() > 0 && positions.get(0).getSpeed() * 1.85 >= parameter.getMaxspeed()){
                     	 String message1 = "Dépassement de vitesse à "+positions.get(0).getFixtime()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
@@ -291,7 +291,7 @@ public class SpringBootScheduler {
 	/** Distance
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(cron = "23 59 00 * * *")
+	@Scheduled(cron = "00 59 23 * * *")
 	//@Scheduled(fixedDelay = 60000)
 	public void distanceMaxNotif() throws ParseException, IOException {
 		log.info("==> Start Distance Notifications");
@@ -546,7 +546,7 @@ public class SpringBootScheduler {
 	/** New Version
 	 * @throws ParseException
 	 * @throws IOException **/
-	@Scheduled(cron = "11 00 00 * * *")
+	//@Scheduled(cron = "11 00 00 * * *")
 	//@Scheduled(fixedDelay = 60000)
 	public void newVersionKriauto() throws ParseException, IOException {
 		log.info("==> Start New Version Kriauto");
@@ -637,7 +637,7 @@ public class SpringBootScheduler {
        log.info("==> Finished calculateDailyDistance");
     }
 	
-	@Scheduled(cron = "01 00 00 * * *")
+	@Scheduled(cron = "00 00 01 * * *")
     //@Scheduled(fixedDelay = 900000)
     public void calculateTotalDistance() throws ParseException {
        log.info("==> Start calculateTotalDistance");
@@ -645,14 +645,14 @@ public class SpringBootScheduler {
        log.info("==> End calculateTotalDistance");
     }
 
-	@Scheduled(cron = "05 00 00 * * *")
+	@Scheduled(cron = "00 00 05 * * *")
 	//@Scheduled(fixedDelay = 900000)
 	public void purgeDataBase() throws ParseException {
 		log.info("==> Start Purge Data Base");
 		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(now);
-		cal.add(Calendar.DAY_OF_YEAR, -10);
+		cal.add(Calendar.HOUR, -240);
 		String currentdate =sdf.format(cal.getTime());
 		List<Car> cars = carService.fetchAllCar();
 		for(Car car : cars){

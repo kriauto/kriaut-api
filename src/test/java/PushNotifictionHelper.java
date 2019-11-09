@@ -1,4 +1,4 @@
-package ma.kriauto.api.test.java;
+package ma.kriauto.api.test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -137,15 +137,16 @@ public class PushNotifictionHelper {
         System.out.println(str);
         return 1;
     }
-    //public static void main(String[] args){
-     //   String token = "e3euKTguz8I:APA91bE90J8vh_yG-BYvrDogdRscXRXsgnqaJtFDAUf1GfHh4L3TogtMXvrFO4fB81GVJOJS8tLkA9ZbIBdkMx8nTtjbAhrGmZtvuGUMhJFmSCVRG7C4M_Qcngx8eGW_Q_CGQt54G2iP";
-//    	String token = "8e44805c397a33b88b340730361b9bd674fd64a582219ee78cc57d597ba4a625";
+
+    public static void main(String[] args) {
+        String token = "e3euKTguz8I:APA91bE90J8vh_yG-BYvrDogdRscXRXsgnqaJtFDAUf1GfHh4L3TogtMXvrFO4fB81GVJOJS8tLkA9ZbIBdkMx8nTtjbAhrGmZtvuGUMhJFmSCVRG7C4M_Qcngx8eGW_Q_CGQt54G2iP";
+        //String token = "8e44805c397a33b88b340730361b9bd674fd64a582219ee78cc57d597ba4a625";
         /*try {
             sendPushNotification(token);
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        //sendSms("contact@kriauto.ma","0033617638348","Test SMS");
+        sendSms("contact@kriauto.ma", "0033617638348", "Bonjour,\n test");
         //sendMail("contact@kriauo.ma","abdelhaq.elhassnaoui@gmail.com","test","test");
-    //}
+    }
 }
