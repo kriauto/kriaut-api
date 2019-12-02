@@ -1,5 +1,6 @@
 package ma.kriauto.api.service;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -39,21 +40,21 @@ public interface CarService {
 	Car save(Car car);
 	
 	/*** menu acces ***/
-	List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date);
-	List<HistoryOut> fetchHistoryByAgencyId(Long id);
-	List<MaxSpeedOut> fetchCarMaxSpeedByAgencyIdAndDate(Long id, String date);
-	List<MaxCourseOut> fetchCarMaxCourseByAgencyIdAndDate(Long id, String date);
-	List<FuelOut> fetchCarFuelPrincipaleByAgencyIdAndDate(Long id, String date);
-	List<FuelOut> fetchCarFuelSecondaireByAgencyId(Long id, String date);
+	List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date) throws ParseException ;
+	List<HistoryOut> fetchHistoryByAgencyId(Long id) throws ParseException ;
+	List<MaxSpeedOut> fetchCarMaxSpeedByAgencyIdAndDate(Long id, String date) throws ParseException;
+	List<MaxCourseOut> fetchCarMaxCourseByAgencyIdAndDate(Long id, String date) throws ParseException;
+	List<FuelOut> fetchCarFuelPrincipaleByAgencyIdAndDate(Long id, String date) throws ParseException;
+	List<FuelOut> fetchCarFuelSecondaireByAgencyId(Long id, String date) throws ParseException;
 	List<MaxTemperatureOut> fetchCarTemperatureMoByAgencyId(Long id, String date);
 	List<MaxTemperatureOut> fetchCarTemperatureFrByAgencyId(Long id, String date);
-	List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number);
-	List<NotificationOut> fetchCarNotificationConsulByAgencyId(Long id, String date);
-	List<NotificationOut> fetchCarNotificationConfigByAgencyId(Long id, String date);
+	List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number) throws ParseException;
+	List<NotificationOut> fetchCarNotificationConsulByAgencyId(Long id, String date) throws ParseException;
+	List<NotificationOut> fetchCarNotificationConfigByAgencyId(Long id, String date) throws ParseException;
 	List<DoorOut> fetchCarDoorByAgencyId(Long id, String date);
 	List<DriverOut> fetchCarDriverByAgencyId(Long id, String date);
-	List<ParametersOut> fetchCarParametersByAgencyId(Long id, String date);
-	List<StartStopOut> fetchCarStartStopByAgencyId(Long id, String date);
+	List<ParametersOut> fetchCarParametersByAgencyId(Long id, String date) throws ParseException;
+	List<StartStopOut> fetchCarStartStopByAgencyId(Long id, String date) throws ParseException;
 	AccountOut fetchAccountByAgencyId(Long id);
 	List<Contact> fetchContacts();
 	

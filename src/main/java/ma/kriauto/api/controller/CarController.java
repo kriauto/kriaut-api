@@ -1,5 +1,7 @@
 package ma.kriauto.api.controller;
 
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import ma.kriauto.api.common.ErrorLabel;
@@ -65,7 +67,7 @@ public class CarController {
 	/*** menu acces ***/
 	@CrossOrigin
 	@PostMapping("/loadmenu")
-    public ResponseEntity<?> menulastposition(@RequestHeader(value="Authorization") String authorization,@RequestBody MenuIn menu) {
+    public ResponseEntity<?> menulastposition(@RequestHeader(value="Authorization") String authorization,@RequestBody MenuIn menu) throws ParseException {
       String token = authorization.replaceAll("Basic", "");
   	  Profile current = profileService.fetchProfileByToken(token);
   	  if(null == current){
@@ -77,7 +79,10 @@ public class CarController {
 
   	  if(menu.getType().equals("00")) {
 		log.info("-- Start Dernière Position : "+menu+" --Profile : "+current);
-  	    List<LastPositionOut> locations = carService.fetchLastPositionByAgencyIdAndDate(agency.getId(),menu.getDate());
+		List<LastPositionOut> locations = new ArrayList<>();
+		if(current.getIsActive()) {
+			  locations = carService.fetchLastPositionByAgencyIdAndDate(agency.getId(), menu.getDate());
+		}
   	    log.info("-- End   Dernière Position --");
   	    return new ResponseEntity<List<LastPositionOut>>(locations, HttpStatus.OK);
   	  }else if(menu.getType().equals("01")) {
@@ -105,17 +110,17 @@ public class CarController {
 	    List<FuelOut> locations = carService.fetchCarFuelSecondaireByAgencyId(agency.getId(),menu.getDate());
 		log.info("-- End   Carburant Secondaire ");
 	    return new ResponseEntity<List<FuelOut>>(locations, HttpStatus.OK);
-	    /******************************
-		 *     Température Moteur     *
-		 *****************************/
 	  }else if (menu.getType().equals("10")) {
+		  /******************************
+		   *     Température Moteur     *
+		   *****************************/
 	    List<MaxTemperatureOut> locations = carService.fetchCarTemperatureMoByAgencyId(agency.getId(),menu.getDate());
 	    log.info("--> End loadmenu --");
 	    return new ResponseEntity<List<MaxTemperatureOut>>(locations, HttpStatus.OK);
-	    /******************************
-		 *     Température Frigot     *
-		 *****************************/
 	  }else if (menu.getType().equals("11")) {
+		  /******************************
+		   *     Température Frigot     *
+		   *****************************/
 	    List<MaxTemperatureOut> locations = carService.fetchCarTemperatureFrByAgencyId(agency.getId(),menu.getDate());
 	    log.info("--> End loadmenu --");
 	    return new ResponseEntity<List<MaxTemperatureOut>>(locations, HttpStatus.OK);
@@ -139,17 +144,17 @@ public class CarController {
 		List<NotificationOut> locations = carService.fetchCarNotificationConfigByAgencyId(agency.getId(),menu.getDate());
 		log.info("-- End   Notification Configuration --");
 		return new ResponseEntity<List<NotificationOut>>(locations, HttpStatus.OK);
-		/******************************
-		 *           Portes           *
-		 *****************************/
 	  }else if (menu.getType().equals("12")) {
+		  /******************************
+		   *           Portes           *
+		   *****************************/
 		List<DoorOut> locations = carService.fetchCarDoorByAgencyId(agency.getId(),menu.getDate());
 		log.info("--> End loadmenu --");
 		return new ResponseEntity<List<DoorOut>>(locations, HttpStatus.OK);
-		/******************************
-		 *         Chauffeures        *
-		 *****************************/
 	  }else if (menu.getType().equals("13")) {
+		  /******************************
+		   *         Chauffeures        *
+		   *****************************/
 		List<DriverOut> locations = carService.fetchCarDriverByAgencyId(agency.getId(),menu.getDate());
 		log.info("--> End loadmenu --");
 		return new ResponseEntity<List<DriverOut>>(locations, HttpStatus.OK);

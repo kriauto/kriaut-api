@@ -84,6 +84,12 @@ public class Profile {
     @Column(name="iscontactus")
     private Boolean isContactUs;
 
+	@Column(name="price")
+	private Integer price;
+
+	@Column(name="deadlineprice")
+	private String deadlineprice;
+
 	@Column(name="isactive")
 	private Boolean isActive;
 
@@ -278,13 +284,29 @@ public class Profile {
 	public void setIsMyAccount(Boolean isMyAccount) {
 		this.isMyAccount = isMyAccount;
 	}
-	
+
 	public Boolean getIsContactUs() {
 		return isContactUs;
 	}
 
 	public void setIsContactUs(Boolean isContactUs) {
 		this.isContactUs = isContactUs;
+	}
+
+	public Integer getPrice() {
+		return price;
+	}
+
+	public void setPrice(Integer price) {
+		this.price = price;
+	}
+
+	public String getDeadlineprice() {
+		return deadlineprice;
+	}
+
+	public void setDeadlineprice(String deadlineprice) {
+		this.deadlineprice = deadlineprice;
 	}
 
 	public Boolean getIsActive() {

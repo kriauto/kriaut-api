@@ -88,6 +88,29 @@ public class ProfileController {
   	  log.info("-- End logout --");
   	    return new ResponseEntity(new CustomErrorType(ErrorLabel.LOGOUT_SUCCESS),HttpStatus.OK);
     }
+
+	@CrossOrigin
+	@PostMapping("/initpassword")
+	public ResponseEntity<?> initPassword(@RequestBody AuthenticationIn auth) {
+		log.info("-- Start initPassword : "+auth);
+		if(null == auth.getMail()){
+			return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_REQUIRED),HttpStatus.NOT_FOUND);
+		}
+		Profile current = profileService.fetchProfileByMail(auth.getMail());
+		if(null == current){
+			return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_NOT_FOUND),HttpStatus.NOT_FOUND);
+
+		}else if(!current.getIsActive()){
+			return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
+		}
+		String from = "noreply@kriauto.ma";
+		String to = current.getMail();
+		String subject = "Identifiants de connexion";
+		String message = "Bonjour "+current.getName()+", <br/><br/> Veuillez trouver vos identifiants de connexion : <br/><br/> - login : "+current.getLogin()+" <br/> - Mot de passe : "+current.getPassword()+" <br/><br/> l'équipe KriAuto.";
+		senderService.sendMail(from, to, subject, message);
+		log.info("-- End initPassword --");
+		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_SEND),HttpStatus.OK);
+	}
     
     @CrossOrigin
 	@PostMapping("/loginweb")
@@ -124,30 +147,7 @@ public class ProfileController {
   	  log.info("--> End logoutweb");
   	    return new ResponseEntity(new CustomErrorType(ErrorLabel.LOGOUT_SUCCESS),HttpStatus.OK);
     }
-    
-    
-    @CrossOrigin
-    @PostMapping("/initpassword")
-    public ResponseEntity<?> initPassword(@RequestBody AuthenticationIn auth) {
-    	log.info("-- Start initPassword : "+auth);
-    	if(null == auth.getMail()){
-    		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_REQUIRED),HttpStatus.NOT_FOUND);
-    	}
-    	Profile current = profileService.fetchProfileByMail(auth.getMail());
-    	if(null == current){
-    		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_NOT_FOUND),HttpStatus.NOT_FOUND);
 
-		}else if(!current.getIsActive()){
-			return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
-		}
-    	String from = "noreply@kriauto.ma";
-    	String to = current.getMail();
-    	String subject = "Identifiants de connexion";
-    	String message = "Bonjour "+current.getName()+", <br/><br/> Veuillez trouver vos identifiants de connexion : <br/><br/> - login : "+current.getLogin()+" <br/> - Mot de passe : "+current.getPassword()+" <br/><br/> l'équipe KriAuto.";
-    	senderService.sendMail(from, to, subject, message);
-    	log.info("-- End initPassword --");
-    	return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_SEND),HttpStatus.OK);
-    }
     
     @CrossOrigin
     @PostMapping("/updateprofile")

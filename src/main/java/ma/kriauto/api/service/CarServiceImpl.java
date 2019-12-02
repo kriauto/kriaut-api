@@ -1,6 +1,7 @@
 package ma.kriauto.api.service;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -89,7 +90,7 @@ public class CarServiceImpl implements CarService {
 
 	/*** menu access ***/
 	@Override
-	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date) {
+	public List<LastPositionOut> fetchLastPositionByAgencyIdAndDate(Long id, String date) throws ParseException {
 		List<LastPositionOut> lsatpositions = new ArrayList<LastPositionOut>();
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		for(int i=0; i<cars.size() ;i++){
@@ -104,10 +105,10 @@ public class CarServiceImpl implements CarService {
 				List<Position> positions = positionRepository.fetchLastPositionByDeviceIdAndDate(car.getDeviceId(), date);
 				if(null != positions && positions.size() > 0) {
 					Position position = positions.get(0);
-					lastposition.setSpeed(Math.round(position.getSpeed() * 1.85 * 100) / 100.0);
+					lastposition.setSpeed(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? Math.round(position.getSpeed() * 1.85 * 100) / 100.0 : 0.0);
 					lastposition.setDate(utilityService.getYyyyMmDdFromFixTime(position.getFixtime()));
 					lastposition.setHour(utilityService.getHhMmSsFromFixTime(position.getFixtime()));
-					lastposition.setMarkertype(position.getSpeed() > 0 ? "01" : "02");
+					lastposition.setMarkertype(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? "01" : "02");
 					lastposition.setLatitude(position.getLatitude());
 					lastposition.setLongitude(position.getLongitude());
 				}
@@ -120,7 +121,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<HistoryOut> fetchHistoryByAgencyId(Long id) {
+	public List<HistoryOut> fetchHistoryByAgencyId(Long id) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<HistoryOut> historys = new ArrayList<HistoryOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -135,7 +136,7 @@ public class CarServiceImpl implements CarService {
 				List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 				if (null != positions && positions.size() > 0) {
 					Position position = positions.get(0);
-					history.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+					history.setIsrolling(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? 0 : 1);
 					history.setLatitude(position.getLatitude());
 					history.setLongitude(position.getLongitude());
 				}
@@ -146,7 +147,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number) {
+	public List<ZoneOut> fetchCarZoneByAgencyIdAndNumber(Long id, Integer number) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<ZoneOut> locations = new ArrayList<ZoneOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -161,7 +162,7 @@ public class CarServiceImpl implements CarService {
 			 location.setModel(car.getModel());
 			 location.setImmatriculation(car.getImmatriculation());
 			 location.setHtmlColor(car.getHtmlColor());
-			 location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+			 location.setIsrolling(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? 0 : 1);
 			 location.setInzone(utilityService.isInZone(zone, position.getLatitude(), position.getLongitude()));
 			}
 			locations.add(location);
@@ -218,7 +219,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<MaxSpeedOut> fetchCarMaxSpeedByAgencyIdAndDate(Long id, String date) {
+	public List<MaxSpeedOut> fetchCarMaxSpeedByAgencyIdAndDate(Long id, String date) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<MaxSpeedOut> locations = new ArrayList<MaxSpeedOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -237,7 +238,7 @@ public class CarServiceImpl implements CarService {
             List<Position> positions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
             if (null != positions && positions.size() > 0) {
                 Position position = positions.get(0);
-                location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+                location.setIsrolling(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? 0 : 1);
             }
 				
 			locations.add(location);
@@ -246,7 +247,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<MaxCourseOut> fetchCarMaxCourseByAgencyIdAndDate(Long id, String date) {
+	public List<MaxCourseOut> fetchCarMaxCourseByAgencyIdAndDate(Long id, String date) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<MaxCourseOut> locations = new ArrayList<MaxCourseOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -432,7 +433,7 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if(null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? 0 : 1);
 			}
 			locations.add(location);
 		}
@@ -440,7 +441,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<FuelOut> fetchCarFuelPrincipaleByAgencyIdAndDate(Long id, String date) {
+	public List<FuelOut> fetchCarFuelPrincipaleByAgencyIdAndDate(Long id, String date) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<FuelOut> locations = new ArrayList<FuelOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -626,7 +627,7 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if(null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? 0 : 1);
 			}
 			locations.add(location);
 		}
@@ -634,7 +635,7 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
-	public List<FuelOut> fetchCarFuelSecondaireByAgencyId(Long id, String date) {
+	public List<FuelOut> fetchCarFuelSecondaireByAgencyId(Long id, String date) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<FuelOut> locations = new ArrayList<FuelOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -650,7 +651,7 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if (null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? 0 : 1);
 			}
 			locations.add(location);
 		}
@@ -710,7 +711,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<NotificationOut> fetchCarNotificationConsulByAgencyId(Long id, String date) {
+	public List<NotificationOut> fetchCarNotificationConsulByAgencyId(Long id, String date) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<NotificationOut> locations = new ArrayList<NotificationOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -726,7 +727,7 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if (null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? 0 : 1);
 			}
 			locations.add(location);
 		}
@@ -734,7 +735,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<NotificationOut> fetchCarNotificationConfigByAgencyId(Long id, String date) {
+	public List<NotificationOut> fetchCarNotificationConfigByAgencyId(Long id, String date) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<NotificationOut> locations = new ArrayList<NotificationOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -756,7 +757,7 @@ public class CarServiceImpl implements CarService {
 			List<Position> lastpositions = positionRepository.fetchLastPositionByDeviceId(car.getDeviceId());
 			if (null != lastpositions && lastpositions.size() > 0) {
 				Position position = lastpositions.get(0);
-				location.setIsrolling(position.getSpeed() > 0 ? 0 : 1);
+				location.setIsrolling(position.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(position.getFixtime()) < 30 ? 0 : 1);
 			}
 			locations.add(location);
 		}
@@ -817,7 +818,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<ParametersOut> fetchCarParametersByAgencyId(Long id, String date) {
+	public List<ParametersOut> fetchCarParametersByAgencyId(Long id, String date) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<ParametersOut> locations = new ArrayList<ParametersOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -837,7 +838,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setIsrolling(last.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(last.getFixtime()) < 30 ? 0 : 1);
 			location.setParametersnumber(activnotifnumber);
 			locations.add(location);
 		}
@@ -845,7 +846,7 @@ public class CarServiceImpl implements CarService {
 	}
 	
 	@Override
-	public List<StartStopOut> fetchCarStartStopByAgencyId(Long id, String date) {
+	public List<StartStopOut> fetchCarStartStopByAgencyId(Long id, String date) throws ParseException {
 		List<Car> cars = carRepository.fetchAllCarByAgencyId(id);
 		List<StartStopOut> locations = new ArrayList<StartStopOut>();
 		for(int i=0; i<cars.size(); i++) {
@@ -858,7 +859,7 @@ public class CarServiceImpl implements CarService {
 			location.setModel(car.getModel());
 			location.setImmatriculation(car.getImmatriculation());
 			location.setHtmlColor(car.getHtmlColor());
-			location.setIsrolling(last.getSpeed() > 0 ? 0 : 1);
+			location.setIsrolling(last.getSpeed() > 0 && utilityService.getDiffSecondesFromNow(last.getFixtime()) < 30 ? 0 : 1);
 			location.setStatus(car.getStatus());
 			locations.add(location);
 		}
@@ -2375,10 +2376,8 @@ public class CarServiceImpl implements CarService {
 	@Override
 	public void calculateTotalDistance() {
 		List<Car> cars = carRepository.fetchAllCar();
-		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
 		// remove next line if you're always using the current time.
-		cal.setTime(now);
 		cal.add(Calendar.HOUR, -3);
 		String date = utilityService.getYyyyMmDdFromFixTime(new Timestamp(cal.getTime().getTime()));
 		for(int i=0; i<cars.size(); i++) {
@@ -2394,6 +2393,7 @@ public class CarServiceImpl implements CarService {
     			}
             }
 			car.setTotaldistance(Double.valueOf(Math.round(course*100/100.0))+car.getTotaldistance());
+			car.setDailydistance(Double.valueOf(Math.round(course*100/100.0))+car.getDailydistance());
 			carRepository.save(car);
 		}
 	}

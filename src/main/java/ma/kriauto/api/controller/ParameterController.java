@@ -2,8 +2,10 @@ package ma.kriauto.api.controller;
 
 import ma.kriauto.api.common.ErrorLabel;
 import ma.kriauto.api.exception.CustomErrorType;
+import ma.kriauto.api.model.Car;
 import ma.kriauto.api.model.Parameter;
 import ma.kriauto.api.model.Profile;
+import ma.kriauto.api.service.CarService;
 import ma.kriauto.api.service.ParameterService;
 import ma.kriauto.api.service.ProfileService;
 
@@ -28,6 +30,9 @@ public class ParameterController {
 	
 	@Autowired
 	private ProfileService profileService;
+
+	@Autowired
+	private CarService carService;
 	
 	@CrossOrigin
     @PostMapping("/updateparameter")
@@ -41,8 +46,13 @@ public class ParameterController {
 	  }else if(!current.getIsActive()){
 		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.NOT_FOUND);
 	  }
+  	  Parameter param = parameterService.fetchParameterById(parameter.getId());
+  	  Car car = carService.fetchCarById(param.getCarid());
   	  parameterService.completeParameter(parameter, currentparameter);
   	  parameterService.save(currentparameter);
+  	  car.setDailydistance(0.0);
+  	  car.setIndexemptyingkm(1);
+  	  carService.save(car);
 	  log.info("-- End   Update Parameters --");
   	  return new ResponseEntity(new CustomErrorType(ErrorLabel.DATA_SAVED),HttpStatus.OK);
     }

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -146,7 +147,9 @@ public class PushNotifictionHelper {
         } catch (IOException e) {
             e.printStackTrace();
         }*/
-        sendSms("contact@kriauto.ma", "0033617638348", "Bonjour,\n test");
+        //sendSms("contact@kriauto.ma", "0033617638348", "Bonjour,\nVous avez une facture non payée d'un montant de 300 dh, pour payer par virement ou en espèces, veuillez contacer 0661096361 \nEquipe Kriauto.");
         //sendMail("contact@kriauo.ma","abdelhaq.elhassnaoui@gmail.com","test","test");
+        //Calendar c = Calendar.getInstance();
+        //System.out.println(c.get(Calendar.DAY_OF_WEEK));
     }
 }

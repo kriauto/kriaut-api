@@ -73,7 +73,7 @@ public class SpringBootScheduler {
 	@Autowired
     private UtilityService utilityService;
 
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
+	private static final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
 	private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
 	
 	@Bean
@@ -98,16 +98,15 @@ public class SpringBootScheduler {
 					Parameter parameter = parameteService.fetchParameterByCarId(c.getId());
 					ActiveNotif activenotif = activeNotifService.fetchActiveNotifByCarId(c.getId());
 					if(null != activenotif && activenotif.getTechcontrol() && null != parameter && null != parameter.getTechcontrol()) {
-					   Date now = new Date();
-   				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date technicaldate = sdf.parse(parameter.getTechcontrol());
+					   Date currentdate = new Date();
+   				       Date technicaldate = sdf2.parse(parameter.getTechcontrol());
 					   long diffInMillies = technicaldate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
                     	 String message1 = "Controle technique à faire pour la date "+parameter.getTechcontrol()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Controle technique à faire pour la date "+parameter.getTechcontrol();
 	    				 for(PushNotif pushnotif : pushnotifs){
-	    					if(null != pushnotif && null != pushnotif.getPushToken()){
+	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 	    					}
 	    				 }
@@ -140,11 +139,10 @@ public class SpringBootScheduler {
 					Parameter parameter = parameteService.fetchParameterByCarId(c.getId());
 					ActiveNotif activenotif = activeNotifService.fetchActiveNotifByCarId(c.getId());
 					if(null != activenotif && activenotif.getEmptyingkm() && null != parameter && null != parameter.getEmptyingkm() && Math.round(c.getTotaldistance()/parameter.getEmptyingkm()) > c.getIndexemptyingkm()) {
-					  
                     	 String message1 = "Vidange à faire pour : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Vidange à faire pour ";
 	    				 for(PushNotif pushnotif : pushnotifs){
-	    					if(null != pushnotif && null != pushnotif.getPushToken()){
+	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 	    					}
 	    				 }
@@ -178,16 +176,15 @@ public class SpringBootScheduler {
 					Parameter parameter = parameteService.fetchParameterByCarId(c.getId());
 					ActiveNotif activenotif = activeNotifService.fetchActiveNotifByCarId(c.getId());
 					if(null != activenotif && activenotif.getInsuranceend() && null != parameter && null != parameter.getInsuranceend()) {
-					   Date now = new Date();
-   				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date insuranceenddate = sdf.parse(parameter.getInsuranceend());
+					   Date currentdate = new Date();
+   				       Date insuranceenddate = sdf2.parse(parameter.getInsuranceend());
 					   long diffInMillies = insuranceenddate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
                     	 String message1 = "Fin d'assurance pour la date "+parameter.getInsuranceend()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Fin d'assurance pour la date "+parameter.getInsuranceend();
 	    				 for(PushNotif pushnotif : pushnotifs){
-	    					if(null != pushnotif && null != pushnotif.getPushToken()){
+	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 	    					}
 	    				 }
@@ -220,16 +217,15 @@ public class SpringBootScheduler {
 					Parameter parameter = parameteService.fetchParameterByCarId(c.getId());
 					ActiveNotif activenotif = activeNotifService.fetchActiveNotifByCarId(c.getId());
 					if(null != activenotif && activenotif.getCirculationend() && null != parameter && null != parameter.getCirculationend()) {
-					   Date now = new Date();
-   				       Date currentdate = sdf.parse(sdf.format(now));
-   				       Date circulationenddate = sdf.parse(parameter.getCirculationend());
+					   Date currentdate = new Date();
+   				       Date circulationenddate = sdf2.parse(parameter.getCirculationend());
 					   long diffInMillies = circulationenddate.getTime() - currentdate.getTime();
                        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
                        if(0<= diff && diff <=15){
                     	 String message1 = "Fin de l'autorisation de circulation pour la date "+parameter.getCirculationend()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Fin de l'autorisation de circulation pour la date "+parameter.getCirculationend();
 	    				 for(PushNotif pushnotif : pushnotifs){
-	    					if(null != pushnotif && null != pushnotif.getPushToken()){
+	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 	    					}
 	    				 }
@@ -261,18 +257,15 @@ public class SpringBootScheduler {
 					Parameter parameter = parameteService.fetchParameterByCarId(c.getId());
 					ActiveNotif activenotif = activeNotifService.fetchActiveNotifByCarId(c.getId());
 					if(null != activenotif && activenotif.getMaxspeed() && null != parameter && null != parameter.getMaxspeed()) {
-					   Date now = new Date();
    				       Calendar cal = Calendar.getInstance();
-   				       // remove next line if you're always using the current time.
-   				       cal.setTime(now);
    				       cal.add(Calendar.HOUR, -1);
-   				       String currentdate =sdf2.format(cal.getTime());
+   				       String currentdate =sdf1.format(cal.getTime());
    				       List<Position> positions = carService.fetchMaxSpeedByDeviceIdAndPeriod(currentdate, c.getDeviceId());
                        if(null != positions && positions.size() > 0 && positions.get(0).getSpeed() * 1.85 >= parameter.getMaxspeed()){
                     	 String message1 = "Dépassement de vitesse à "+positions.get(0).getFixtime()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Dépassement de vitesse à "+positions.get(0).getFixtime();
 	    				 for(PushNotif pushnotif : pushnotifs){
-	    					if(null != pushnotif && null != pushnotif.getPushToken()){
+	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 	    					}
 	    				 }
@@ -295,11 +288,8 @@ public class SpringBootScheduler {
 	//@Scheduled(fixedDelay = 60000)
 	public void distanceMaxNotif() throws ParseException, IOException {
 		log.info("==> Start Distance Notifications");
-		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
-		// remove next line if you're always using the current time.
-		cal.setTime(now);
-		String currentdate =sdf.format(cal.getTime());
+		String currentdate =sdf2.format(cal.getTime());
 		List<Profile> profiles = profileService.fetchAllProfile();
 		for(Profile p : profiles) {
 			Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
@@ -314,7 +304,7 @@ public class SpringBootScheduler {
                     	 String message1 = "Dépassement de distance journalière : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Dépassement de distance journalière ";
 	    				 for(PushNotif pushnotif : pushnotifs){
-	    					if(null != pushnotif && null != pushnotif.getPushToken()){
+	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 	    					}
 	    				 }
@@ -351,7 +341,7 @@ public class SpringBootScheduler {
                     	 String message1 = "Entrée en zone "+zone.getLabel()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Entrée en zone "+zone.getLabel();
 	    				 for(PushNotif pushnotif : pushnotifs){
-	    					if(null != pushnotif && null != pushnotif.getPushToken()){
+	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 	    					}
 	    				 }
@@ -368,7 +358,7 @@ public class SpringBootScheduler {
 	                    	 String message1 = "Sortie de la zone "+zone.getLabel()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
 	                    	 String message2 = "Sortie de la zone  "+zone.getLabel();
 		    				 for(PushNotif pushnotif : pushnotifs){
-		    					if(null != pushnotif && null != pushnotif.getPushToken()){
+		    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 		    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 		    					}
 		    				 }
@@ -407,7 +397,7 @@ public class SpringBootScheduler {
                     	 String message1 = "Entrée en zone "+zone.getLabel()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
                     	 String message2 = "Entrée en zone "+zone.getLabel();
 	    				 for(PushNotif pushnotif : pushnotifs){
-	    					if(null != pushnotif && null != pushnotif.getPushToken()){
+	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 	    					}
 	    				 }
@@ -424,7 +414,7 @@ public class SpringBootScheduler {
 	                    	 String message1 = "Sortie de la zone "+zone.getLabel()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
 	                    	 String message2 = "Sortie de la zone  "+zone.getLabel();
 		    				 for(PushNotif pushnotif : pushnotifs){
-		    					if(null != pushnotif && null != pushnotif.getPushToken()){
+		    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 		    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 		    					}
 		    				 }
@@ -445,8 +435,8 @@ public class SpringBootScheduler {
 	/** Stop Car
 	 * @throws ParseException
 	 * @throws IOException **/
-	//@Scheduled(cron = "23 59 00 * * *")
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "23 59 00 * * *")
+	//@Scheduled(fixedDelay = 60000)
 	public void stopCar() throws ParseException, IOException {
 		log.info("==> Start Stop Car");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -464,7 +454,7 @@ public class SpringBootScheduler {
 								String message1 = "Arret de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + " est en cours veuillez patienter 2 minutes en cas de problème veuillez nous contacter";
 								String message2 = "Arret de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + "";
 								for (PushNotif pushnotif : pushnotifs) {
-									if (null != pushnotif && null != pushnotif.getPushToken()) {
+									if (null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()) {
 										senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 									}
 								}
@@ -477,7 +467,7 @@ public class SpringBootScheduler {
 							}else{
 								String message = "l'arret de la voiture "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation()+" est impossible actuelement à cause de sa vitesse de circulation";
 								for(PushNotif pushnotif : pushnotifs){
-									if(null != pushnotif && null != pushnotif.getPushToken()){
+									if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 										senderService.sendPushNotification(pushnotif.getPushToken(), message);
 									}
 								}
@@ -485,7 +475,7 @@ public class SpringBootScheduler {
 						}else{
 							String message = "l'arret de la voiture "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation()+" est impossible actuelement à cause de sa vitesse de circulation";
 							for(PushNotif pushnotif : pushnotifs){
-								if(null != pushnotif && null != pushnotif.getPushToken()){
+								if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 									senderService.sendPushNotification(pushnotif.getPushToken(), message);
 								}
 							}
@@ -500,8 +490,8 @@ public class SpringBootScheduler {
 	/** Start Car
 	 * @throws ParseException
 	 * @throws IOException **/
-	//@Scheduled(cron = "23 59 00 * * *")
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "23 59 00 * * *")
+	//@Scheduled(fixedDelay = 60000)
 	public void startCar() throws ParseException, IOException {
 		log.info("==> Start Start Car");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -517,7 +507,7 @@ public class SpringBootScheduler {
 							String message1 = "Démarrage de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + " est en cours veuillez patienter 2 minutes en cas de problème veuillez nous contacter";
 							String message2 = "Démarrage de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + "";
 							for (PushNotif pushnotif : pushnotifs) {
-								if (null != pushnotif && null != pushnotif.getPushToken()) {
+								if (null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()) {
 									senderService.sendPushNotification(pushnotif.getPushToken(), message1);
 								}
 							}
@@ -530,7 +520,7 @@ public class SpringBootScheduler {
 						} else {
 							String message = "le Démarrage de la voiture " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation() + " est impossible actuelement suite à un problème de couverture réseau";
 							for (PushNotif pushnotif : pushnotifs) {
-								if (null != pushnotif && null != pushnotif.getPushToken()) {
+								if (null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()) {
 									senderService.sendPushNotification(pushnotif.getPushToken(), message);
 								}
 							}
@@ -546,17 +536,43 @@ public class SpringBootScheduler {
 	/** New Version
 	 * @throws ParseException
 	 * @throws IOException **/
-	//@Scheduled(cron = "11 00 00 * * *")
+	//@Scheduled(cron = "00 30 12 * * *")
 	//@Scheduled(fixedDelay = 60000)
 	public void newVersionKriauto() throws ParseException, IOException {
 		log.info("==> Start New Version Kriauto");
-		List<Profile> profiles = profileService.fetchAllProfile();
-		for(Profile p : profiles) {
-			int status = senderService.sendSms("KriAuto.ma", p.getPhone(), "Bonjour," +
-					"Pour les utilisateurs IPhone une nouvelle version Kriauto est disponible sur l'App Store, l'application actuelle sera plus accessible dans une semaine." +
-					"Equipe Kriauto.");
+		Calendar c = Calendar.getInstance();
+		if(c.get(Calendar.DAY_OF_WEEK) == 3) {
+			List<Profile> profiles = profileService.fetchAllProfile();
+			for (Profile p : profiles) {
+				int status = senderService.sendSms("KriAuto.ma", p.getPhone(), "Bonjour,\n Nous vous informant qu'une nouvelle version Kriauto pour Ios (Iphone) est disponible, la version Adroid (Samsung) sera disponible dans un mois.\nEquipe Kriauto.");
+			}
 		}
 		log.info("==> End New Version Kriauto");
+	}
+
+
+	/** New Version
+	 * @throws ParseException
+	 * @throws IOException **/
+	//@Scheduled(cron = "00 45 12 * * *")
+	//@Scheduled(fixedDelay = 60000)
+	public void payment() throws ParseException, IOException {
+		log.info("==> Start Payment");
+		Calendar c = Calendar.getInstance();
+		if(c.get(Calendar.DAY_OF_WEEK) == 3) {
+			Date now = new Date();
+			Date currentdate = sdf2.parse(now.toString());
+			List<Profile> profiles = profileService.fetchAllProfile();
+			for (Profile p : profiles) {
+				Date deadlineprice = sdf2.parse(p.getDeadlineprice());
+				long diffInMillies = deadlineprice.getTime() - currentdate.getTime();
+				long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+				if (0 <= diff && p.getPrice() > 0) {
+					int status = senderService.sendSms("KriAuto.ma", p.getPhone(), "Bonjour,\nVous avez une facture non payée d'un montant de "+p.getPrice()+" dh, pour payer par virement ou en espèces, veuillez contacer 0661096361 \nEquipe Kriauto.");
+				}
+			}
+		}
+		log.info("==> End Payment");
 	}
 	
 	/** Moteur allumé/coupé
@@ -580,7 +596,7 @@ public class SpringBootScheduler {
    				       // remove next line if you're always using the current time.
    				       cal.setTime(now);
    				       cal.add(Calendar.MINUTE, -10);
-   				       String currentdate =sdf.format(cal.getTime());
+   				       String currentdate =sdf1.format(cal.getTime());
    				       List<Position> positions = carService.fetchCarIgnition(currentdate, c.getDeviceId());
                        if(null != positions && positions.size() > 0){
                     	   boolean ignition = positions.get(0).getAttributes().contains("\"ignition\":true") ? true : false ;
@@ -646,14 +662,12 @@ public class SpringBootScheduler {
     }
 
 	@Scheduled(cron = "00 00 05 * * *")
-	//@Scheduled(fixedDelay = 900000)
+	//@Scheduled(fixedDelay = 6000)
 	public void purgeDataBase() throws ParseException {
 		log.info("==> Start Purge Data Base");
-		Date now = new Date();
 		Calendar cal = Calendar.getInstance();
-		cal.setTime(now);
-		cal.add(Calendar.HOUR, -240);
-		String currentdate =sdf.format(cal.getTime());
+		cal.add(Calendar.HOUR, -216);
+		String currentdate =sdf2.format(cal.getTime());
 		List<Car> cars = carService.fetchAllCar();
 		for(Car car : cars){
 			List<Position> positions = carService.fetchLastPositionByDeviceId(car.getDeviceId());
@@ -665,6 +679,4 @@ public class SpringBootScheduler {
 		log.info("==> End Purge Data Base");
 
 	}
-
-
 }

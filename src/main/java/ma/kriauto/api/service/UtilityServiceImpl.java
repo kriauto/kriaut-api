@@ -1,13 +1,16 @@
 package ma.kriauto.api.service;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
-
-
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 
 import ma.kriauto.api.model.Profile;
@@ -22,6 +25,9 @@ import com.google.maps.model.LatLng;
 
 @Service
 public class UtilityServiceImpl implements UtilityService {
+
+	private static final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
+	private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
 
 
 	@Override
@@ -107,5 +113,15 @@ public class UtilityServiceImpl implements UtilityService {
         }
 	    return inBound;
    }
+
+	@Override
+	public long getDiffSecondesFromNow(Timestamp fixtime) throws ParseException {
+		Date now = new Date();
+		//Date currentdate = sdf2.parse(now.toString());
+		//Date fixtimedate = sdf2.parse(fixtime.toString());
+		long diffInMillies = now.getTime() - fixtime.getTime();
+		long diff = TimeUnit.SECONDS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+		return diff;
+	}
 
 }
