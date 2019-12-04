@@ -1,9 +1,9 @@
 package ma.kriauto.api.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "api_profile")
@@ -92,6 +92,9 @@ public class Profile {
 
 	@Column(name="isactive")
 	private Boolean isActive;
+
+	@Column(name = "lastlogin", columnDefinition = "timestamp default current_timestamp")
+	private Timestamp lastlogin;
 
 	public Long getId() {
 		return id;
@@ -317,6 +320,10 @@ public class Profile {
 		isActive = isactive;
 	}
 
+	public Timestamp getLastlogin() { return lastlogin; }
+
+	public void setLastlogin(Timestamp lastlogin) { this.lastlogin = lastlogin; }
+
 	@Override
 	public String toString() {
 		return "Profile{" +
@@ -345,7 +352,10 @@ public class Profile {
 				", isStartStop=" + isStartStop +
 				", isMyAccount=" + isMyAccount +
 				", isContactUs=" + isContactUs +
+				", price=" + price +
+				", deadlineprice='" + deadlineprice + '\'' +
 				", isActive=" + isActive +
+				", lastlogin=" + lastlogin +
 				'}';
 	}
 }

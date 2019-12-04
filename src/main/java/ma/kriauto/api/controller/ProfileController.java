@@ -109,7 +109,7 @@ public class ProfileController {
 		String message = "Bonjour "+current.getName()+", <br/><br/> Veuillez trouver vos identifiants de connexion : <br/><br/> - login : "+current.getLogin()+" <br/> - Mot de passe : "+current.getPassword()+" <br/><br/> l'équipe KriAuto.";
 		senderService.sendMail(from, to, subject, message);
 		log.info("-- End initPassword --");
-		return new ResponseEntity(new CustomErrorType(ErrorLabel.MAIL_SEND),HttpStatus.OK);
+		return new ResponseEntity(new CustomErrorType(null, ErrorLabel.MAIL_SEND),HttpStatus.OK);
 	}
     
     @CrossOrigin

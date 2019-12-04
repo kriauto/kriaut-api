@@ -1,6 +1,8 @@
 package ma.kriauto.api.controller;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +78,8 @@ public class CarController {
 		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.FORBIDDEN);
 	  }
   	  Agency agency = agencyService.fetchAgencyByProfileId(current.getId());
-
+  	  current.setLastlogin(new Timestamp(System.currentTimeMillis()));
+  	  profileService.save(current);
   	  if(menu.getType().equals("00")) {
 		log.info("-- Start Dernière Position : "+menu+" --Profile : "+current);
 		List<LastPositionOut> locations = new ArrayList<>();
@@ -195,7 +198,8 @@ public class CarController {
 	  }else if(!current.getIsActive()){
 		  return new ResponseEntity(new CustomErrorType(ErrorLabel.USER_NOT_ACTIVE),HttpStatus.FORBIDDEN);
 	  }
-
+  	  current.setLastlogin(new Timestamp(System.currentTimeMillis()));
+  	  profileService.save(current);
   	  if(data.getType().equals("01")) {
 		log.info("-- Start Historique Détail : "+data+" --Profile : "+current);
   	    List<HistoryLocationOut> historylocations = carService.fetchHistoryCarLocationsByCarIdAndDate(data.getCarid(), data.getDate());
