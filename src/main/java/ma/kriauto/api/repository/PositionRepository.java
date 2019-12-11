@@ -24,6 +24,9 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
 	
 	@Query("SELECT p  FROM Position p where to_char(p.fixtime,'YYYY-MM-DD')=:date AND p.deviceid=:deviceid AND p.valid = true ORDER BY p.fixtime")
 	List<Position> fetchAllPositionByDeviceIdAndDate(@Param("date") String date, @Param("deviceid") Integer deviceid);
+
+	@Query("SELECT p  FROM Position p where p.deviceid=:deviceid AND to_char(p.fixtime,'YYYY-MM-DD HH24:MI:SS') >=:date AND p.valid = true ORDER BY p.fixtime ")
+	List<Position> fetchAllPositionByDeviceIdAndPeriode(@Param("date") String date, @Param("deviceid") Integer deviceid);
 	
 	@Query("SELECT p  FROM Position p where p.speed = (SELECT MAX(p.speed) FROM Position p WHERE to_char(p.fixtime,'YYYY-MM-DD') =:date AND p.deviceid=:deviceid AND p.valid= true) AND to_char(p.fixtime,'YYYY-MM-DD') =:date AND p.deviceid=:deviceid AND p.valid= true ORDER BY p.fixtime DESC")
 	List<Position> fetchMaxSpeedDeviceIdAndDate(@Param("date") String date, @Param("deviceid") Integer deviceid);

@@ -1256,6 +1256,11 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
+	public List<Position> fetchAllPositionByDeviceIdAndPeriode(String date, Integer deviceid) {
+		return positionRepository.fetchAllPositionByDeviceIdAndPeriode(date,deviceid);
+	}
+
+	@Override
 	public void deletePositions(String date, Integer deviceid, Integer id) {
 		positionRepository.deletePositions(date,deviceid,id);
 	}

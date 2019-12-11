@@ -75,6 +75,9 @@ public class Car {
 	  @Column(name="status")
 	  private Integer status;
 
+	  @Column(name="rolling")
+	  private Integer rolling;
+
 	public Long getId() {
 		return id;
 	}
@@ -243,14 +246,35 @@ public class Car {
 		this.status = status;
 	}
 
+	public Integer getRolling() { return rolling; }
+
+	public void setRolling(Integer rolling) { this.rolling = rolling; }
+
 	@Override
 	public String toString() {
-		return "Car [id=" + id + ", mark=" + mark + ", model=" + model + ", immatriculation=" + immatriculation
-				+ ", htmlColor=" + htmlColor + ", agencyId=" + agencyId + ", consumption=" + consumption + ", deviceId="
-				+ deviceId + ", simnumber=" + simnumber + ", creationdate=" + creationdate + ", totaldistance="
-				+ totaldistance + ", indexemptyingkm=" + indexemptyingkm + ", inzoneone=" + inzoneone + ", inzonetwo="
-				+ inzonetwo + ", lastlat=" + lastlat + ", lastlon=" + lastlon + ", lastspeed=" + lastspeed
-				+ ", lastfixtime=" + lastfixtime + ", dailydistance=" + dailydistance + ", color=" + color + ", status="
-				+ status + "]";
+		return "Car{" +
+				"id=" + id +
+				", mark='" + mark + '\'' +
+				", model='" + model + '\'' +
+				", immatriculation='" + immatriculation + '\'' +
+				", htmlColor='" + htmlColor + '\'' +
+				", agencyId=" + agencyId +
+				", consumption=" + consumption +
+				", deviceId=" + deviceId +
+				", simnumber='" + simnumber + '\'' +
+				", creationdate=" + creationdate +
+				", totaldistance=" + totaldistance +
+				", indexemptyingkm=" + indexemptyingkm +
+				", inzoneone=" + inzoneone +
+				", inzonetwo=" + inzonetwo +
+				", lastlat=" + lastlat +
+				", lastlon=" + lastlon +
+				", lastspeed=" + lastspeed +
+				", lastfixtime=" + lastfixtime +
+				", dailydistance=" + dailydistance +
+				", color='" + color + '\'' +
+				", status=" + status +
+				", rolling=" + rolling +
+				'}';
 	}
 }

@@ -262,8 +262,8 @@ public class SpringBootScheduler {
    				       String currentdate =sdf1.format(cal.getTime());
    				       List<Position> positions = carService.fetchMaxSpeedByDeviceIdAndPeriod(currentdate, c.getDeviceId());
                        if(null != positions && positions.size() > 0 && positions.get(0).getSpeed() * 1.85 >= parameter.getMaxspeed()){
-                    	 String message1 = "Dépassement de vitesse à "+positions.get(0).getFixtime()+" : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
-                    	 String message2 = "Dépassement de vitesse à "+positions.get(0).getFixtime();
+                    	 String message1 = "Dépassement de vitesse ("+Math.round(positions.get(0).getSpeed() * 1.85 * 100/100)+") : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
+                    	 String message2 = "Dépassement de vitesse ("+Math.round(positions.get(0).getSpeed() * 1.85 * 100/100)+")";
 	    				 for(PushNotif pushnotif : pushnotifs){
 	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
@@ -578,59 +578,55 @@ public class SpringBootScheduler {
 	/** Moteur allumé/coupé
 	 * @throws ParseException 
 	 * @throws IOException **/
-	//@Scheduled(fixedDelay = 600000)
+	@Scheduled(fixedDelay = 3600000)
 	public void engineStartStopNotif() throws ParseException, IOException {
 		log.info("==> Start engineStartStopNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.HOUR, -1);
+		String currentdate =sdf1.format(cal.getTime());
 		for(Profile p : profiles) {
 			Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
 			List<PushNotif> pushnotifs = pushNotifService.fetchPushNotifByProfileId(p.getId());
 			if(null != agency) {
 				List<Car> cars = carService.fetchAllCarByAgencyId(agency.getId());
 				for(Car c : cars) {
-					Parameter parameter = parameteService.fetchParameterByCarId(c.getId());
 					ActiveNotif activenotif = activeNotifService.fetchActiveNotifByCarId(c.getId());
-					if(null != activenotif && activenotif.getEnginestop()) {
-					   Date now = new Date();
-   				       Calendar cal = Calendar.getInstance();
-   				       // remove next line if you're always using the current time.
-   				       cal.setTime(now);
-   				       cal.add(Calendar.MINUTE, -10);
-   				       String currentdate =sdf1.format(cal.getTime());
-   				       List<Position> positions = carService.fetchCarIgnition(currentdate, c.getDeviceId());
-                       if(null != positions && positions.size() > 0){
-                    	   boolean ignition = positions.get(0).getAttributes().contains("\"ignition\":true") ? true : false ;
-                    	 for(Position po : positions) {
-                    	   if(po.getAttributes().contains("\"ignition\":false") && !ignition) {
-                    		  ignition = true;
-                    	      String message1 = "Moteur coupé à "+positions.get(0).getFixtime()+" :"+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
-                    	      String message2 = "Moteur coupé à "+positions.get(0).getFixtime();
-	    				     for(PushNotif pushnotif : pushnotifs){
-	    					   if(null != pushnotif && null != pushnotif.getPushToken()){
-	    					     senderService.sendPushNotification(pushnotif.getPushToken(), message1);
-	    					   }
-	    				     }
-	    				     Notification notification = new Notification();
- 						     notification.setCarid(c.getId());
- 						     notification.setMessage(message2);
- 						     notificationService.save(notification);
-                    	   }
-                    	   if(po.getAttributes().contains("\"ignition\":true") && ignition){
-                    		  ignition = false;
-                    		  String message1 = "Moteur allumé à "+positions.get(0).getFixtime()+" :"+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
-                     	      String message2 = "Moteur allumé à "+positions.get(0).getFixtime();
- 	    				     for(PushNotif pushnotif : pushnotifs){
- 	    					   if(null != pushnotif && null != pushnotif.getPushToken()){
- 	    					     senderService.sendPushNotification(pushnotif.getPushToken(), message1);
- 	    					   }
- 	    				     }
- 	    				     Notification notification = new Notification();
-  						     notification.setCarid(c.getId());
-  						     notification.setMessage(message2);
-  						     notificationService.save(notification);  
-                    	   }
-                        }
-                      }
+					List<Position> positions = carService.fetchAllPositionByDeviceIdAndPeriode(currentdate, c.getDeviceId());
+					int isrolling = c.getRolling();
+					for(Position position : positions) {
+						if (null != position && position.getSpeed() == 0 && activenotif.getEnginestop() && isrolling == 0) {
+							isrolling = 1;
+							String message1 = "Voiture en mode parking ("+utilityService.getHhMmSsFromFixTime(position.getFixtime())+") : " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation();
+							String message2 = "Voiture en mode parking";
+							for (PushNotif pushnotif : pushnotifs) {
+								if (null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()) {
+									senderService.sendPushNotification(pushnotif.getPushToken(), message1);
+								}
+							}
+							Notification notification = new Notification();
+							notification.setCarid(c.getId());
+							notification.setMessage(message2);
+							c.setRolling(isrolling);
+							carService.save(c);
+							notificationService.save(notification);
+						}
+						if (null != position && position.getSpeed() > 0 && activenotif.getEnginestart() && isrolling == 1) {
+							isrolling = 0;
+							String message1 = "Voiture en mode circulation ("+utilityService.getHhMmSsFromFixTime(position.getFixtime())+") : " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation();
+							String message2 = "Voiture en mode circulation";
+							for (PushNotif pushnotif : pushnotifs) {
+								if (null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()) {
+									senderService.sendPushNotification(pushnotif.getPushToken(), message1);
+								}
+							}
+							Notification notification = new Notification();
+							notification.setCarid(c.getId());
+							notification.setMessage(message2);
+							c.setRolling(isrolling);
+							carService.save(c);
+							notificationService.save(notification);
+						}
 					}
 				}
 			}
@@ -666,7 +662,7 @@ public class SpringBootScheduler {
 	public void purgeDataBase() throws ParseException {
 		log.info("==> Start Purge Data Base");
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.HOUR, -216);
+		cal.add(Calendar.HOUR, -224);
 		String currentdate =sdf2.format(cal.getTime());
 		List<Car> cars = carService.fetchAllCar();
 		for(Car car : cars){
