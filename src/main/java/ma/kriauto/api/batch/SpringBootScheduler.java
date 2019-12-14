@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
@@ -40,6 +42,7 @@ import ma.kriauto.api.service.ZoneService;
 
 @Configuration
 @EnableScheduling
+@EnableAsync
 @Slf4j
 public class SpringBootScheduler {
 	
@@ -75,7 +78,9 @@ public class SpringBootScheduler {
 
 	private static final SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.FRANCE);
 	private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
-	
+    private static final String  ENGINE_UP = "\"ignition\":true";
+    private static final String  ENGINE_DOWN = "\"ignition\":false";
+
 	@Bean
 	public TaskScheduler taskScheduler() {
 	    return new ConcurrentTaskScheduler();
@@ -244,7 +249,8 @@ public class SpringBootScheduler {
 	/** Vitesse
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 3600000)
+	@Async
+	@Scheduled(fixedRate = 3600000)
 	public void vitesseMaxNotif() throws ParseException, IOException {
 		log.info("==> Start Vitesse Notifications");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -262,8 +268,8 @@ public class SpringBootScheduler {
    				       String currentdate =sdf1.format(cal.getTime());
    				       List<Position> positions = carService.fetchMaxSpeedByDeviceIdAndPeriod(currentdate, c.getDeviceId());
                        if(null != positions && positions.size() > 0 && positions.get(0).getSpeed() * 1.85 >= parameter.getMaxspeed()){
-                    	 String message1 = "Dépassement de vitesse ("+Math.round(positions.get(0).getSpeed() * 1.85 * 100/100)+") : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
-                    	 String message2 = "Dépassement de vitesse ("+Math.round(positions.get(0).getSpeed() * 1.85 * 100/100)+")";
+                    	 String message1 = "Dépassement de vitesse ("+Math.round(positions.get(0).getSpeed() * 1.85 * 100/100)+" km/h) : "+c.getMark()+" "+c.getModel()+" "+c.getImmatriculation();
+                    	 String message2 = "Dépassement de vitesse ("+Math.round(positions.get(0).getSpeed() * 1.85 * 100/100)+" km/h)";
 	    				 for(PushNotif pushnotif : pushnotifs){
 	    					if(null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()){
 	    					    senderService.sendPushNotification(pushnotif.getPushToken(), message1);
@@ -323,7 +329,8 @@ public class SpringBootScheduler {
 	/** Zone une
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 600000)
+	@Async
+	@Scheduled(fixedRate = 600000)
 	public void zoneUneNotif() throws ParseException, IOException {
 		log.info("==> Start Zone Une Notifications");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -379,7 +386,8 @@ public class SpringBootScheduler {
 	/** Zone deux
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 600000)
+	@Async
+	@Scheduled(fixedRate = 600000)
 	public void zoneTwoNotif() throws ParseException, IOException {
 		log.info("==> Start Zone Deux Notifications");
 		List<Profile> profiles = profileService.fetchAllProfile();
@@ -578,12 +586,13 @@ public class SpringBootScheduler {
 	/** Moteur allumé/coupé
 	 * @throws ParseException 
 	 * @throws IOException **/
-	@Scheduled(fixedDelay = 3600000)
+	@Async
+	@Scheduled(fixedRate = 60000)
 	public void engineStartStopNotif() throws ParseException, IOException {
 		log.info("==> Start engineStartStopNotif");
 		List<Profile> profiles = profileService.fetchAllProfile();
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.HOUR, -1);
+		cal.add(Calendar.MINUTE, -1);
 		String currentdate =sdf1.format(cal.getTime());
 		for(Profile p : profiles) {
 			Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
@@ -595,10 +604,10 @@ public class SpringBootScheduler {
 					List<Position> positions = carService.fetchAllPositionByDeviceIdAndPeriode(currentdate, c.getDeviceId());
 					int isrolling = c.getRolling();
 					for(Position position : positions) {
-						if (null != position && position.getSpeed() == 0 && activenotif.getEnginestop() && isrolling == 0) {
+						if (null != position && position.getAttributes().contains(ENGINE_DOWN) && position.getSpeed() == 0 && activenotif.getEnginestop() && isrolling == 0) {
 							isrolling = 1;
-							String message1 = "Voiture en mode parking ("+utilityService.getHhMmSsFromFixTime(position.getFixtime())+") : " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation();
-							String message2 = "Voiture en mode parking";
+							String message1 = "Moteur Coupé à ("+utilityService.getHhMmSsFromFixTime(position.getFixtime())+") : " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation();
+							String message2 = "Moteur Coupé ("+utilityService.getHhMmSsFromFixTime(position.getFixtime())+")";
 							for (PushNotif pushnotif : pushnotifs) {
 								if (null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()) {
 									senderService.sendPushNotification(pushnotif.getPushToken(), message1);
@@ -611,10 +620,10 @@ public class SpringBootScheduler {
 							carService.save(c);
 							notificationService.save(notification);
 						}
-						if (null != position && position.getSpeed() > 0 && activenotif.getEnginestart() && isrolling == 1) {
+						if (null != position && position.getAttributes().contains(ENGINE_UP) && activenotif.getEnginestart() && isrolling == 1) {
 							isrolling = 0;
-							String message1 = "Voiture en mode circulation ("+utilityService.getHhMmSsFromFixTime(position.getFixtime())+") : " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation();
-							String message2 = "Voiture en mode circulation";
+							String message1 = "Moteur Démarré à ("+utilityService.getHhMmSsFromFixTime(position.getFixtime())+") : " + c.getMark() + " " + c.getModel() + " " + c.getImmatriculation();
+							String message2 = "Moteur Démarré ("+utilityService.getHhMmSsFromFixTime(position.getFixtime())+")";
 							for (PushNotif pushnotif : pushnotifs) {
 								if (null != pushnotif && null != pushnotif.getPushToken() && p.getIsActive()) {
 									senderService.sendPushNotification(pushnotif.getPushToken(), message1);
@@ -655,6 +664,74 @@ public class SpringBootScheduler {
        log.info("==> Start calculateTotalDistance");
        carService.calculateTotalDistance();
        log.info("==> End calculateTotalDistance");
+    }
+
+    /** Moteur allumé/coupé
+     * @throws ParseException
+     * @throws IOException **/
+    @Scheduled(cron = "00 00 05 * * *")
+	//@Scheduled(fixedDelay = 6000)
+    public void rapportKriauto() throws ParseException, IOException {
+        log.info("==> Start rapportKriauto");
+        List<Profile> profiles = profileService.fetchAllProfile();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.HOUR, -3);
+        String currentdate =sdf2.format(cal.getTime());
+        for(Profile p : profiles) {
+			String bodyHtml = "Bonjour,<br/>Voici le détail du rapport journalier pour toutes les voitures : <br/>" +
+					"<table>\n" +
+					"    <thead>\n" +
+					"        <tr>\n" +
+					"            <th style=\"border : solid black 1px\" width=\"300px\">Voiture</th>\n" +
+					"            <th style=\"border : solid black 1px\" width=\"100px\">Distance</th>\n" +
+					"            <th style=\"border : solid black 1px\" width=\"100px\">Vitesse</th>\n" +
+					"            <th style=\"border : solid black 1px\" width=\"100px\">Carburant</th>\n" +
+					"        </tr>\n" +
+					"    </thead>\n" +
+					"    <tbody>\n";
+            Agency agency = agencyService.fetchAgencyByProfileId(p.getId());
+            if(null != agency) {
+                List<Car> cars = carService.fetchAllCarByAgencyId(agency.getId());
+                for(Car c : cars) {
+                    ActiveNotif activenotif = activeNotifService.fetchActiveNotifByCarId(c.getId());
+					double course = 0.0;
+					double speed = 0.0;
+					double fuel = 0.0;
+					List<Position> positions = carService.fetchAllPositionByDeviceIdAndDate(currentdate, c.getDeviceId());
+					for(int j=1; j<positions.size(); j++) {
+						Position position1 = positions.get(j-1);
+						Position position2 = positions.get(j);
+						Double distance = carService.distance(position1.getLatitude(), position1.getLongitude(), position2.getLatitude(), position2.getLongitude(), 'K');
+						if(distance > 0.0) {
+							course = course + distance;
+						}
+						if(positions.get(j-1).getSpeed() > speed ){
+							speed = positions.get(j-1).getSpeed();
+						}
+					}
+					course = Math.round(course*100/100);
+					fuel = Math.round((course*c.getConsumption()/100)*100/100.0);
+					speed = Math.round(speed*100/100);
+					if(activenotif.getMail()) {
+						bodyHtml = bodyHtml + "<tr>\n" +
+								"            <td style=\"border : solid black 1px\"> "+c.getMark() + " " + c.getModel() + " " + c.getImmatriculation()+"</td>\n" +
+								"            <td style=\"border : solid black 1px\">"+course+" Km</td>\n" +
+								"            <td style=\"border : solid black 1px\">"+speed+" Km/h</td>\n" +
+								"     		 <td style=\"border : solid black 1px\">"+fuel+" L</td>\n" +
+								"        </tr>\n";
+
+					}
+
+                }
+            }
+			bodyHtml = bodyHtml + "    </tbody>\n" +
+					"</table>\n<br/>" +
+					"<img width=\"200px\" height=\"50px\" src=\"{kriauto.png}\" alt=\"image1\" border=\"0\"><br/>Equipe Kriauto.";
+            log.info(" --> bodyHtml "+bodyHtml);
+			//senderService.sendMail("nereply@kriauto.ma",p.getMail(),"Rapport Kriauto ("+currentdate+")", bodyHtml);
+        }
+
+        log.info("==> End rapportKriauto");
     }
 
 	@Scheduled(cron = "00 00 05 * * *")

@@ -36,6 +36,7 @@ public interface CarService {
 	List<Car> fetchAllCarByAgencyIdAndStatus(Long id, Integer status);
 	List<Car> fetchAllCar();
 	List<Position> fetchAllPositionByDeviceIdAndPeriode(String date, Integer deviceid);
+	List<Position> fetchAllPositionByDeviceIdAndDate(String date,Integer deviceid);
 	void deletePositions(String date, Integer deviceid, Integer id);
 	Car fetchCarById(Long id);
 	Car save(Car car);
@@ -60,7 +61,7 @@ public interface CarService {
 	List<Contact> fetchContacts();
 	
 	/*** data by car access ***/
-	List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date);
+	List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date) throws ParseException;
 	DetailOut fetchMaxSpeedByCarIdAndDate(Long id, String date);
 	DetailOut fetchCourseByCarIdAndDate(Long id, String date);
 	DetailOut fetchCarFuelPrincipaleByCarIdAndDate(Long id, String date);

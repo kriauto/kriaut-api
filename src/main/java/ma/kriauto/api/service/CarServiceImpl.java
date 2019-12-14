@@ -171,7 +171,7 @@ public class CarServiceImpl implements CarService {
 	}
 
 	@Override
-	public List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date) {
+	public List<HistoryLocationOut> fetchHistoryCarLocationsByCarIdAndDate(Long id, String date) throws ParseException{
 		List<HistoryLocationOut> historylocations = new ArrayList<HistoryLocationOut>();
 		List<Position> positions = new ArrayList<Position>();
 		Car car = carRepository.fetchCarById(id);
@@ -201,11 +201,14 @@ public class CarServiceImpl implements CarService {
 			if(i == 0  || i == positions.size()-1){
 				historylocation.setMarkerdisplay(0);
 			}
+			if(i == positions.size()-1 && utilityService.getDiffSecondesFromNow(position.getFixtime()) > 30){
+				historylocation.setMarkertype("02");
+			}
 			if(positions.size() > 500) {
-			  if(i != 0 && i != (positions.size()-1) && (i % 4 == 0)){
+			  if(i != 0 && i != (positions.size()-1) && (i % 30 == 0)){
 				historylocation.setMarkerdisplay(0);
 			  }
-			  if(i != 0 && i != (positions.size()-1) && (i % 4 != 0)){
+			  if(i != 0 && i != (positions.size()-1) && (i % 30 != 0)){
 				historylocation.setMarkerdisplay(1);
 			  }
 			}else {
@@ -1258,6 +1261,11 @@ public class CarServiceImpl implements CarService {
 	@Override
 	public List<Position> fetchAllPositionByDeviceIdAndPeriode(String date, Integer deviceid) {
 		return positionRepository.fetchAllPositionByDeviceIdAndPeriode(date,deviceid);
+	}
+
+	@Override
+	public List<Position> fetchAllPositionByDeviceIdAndDate(String date, Integer deviceid) {
+		return positionRepository.fetchAllPositionByDeviceIdAndDate(date, deviceid);
 	}
 
 	@Override
