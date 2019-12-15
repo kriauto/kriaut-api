@@ -728,7 +728,7 @@ public class SpringBootScheduler {
 					"</table>\n<br/>" +
 					"<img width=\"200px\" height=\"50px\" src=\"{kriauto.png}\" alt=\"image1\" border=\"0\"><br/>Equipe Kriauto.";
             log.info(" --> bodyHtml "+bodyHtml);
-			//senderService.sendMail("nereply@kriauto.ma",p.getMail(),"Rapport Kriauto ("+currentdate+")", bodyHtml);
+			senderService.sendMail("nereply@kriauto.ma",p.getMail(),"Rapport Kriauto ("+currentdate+")", bodyHtml);
         }
 
         log.info("==> End rapportKriauto");

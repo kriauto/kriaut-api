@@ -203,6 +203,7 @@ public class CarServiceImpl implements CarService {
 			}
 			if(i == positions.size()-1 && utilityService.getDiffSecondesFromNow(position.getFixtime()) > 30){
 				historylocation.setMarkertype("02");
+				historylocation.setSpeed(0.0);
 			}
 			if(positions.size() > 500) {
 			  if(i != 0 && i != (positions.size()-1) && (i % 30 == 0)){
