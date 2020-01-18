@@ -13,136 +13,52 @@
 <body>
 
 <!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
-  <a class="navbar-brand" href="#"><img  width="150px" height="40px" src="assets/img/kriauto.png" alt=""></a>
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+  <a class="navbar-brand" routerLink="/"><img  width="150px" height="40px" src="assets/img/kriauto.png" alt=""></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
-    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0"></ul>
+
+    <ul class="navbar-nav">
+     <li class="nav-item dropdown" [hidden]="islogout">
+      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Dropdown
+      </a>
+      <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <a class="dropdown-item" routerLink="/home">Action</a>
+        <a class="dropdown-item" href="#">Another action</a>
+        <a class="dropdown-item" href="#">Something else here</a>
+      </div>
+     </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="" (click)="openModal(template);false" [hidden]="islogin">Connexion</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
+        <a class="nav-link" href="" (click)="logout();false" [hidden]="islogout">Déconnexion</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="#">Disabled</a>
+        <a class="nav-link" href="" (click)="login();false" [hidden]="isconnexion">Se connecter</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-1" type="search" placeholder="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
   </div>
 </nav>
 
-<carousel>
-  <slide>
-    <img src="assets/img/0KA-00.jpg" alt="first slide" style="display: block; height: 600px; width: 100%;">
-    <div class="carousel-caption d-none d-md-block">
-      <h3>Géolocalisation</h3>
-      <p>suivez votre flotte en temps réel ce n'est jamais facile !</p>
-    </div>
-  </slide>
-  <slide>
-    <img src="assets/img/0KA-06.jpg" alt="second slide" style="display: block; height: 600px; width: 100%;">
-    <div class="carousel-caption d-none d-md-block">
-      <h3>Sécurité</h3>
-      <p>avoir la sécurité garantie c'est prémordiale !</p>
-    </div>
-  </slide>
-  <slide>
-    <img src="assets/img/0KA-05.jpg" alt="third slide" style="display: block; height: 600px; width: 100%;">
-    <div class="carousel-caption d-none d-md-block">
-      <h3>Traçabilité</h3>
-      <p>avoir l'historique de votre flotte donne plus de visibilité !</p>
-    </div>
-  </slide>
-</carousel>
-
-<section>
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 order-lg-2">
-        <div class="p-5">
-          <img class="img-fluid rounded-circle" src="assets/img/localisation.png" alt="">
-        </div>
-      </div>
-      <div class="col-lg-6 order-lg-1">
-        <div class="p-5">
-          <h2 class="display-4">For those about to rock...</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-        </div>
-      </div>
-    </div>
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
-</section>
-
-<section>
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6">
-        <div class="p-5">
-          <img class="img-fluid rounded-circle" src="assets/img/navigation.png" alt="">
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="p-5">
-          <h2 class="display-4">We salute you!</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-        </div>
-      </div>
-    </div>
+  <div class="modal-body">
+    This is a modal.
   </div>
-</section>
+</ng-template>
 
-<section>
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 order-lg-2">
-        <div class="p-5">
-          <img class="img-fluid rounded-circle" src="assets/img/notifications.png" alt="">
-        </div>
-      </div>
-      <div class="col-lg-6 order-lg-1">
-        <div class="p-5">
-          <h2 class="display-4">Let there be rock!</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6">
-        <div class="p-5">
-          <img class="img-fluid rounded-circle" src="assets/img/historique.png" alt="">
-        </div>
-      </div>
-      <div class="col-lg-6 order-lg-1">
-        <div class="p-5">
-          <h2 class="display-4">Let there be rock!</h2>
-          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod aliquid, mollitia odio veniam sit iste esse assumenda amet aperiam exercitationem, ea animi blanditiis recusandae! Ratione voluptatum molestiae adipisci, beatae obcaecati.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<div style="min-height:100vh;"><router-outlet></router-outlet></div>
 
 <!-- Footer -->
 <footer class="py-3 bg-black">
@@ -154,5 +70,3 @@
 </body>
 
 </html>
-
-<router-outlet></router-outlet>
